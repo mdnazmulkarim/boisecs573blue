@@ -1,4 +1,4 @@
-package org.boise.petrinet;
+package org.boise.petrinet.core;
 
 public class Main {
 
