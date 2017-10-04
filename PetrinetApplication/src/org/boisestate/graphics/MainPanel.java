@@ -1,7 +1,11 @@
 package org.boisestate.graphics;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.MouseInfo;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -12,16 +16,30 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
  
+enum State { PLACE, TRANSITION, ARC }
 
 public class MainPanel extends JFrame {
 	private static final long serialVersionUID = 1L;
 	protected JMenuBar menuBar;
 	protected JMenuItem newAction,openAction,saveAction,exitAction;
 	protected JButton placeButton,transitionButton,arcButton;
+	protected JPanel drawingPanel;
+	public State currentState;
 	
     public MainPanel() {
         setTitle("Draw Petri Net");
-        setSize(500, 500);
+        
+     // get the screen size as a java dimension
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+        // get 2/3 of the height, and 2/3 of the width
+        int height = screenSize.height * 3 / 4;
+        int width = screenSize.width * 5/6;
+
+        // set the jframe height and width
+//        jframe.setPreferredSize(new Dimension(width, height));
+        
+        setSize(width, height);
         this.getContentPane().setLayout(new FlowLayout());
         
         JPanel panel = new JPanel();
@@ -44,6 +62,12 @@ public class MainPanel extends JFrame {
         createFileMenu();
         createEditMenu();
         createActions();
+        
+        
+        drawingPanel = new JPanel(new BorderLayout()); 
+        drawingPanel.setPreferredSize(new Dimension(width, height));
+        drawingPanel.setBackground(Color.white);
+		this.getContentPane().add(drawingPanel, BorderLayout.NORTH);
     }
     private void createActions() {
       newAction.addActionListener(new ActionListener() {
@@ -72,15 +96,21 @@ public class MainPanel extends JFrame {
       });
       placeButton.addActionListener(new ActionListener() {
     	  public void actionPerformed(ActionEvent arg0) {
-    		  double mouseX = MouseInfo.getPointerInfo().getLocation().getX();
-    	      double mouseY = MouseInfo.getPointerInfo().getLocation().getY();
-    		  
+//    		  double mouseX = MouseInfo.getPointerInfo().getLocation().getX();
+//    	      double mouseY = MouseInfo.getPointerInfo().getLocation().getY();
+//    		  
 //    		  Place p = new Place();
 //    		  p.setCoordinate(mouseX, mouseY);
 //    		  p.paintComponent(getGraphics());
+    		  
+    		  currentState = currentState.PLACE;
+    		 
     	  }
       });
+      
+      
     }
+    
     protected JMenu createFileMenu() {
         JMenu fileMenu = new JMenu("File");
         menuBar.add(fileMenu);
