@@ -16,7 +16,7 @@ class RedSquare{
     private int yPos = 50;
     private int width = 20;
     private int height = 20;
-
+    
     public void setX(int xPos){ 
         this.xPos = xPos;
     }
@@ -41,10 +41,13 @@ class RedSquare{
         return height;
     }
 
-    public void paintSquare(Graphics g){
-        g.setColor(Color.RED);
-        g.fillRect(xPos,yPos,width,height);
+    public void paintPlace(Graphics g){
+        g.setColor(Color.white);
+//        g.fillRect(xPos,yPos,width,height);
+        g.fillOval(xPos, yPos, width, height);
         g.setColor(Color.BLACK);
-        g.drawRect(xPos,yPos,width,height);  
+//        g.drawRect(xPos,yPos,width,height);  
+        g.drawOval(xPos,yPos,width,height);  
     }
+    
 }

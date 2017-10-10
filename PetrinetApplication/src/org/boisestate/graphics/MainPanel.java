@@ -24,10 +24,11 @@ public class MainPanel extends JFrame {
 	protected JMenuItem newAction,openAction,saveAction,exitAction;
 	protected JButton placeButton,transitionButton,arcButton;
 	protected DrawingPanel drawingPanel;
-	public State currentState;
+	public static State currentState;
 	
     public MainPanel() {
         setTitle("Draw Petri Net");
+        
         
      // get the screen size as a java dimension
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -96,14 +97,13 @@ public class MainPanel extends JFrame {
       });
       placeButton.addActionListener(new ActionListener() {
     	  public void actionPerformed(ActionEvent arg0) {
-//    		  double mouseX = MouseInfo.getPointerInfo().getLocation().getX();
-//    	      double mouseY = MouseInfo.getPointerInfo().getLocation().getY();
-//    		  
-//    		  Place p = new Place();
-//    		  p.setCoordinate(mouseX, mouseY);
-//    		  p.paintComponent(getGraphics());
-    		  
-    		  currentState = currentState.PLACE;
+    	      currentState = currentState.PLACE;
+    		 
+    	  }
+      });
+      transitionButton.addActionListener(new ActionListener() {
+    	  public void actionPerformed(ActionEvent arg0) {
+    	      currentState = currentState.TRANSITION;
     		 
     	  }
       });
