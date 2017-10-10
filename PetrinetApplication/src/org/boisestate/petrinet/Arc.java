@@ -38,9 +38,9 @@ public class Arc {
 		this.connectedTransition = transition;
 	}
 	
-	public Place getTransition(){
-	return this.connectedTransition;
-	}
+//	public Place getTransition(){
+//	return this.connectedTransition;
+//	}
 	
 	
 

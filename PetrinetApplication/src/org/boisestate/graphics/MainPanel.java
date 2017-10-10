@@ -8,6 +8,7 @@ import java.awt.MouseInfo;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -26,6 +27,9 @@ public class MainPanel extends JFrame {
 	protected DrawingPanel drawingPanel;
 	public static State currentState;
 	
+	public static ArrayList<String> placeCoordinator = new ArrayList<String>();
+	public static ArrayList<String> transitionCoordinator = new ArrayList<String>();
+
     public MainPanel() {
         setTitle("Draw Petri Net");
         
@@ -33,13 +37,9 @@ public class MainPanel extends JFrame {
      // get the screen size as a java dimension
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-        // get 2/3 of the height, and 2/3 of the width
         int height = screenSize.height * 3 / 4;
         int width = screenSize.width * 5/6;
 
-        // set the jframe height and width
-//        jframe.setPreferredSize(new Dimension(width, height));
-        
         setSize(width, height);
         this.getContentPane().setLayout(new FlowLayout());
         

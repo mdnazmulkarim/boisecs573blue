@@ -1,13 +1,16 @@
 package org.boisestate.graphics;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
 
+import javax.swing.JLabel;
+
 public class TransitionGuiItem {
-	private int xPos = 0;
-    private int yPos = 0;
-    private int width = 20;
-    private int height = 40;
+	private int xPos = -50;
+    private int yPos = -50;
+    private int width = 10;
+    private int height = 30;
     
     public void setX(int xPos){ 
         this.xPos = xPos;

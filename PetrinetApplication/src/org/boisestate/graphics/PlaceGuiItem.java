@@ -3,11 +3,13 @@ package org.boisestate.graphics;
 import java.awt.Color;
 import java.awt.Graphics;
 
+
 public class PlaceGuiItem {
-	private int xPos = 50;
-    private int yPos = 50;
-    private int width = 20;
-    private int height = 20;
+	private int xPos = -50;
+    private int yPos = -50;
+    private int width = 30;
+    private int height = 30;
+    
     
     public void setX(int xPos){ 
         this.xPos = xPos;
@@ -33,10 +35,13 @@ public class PlaceGuiItem {
         return height;
     }
 
+   
     public void paintPlace(Graphics g){
         g.setColor(Color.white);
         g.fillOval(xPos, yPos, width, height);
         g.setColor(Color.BLACK);
-        g.drawOval(xPos,yPos,width,height);  
+        g.drawOval(xPos,yPos,width,height); 
+        g.drawString("P1", xPos+100, yPos+100);
+
     }
 }
