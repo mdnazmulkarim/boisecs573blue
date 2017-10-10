@@ -23,7 +23,7 @@ public class MainPanel extends JFrame {
 	protected JMenuBar menuBar;
 	protected JMenuItem newAction,openAction,saveAction,exitAction;
 	protected JButton placeButton,transitionButton,arcButton;
-	protected JPanel drawingPanel;
+	protected DrawingPanel drawingPanel;
 	public State currentState;
 	
     public MainPanel() {
@@ -64,7 +64,7 @@ public class MainPanel extends JFrame {
         createActions();
         
         
-        drawingPanel = new JPanel(new BorderLayout()); 
+        drawingPanel = new DrawingPanel(); 
         drawingPanel.setPreferredSize(new Dimension(width, height));
         drawingPanel.setBackground(Color.white);
 		this.getContentPane().add(drawingPanel, BorderLayout.NORTH);
