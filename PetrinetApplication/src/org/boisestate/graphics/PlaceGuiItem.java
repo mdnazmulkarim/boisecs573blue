@@ -4,17 +4,19 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 
-public class PlaceGuiItem implements GuiItem{
+public class PlaceGuiItem implements GuiItemInterface{
 	private Color fillColor;
 	private Color borderColor;
 	private int xPos = -50;
     private int yPos = -50;
     private int width = 30;
-    private int height = 30;
+    private int height = 40;
+    private int nameHeight = 10;
     private String name = "";
     
-    public PlaceGuiItem()
+    public PlaceGuiItem(String name)
     {
+    	this.name = name;
     	this.fillColor = Color.GRAY;
     	this.borderColor = Color.BLACK;
     } 
@@ -83,10 +85,9 @@ public class PlaceGuiItem implements GuiItem{
    
     public void draw(Graphics g){
         g.setColor(Color.white);
-        g.fillOval(xPos, yPos, width, height);
+        g.fillOval(xPos, yPos, width, height-nameHeight);
         g.setColor(Color.BLACK);
-        g.drawOval(xPos,yPos,width,height); 
-        g.drawString("P1", xPos+1, yPos+100);
-
+        g.drawOval(xPos,yPos,width,height-nameHeight); 
+        g.drawString(name, xPos+10+2, yPos+height);
     }
 }

@@ -21,9 +21,8 @@ import javax.swing.JPanel;
 class DrawingPanel extends JPanel {
 	
 
-	PlaceGuiItem place = new PlaceGuiItem();
-	
-	TransitionGuiItem transiiton = new TransitionGuiItem();
+	PlaceGuiItem place = new PlaceGuiItem("P1");	
+	TransitionGuiItem transiiton = new TransitionGuiItem("T1");
 
 	
     public DrawingPanel() {
@@ -58,33 +57,12 @@ class DrawingPanel extends JPanel {
     	place.setY(y);
         repaint(place.getX(), place.getY(), 
         		place.getWidth()+1, 
-        		place.getHeight()+100);
+        		place.getHeight()+10+2);
        
         MainPanel.placeCoordinator.add(x + "," + y);
 		System.out.println("Current placeCoordinator array list is:"+MainPanel.placeCoordinator);
 
-//        // Current square state, stored as final variables 
-//        // to avoid repeat invocations of the same methods.
-//        final int CURR_X = place.getX();
-//        final int CURR_Y = place.getY();
-//        final int CURR_W = place.getWidth();
-//        final int CURR_H = place.getHeight();
-//        final int OFFSET = 1;
-//
-//        if ((CURR_X!=x) || (CURR_Y!=y)) {
-//
-//            // The square is moving, repaint background 
-//            // over the old square location. 
-////            repaint(CURR_X,CURR_Y,CURR_W+OFFSET,CURR_H+OFFSET);
-//
-//            // Update coordinates.
-//        	place.setX(x);
-//        	place.setY(y);
-//
-//            repaint(place.getX(), place.getY(), 
-//            		place.getWidth()+OFFSET, 
-//            		place.getHeight()+OFFSET);
-//        }
+
     }
     private void drawTransition(int x, int y){
     	transiiton.setX(x);
@@ -93,34 +71,11 @@ class DrawingPanel extends JPanel {
         // Repaint the square at the new location.
         repaint(transiiton.getX(), transiiton.getY(), 
         		transiiton.getWidth()+1, 
-        		transiiton.getHeight()+1);
+        		transiiton.getHeight()+10+2);
         
         MainPanel.transitionCoordinator.add(x + "," + y);
 		System.out.println("Current transitionCoordinator array list is:"+MainPanel.transitionCoordinator);
-		
-//        // Current square state, stored as final variables 
-//        // to avoid repeat invocations of the same methods.
-//        final int CURR_X = transiiton.getX();
-//        final int CURR_Y = transiiton.getY();
-//        final int CURR_W = transiiton.getWidth();
-//        final int CURR_H = transiiton.getHeight();
-//        final int OFFSET = 1;
-//
-//        if ((CURR_X!=x) || (CURR_Y!=y)) {
-//
-//            // The square is moving, repaint background 
-//            // over the old square location. 
-////            repaint(CURR_X,CURR_Y,CURR_W+OFFSET,CURR_H+OFFSET);
-//
-//            // Update coordinates.
-//        	transiiton.setX(x);
-//        	transiiton.setY(y);
-//
-//            // Repaint the square at the new location.
-//            repaint(transiiton.getX(), transiiton.getY(), 
-//            		transiiton.getWidth()+OFFSET, 
-//            		transiiton.getHeight()+OFFSET);
-//        }
+	
     }
 
     public Dimension getPreferredSize() {

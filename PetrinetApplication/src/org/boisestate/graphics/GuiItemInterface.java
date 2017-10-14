@@ -3,7 +3,7 @@ package org.boisestate.graphics;
 import java.awt.Color;
 import java.awt.Graphics;
 
-public interface GuiItem {
+public interface GuiItemInterface {
 	
 	
 	public void setX(int x);
