@@ -58,7 +58,7 @@ class DrawingPanel extends JPanel {
     	place.setY(y);
         repaint(place.getX(), place.getY(), 
         		place.getWidth()+1, 
-        		place.getHeight()+1);
+        		place.getHeight()+100);
        
         MainPanel.placeCoordinator.add(x + "," + y);
 		System.out.println("Current placeCoordinator array list is:"+MainPanel.placeCoordinator);

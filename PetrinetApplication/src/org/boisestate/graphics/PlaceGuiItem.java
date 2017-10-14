@@ -41,7 +41,7 @@ public class PlaceGuiItem {
         g.fillOval(xPos, yPos, width, height);
         g.setColor(Color.BLACK);
         g.drawOval(xPos,yPos,width,height); 
-        g.drawString("P1", xPos+100, yPos+100);
+        g.drawString("P1", xPos+1, yPos+100);
 
     }
 }

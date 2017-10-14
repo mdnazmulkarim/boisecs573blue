@@ -7,11 +7,19 @@ import java.awt.Graphics;
 import javax.swing.JLabel;
 
 public class TransitionGuiItem {
+	
+	private Color fillColor;
+	private Color borderColor;
 	private int xPos = -50;
     private int yPos = -50;
     private int width = 10;
     private int height = 30;
     
+    public void TransitionGuiItem()
+    {
+    	this.fillColor = Color.GRAY;
+    	this.borderColor = Color.BLACK;
+    }
     public void setX(int xPos){ 
         this.xPos = xPos;
     }
