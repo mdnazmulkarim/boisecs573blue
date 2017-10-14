@@ -134,7 +134,7 @@ class DrawingPanel extends JPanel {
     
     public void paintComponent(Graphics g) {
         super.paintComponent(g);  
-        place.paintPlace(g);
-        transiiton.paintTransition(g);
+        place.draw(g);
+        transiiton.draw(g);
     }  
 }
