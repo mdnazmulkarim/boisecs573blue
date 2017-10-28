@@ -7,13 +7,10 @@ import org.boisestate.graphics.PlaceGuiItem;
  *
  * @author Nazmul
  */
-public class Place {
+public class Place extends PlaceGuiItem{
 	
-	private String name;	
-	private int noOfTokens;	
 	private boolean isBounded;
-	private PlaceGuiItem placeGuiItem;
-	
+	private String ID;
 	/**
 	 * Constructor: creates a place with a name and .
 	 * @param name is the name of this place
@@ -21,29 +18,17 @@ public class Place {
 	 * isBounded is false by default
 	 */
 	Place(String name){
-		this.name = name;
-		this.noOfTokens = 0;
+		
+		super(name,0);
 		this.isBounded = false;
 	}
 	
-	public String getName() {
-		return this.name;
-	}
-	
-	public void setTokenNumbers(int num) {
-		this.noOfTokens = num;
-	}
-	
-	public int getTokenNumbers() {
-		return this.noOfTokens;
-	}
-	
 	public void addToken(int num) {
-		this.noOfTokens = this.noOfTokens + num;
+		super.setTokenNumbers(super.getTokenNumbers()+ num);
 	}
 	
 	public void removeToken(int num) {
-		this.noOfTokens = this.noOfTokens - num;
+		super.setTokenNumbers(super.getTokenNumbers()-num);
 	}
 	
 	public void setBounded(boolean b) {

@@ -1,10 +1,12 @@
 package org.boisestate.util;
 
+import java.util.Random;
 import java.util.Vector;
 
 public class PetrinetUtility {
 	
 	public static enum ITEM {PLACE,TRANSITION,ARC};
+	
 	private String namePrefixPlace = "P"; 
 	private String namePrefixTransition = "T"; 
 	private String namePrefixArc = "A";
@@ -60,6 +62,48 @@ public class PetrinetUtility {
 			case ARC :
 				unusedNamesArc.addElement(name);
 				break;
+		}
+	}
+	
+	 public static int RND_NUM_BASE = 999999;
+	 public String generateRandomSequence(String tag) {
+	        String rndSequence=tag;
+	        Random rnd = new Random(System.currentTimeMillis());
+
+	        int nextint = rnd.nextInt(RND_NUM_BASE++);
+
+	        if (nextint < 1000000) {
+	            nextint += 1000000;
+	        }
+
+	        rndSequence = rndSequence + nextint;
+
+	        return rndSequence;
+	    }
+	
+	public String generateAPetrinetID()
+	{
+		return generateRandomSequence("PETRI");
+	}
+	
+	public String generateAPlaceID()
+	{
+		return generateRandomSequence("PLACE");
+	}
+	public String generateATransitionID()
+	{
+		return generateRandomSequence("TRANS");
+	}
+	
+	public String generateAPetrineName(String name)
+	{
+		if(name==null || name.isEmpty())
+		{
+			return "";
+		}
+		else
+		{
+			return generateRandomSequence("PETRI");
 		}
 	}
 	

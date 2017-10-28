@@ -40,15 +40,15 @@ class DrawingPanel extends JPanel {
             }
         });
 
-        addMouseMotionListener(new MouseAdapter(){
-            public void mouseDragged(MouseEvent e){
-            	if(MainPanel.currentState == MainPanel.currentState.PLACE) {
-            		drawPlace(e.getX(),e.getY());
-            	}else if (MainPanel.currentState == MainPanel.currentState.TRANSITION){
-            		drawTransition(e.getX(),e.getY());
-            	}
-            }
-        });
+//        addMouseMotionListener(new MouseAdapter(){
+//            public void mouseDragged(MouseEvent e){
+//            	if(MainPanel.currentState == MainPanel.currentState.PLACE) {
+//            		drawPlace(e.getX(),e.getY());
+//            	}else if (MainPanel.currentState == MainPanel.currentState.TRANSITION){
+//            		drawTransition(e.getX(),e.getY());
+//            	}
+//            }
+//        });
 
     }
    

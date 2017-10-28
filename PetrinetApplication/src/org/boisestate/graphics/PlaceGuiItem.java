@@ -13,10 +13,12 @@ public class PlaceGuiItem implements GuiItemInterface{
     private int height = 40;
     private int nameHeight = 10;
     private String name = "";
+    private int noOfTokens = 0;
     
-    public PlaceGuiItem(String name)
+    public PlaceGuiItem(String name, int tokens)
     {
     	this.name = name;
+    	this.noOfTokens = tokens;
     	this.fillColor = Color.GRAY;
     	this.borderColor = Color.BLACK;
     } 
@@ -53,6 +55,14 @@ public class PlaceGuiItem implements GuiItemInterface{
 		return this.name;
 	}
 	
+	public void setTokenNumbers(int num) {
+		this.noOfTokens = num;
+	}
+	
+	public int getTokenNumbers() {
+		return this.noOfTokens;
+	}
+	
 	@Override
 	public void setBorderColor(Color color) {
 		this.borderColor = color;
@@ -84,6 +94,7 @@ public class PlaceGuiItem implements GuiItemInterface{
 
    
     public void draw(Graphics g){
+    	System.out.println("call to place draw");
         g.setColor(Color.white);
         g.fillOval(xPos, yPos, width, height-nameHeight);
         g.setColor(Color.BLACK);

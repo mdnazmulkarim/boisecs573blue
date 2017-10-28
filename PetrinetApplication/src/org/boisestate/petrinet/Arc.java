@@ -8,7 +8,7 @@ public class Arc {
 	private ArcDirectionType directionType;
 	
 	public enum ArcDirectionType  {
-	      Place_to_Transition, Transition_to_Place
+	      P_2_T, T_2_P
 	   }
 	
 	public Arc(Place place, Transition transition, ArcDirectionType type )
@@ -38,9 +38,9 @@ public class Arc {
 		this.connectedTransition = transition;
 	}
 	
-//	public Place getTransition(){
-//	return this.connectedTransition;
-//	}
+	public Transition getTransition(){
+	     return this.connectedTransition;
+	}
 	
 	
 

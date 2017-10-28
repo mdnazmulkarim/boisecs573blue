@@ -1,8 +1,44 @@
 package org.boisestate.petrinet;
 
-public class Transition {
+import java.util.Vector;
+
+import org.boisestate.graphics.TransitionGuiItem;
+
+public class Transition extends TransitionGuiItem{
+
+	private Vector<Arc> arcVector;
+	private boolean fireable;
 	
-	private String name;
+	public Transition(String name) 
+	{
+		super(name);
+		this.arcVector = new Vector<Arc>();
+		fireable=false;
+	}
+	
+	public boolean isFireable() {
+		return fireable;
+	}
+	
+	public void setFireable(boolean fireable) {
+		this.fireable = fireable;
+	}
+	
+	public boolean checkFireable() 
+	{
+		
+		return false;
+	}
+	
+	public void  fireTransition()
+	{
+		
+	}
+	
+	
+	
+	
+	
 	
 
 }

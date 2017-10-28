@@ -49,15 +49,15 @@ public class MainPanel extends JFrame {
         setJMenuBar(menuBar);
   
         placeButton = new JButton("Place");
-  	  	placeButton.setVisible(false);
+  	  	placeButton.setVisible(true);
   	  	add(placeButton);
 	        
 	    transitionButton = new JButton("Transition");
-	    transitionButton.setVisible(false);
+	    transitionButton.setVisible(true);
 	    add(transitionButton);
 			
 	    arcButton = new JButton("Arc");
-	    arcButton.setVisible(false);
+	    arcButton.setVisible(true);
 	    add(arcButton);
         
         createFileMenu();
@@ -69,14 +69,15 @@ public class MainPanel extends JFrame {
         drawingPanel.setPreferredSize(new Dimension(width, height));
         drawingPanel.setBackground(Color.white);
 		this.getContentPane().add(drawingPanel, BorderLayout.NORTH);
+		Toolkit.getDefaultToolkit().setDynamicLayout(true);
     }
     private void createActions() {
       newAction.addActionListener(new ActionListener() {
     	  public void actionPerformed(ActionEvent arg0) {
     		  System.out.println("You have clicked on the new action");
-    		  placeButton.setVisible(true);
-    		  transitionButton.setVisible(true);
-    		  arcButton.setVisible(true);
+//    		  placeButton.setVisible(true);
+//    		  transitionButton.setVisible(true);
+//    		  arcButton.setVisible(true);
     		  
     	  }
       });
