@@ -24,9 +24,8 @@ public class Transition extends TransitionGuiItem{
 		this.fireable = fireable;
 	}
 	
-	public boolean checkFireable() 
+	public boolean isTransitionFireable() 
 	{
-		
 		return false;
 	}
 	

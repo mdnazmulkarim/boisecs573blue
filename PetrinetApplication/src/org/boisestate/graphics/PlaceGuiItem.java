@@ -2,6 +2,7 @@ package org.boisestate.graphics;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 
 public class PlaceGuiItem implements GuiItemInterface{
@@ -101,4 +102,6 @@ public class PlaceGuiItem implements GuiItemInterface{
         g.drawOval(xPos,yPos,width,height-nameHeight); 
         g.drawString(name, xPos+10+2, yPos+height);
     }
+
+	
 }

@@ -3,6 +3,8 @@ package org.boisestate.graphics;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+
 import javax.swing.JLabel;
 
 
@@ -87,11 +89,12 @@ public class TransitionGuiItem implements GuiItemInterface
 	    
 	@Override
     public void draw(Graphics g){
-        g.setColor(this.fillColor);
+        g.setColor(this.fillColor);     
         g.fillRect(xPos, yPos, width, height-nameHeight);
         g.setColor(this.borderColor);
         g.drawRect(xPos,yPos,width,height-nameHeight);  
         g.drawString(name, xPos+2, yPos+height);
+       
     }
 
 		
