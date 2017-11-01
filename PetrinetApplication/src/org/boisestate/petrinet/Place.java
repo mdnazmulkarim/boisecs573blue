@@ -17,9 +17,9 @@ public class Place extends PlaceGuiItem{
 	 * noOfTokens is intialized to zero(0) a default value
 	 * isBounded is false by default
 	 */
-	Place(String name){
+	public Place(){
 		
-		super(name,0);
+		super();
 		this.isBounded = false;
 	}
 	

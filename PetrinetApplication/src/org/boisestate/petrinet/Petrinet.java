@@ -1,8 +1,11 @@
 package org.boisestate.petrinet;
 
+import java.awt.Point;
+import java.util.ArrayList;
 import java.util.Vector;
 
 import org.boisestate.core.PetrinetBuilder;
+import org.boisestate.graphics.PlaceGuiItem;
 
 public class Petrinet {
 	
@@ -10,9 +13,9 @@ public class Petrinet {
 	private String name;
 	private String title;
 	
-	private Vector<Place> placeVector;
-	private Vector<Transition> transitionVector;
-	private Vector<Arc> arcVector;
+	public ArrayList<Place> placeVector;
+	private ArrayList<Transition> transitionVector;
+	private ArrayList<Arc> arcVector;
 
 	private PetrinetBuilder petrinetBuilder;
 	
@@ -21,13 +24,14 @@ public class Petrinet {
 		this.title = title;
 		this.petrinetBuilder = pb;
 		initIDNameBuilder();
-	
+		initVectors();
 	}
 	
 	public Petrinet(String title) 
 	{
 		this.title = title;
-		initIDNameBuilder();	
+		initIDNameBuilder();
+		initVectors();
 	}
 	
 	private void initIDNameBuilder()
@@ -42,10 +46,10 @@ public class Petrinet {
 	
 	private void initVectors()
 	{
-		placeVector = new Vector<Place>();
-		placeVector.add(new Place(""));
-		transitionVector = new Vector<Transition>();
-		arcVector = new Vector<Arc>();
+		placeVector = new ArrayList<Place>();
+		placeVector.add(new Place());
+		transitionVector = new ArrayList<Transition>();
+		arcVector = new ArrayList<Arc>();
 	}
 	
 	public void setPetrinetBuilder(PetrinetBuilder pb)
@@ -65,7 +69,35 @@ public class Petrinet {
 		this.title = title;
 	}
 	
-	
-	
+	public void addPlace(Place place) {
+		this.placeVector.add(place);
+	}
+	public void removePlace() {
+		this.placeVector.remove(placeVector.size()-1);
+	}
+	public void removeAllPlace() {
+		this.placeVector.clear();
+	}
+	public int tokensOfPlace(int x, int y){
+		for(int i=0; i<this.placeVector.size(); i++) {
+			Place place = (Place)this.placeVector.get(i);
+			if(place.getBounds().contains(new Point(x,y))) {
+				return i;
+			}
+		}
+		
+		return -1;
+	}
+	public Object selectedPlace(int x, int y){
+		
+		for(int i=0; i<this.placeVector.size(); i++) {
+			Place place = (Place)this.placeVector.get(i);
+			if(place.getBounds().contains(new Point(x,y))) {
+				return place;
+			}
+		}
+		
+		return null;
+	}
 	
 }

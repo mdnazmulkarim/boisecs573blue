@@ -20,9 +20,8 @@ public class TransitionGuiItem implements GuiItemInterface
     private int nameHeight = 15;
     private String name = "";
     
-    public TransitionGuiItem(String name)
+    public TransitionGuiItem()
     {
-    	this.name = name;
     	this.fillColor = Color.GRAY;
     	this.borderColor = Color.BLACK;
     }

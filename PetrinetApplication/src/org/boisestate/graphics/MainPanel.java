@@ -8,37 +8,44 @@ import java.awt.MouseInfo;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.filechooser.FileSystemView;
+
+import org.boisestate.petrinet.Petrinet;
  
-enum State { PLACE, TRANSITION, ARC }
+enum State { PLACE, TRANSITION, ARC, NOTHING, COPY, PASTE, DELETE }
 
 public class MainPanel extends JFrame {
 	private static final long serialVersionUID = 1L;
 	protected JMenuBar menuBar;
-	protected JMenuItem newAction,openAction,saveAction,exitAction;
-	protected JButton placeButton,transitionButton,arcButton;
+	protected JMenuItem newAction,openAction,saveAction,exitAction,deleteAction,copyAction,pasteAction,undoAction,redoAction;
+	protected JButton placeButton,transitionButton,arcButton,arrowButton;
 	protected DrawingPanel drawingPanel;
 	public static State currentState;
-	
+	public Petrinet petrinet;
+	public PetriNetSaver savePetrinet;
 	public static ArrayList<String> placeCoordinator = new ArrayList<String>();
 	public static ArrayList<String> transitionCoordinator = new ArrayList<String>();
-
+	int width, height;
     public MainPanel() {
         setTitle("Draw Petri Net");
-        
-        
+        petrinet = new Petrinet("Vending Machine");
+        savePetrinet = new PetriNetSaver(petrinet);
      // get the screen size as a java dimension
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-        int height = screenSize.height * 3 / 4;
-        int width = screenSize.width * 5/6;
+         height = screenSize.height * 3 / 4;
+         width = screenSize.width * 5/6;
 
         setSize(width, height);
         this.getContentPane().setLayout(new FlowLayout());
@@ -60,35 +67,77 @@ public class MainPanel extends JFrame {
 	    arcButton.setVisible(true);
 	    add(arcButton);
         
+	    arrowButton = new JButton("Arrow");
+	    arrowButton.setVisible(true);
+	    add(arrowButton);
+	    
         createFileMenu();
         createEditMenu();
         createActions();
         
         
-        drawingPanel = new DrawingPanel(); 
+        drawingPanel = new DrawingPanel(petrinet); 
         drawingPanel.setPreferredSize(new Dimension(width, height));
         drawingPanel.setBackground(Color.white);
 		this.getContentPane().add(drawingPanel, BorderLayout.NORTH);
 		Toolkit.getDefaultToolkit().setDynamicLayout(true);
     }
+    public int alertDialog() {
+    	int dialogResult = JOptionPane.showConfirmDialog (null, "Do you want to close current petrinet?","Warning",2); 
+    	if(dialogResult == JOptionPane.YES_OPTION){ 
+    		// Saving code here }
+    		 
+    	}
+    	return dialogResult;
+    }
+    public void fileChoose() {
+    	JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+
+		int returnValue = jfc.showOpenDialog(null);
+		// int returnValue = jfc.showSaveDialog(null);
+
+		if (returnValue == JFileChooser.APPROVE_OPTION) {
+			File selectedFile = jfc.getSelectedFile();
+			System.out.println(selectedFile.getAbsolutePath());
+			petrinet.removeAllPlace();
+			XMLParser parser = new XMLParser(selectedFile,petrinet);
+			drawingPanel.paintAgain();
+		}
+    }
     private void createActions() {
       newAction.addActionListener(new ActionListener() {
     	  public void actionPerformed(ActionEvent arg0) {
-    		  System.out.println("You have clicked on the new action");
-//    		  placeButton.setVisible(true);
-//    		  transitionButton.setVisible(true);
-//    		  arcButton.setVisible(true);
-    		  
+    		if(alertDialog() == JOptionPane.YES_OPTION) {
+    			petrinet.removeAllPlace();
+     			drawingPanel.paintAgain();
+    		}
     	  }
       });
       openAction.addActionListener(new ActionListener() {
     	  public void actionPerformed(ActionEvent arg0) {
-
+    		  if(alertDialog() == JOptionPane.YES_OPTION) {
+        		  fileChoose();
+      		}
     	  }
       });
       saveAction.addActionListener(new ActionListener() {
     	  public void actionPerformed(ActionEvent arg0) {
-
+    		  savePetrinet.xmlFileName();
+    	  }
+      });
+      deleteAction.addActionListener(new ActionListener() {
+    	  public void actionPerformed(ActionEvent arg0) {
+    		  currentState = currentState.DELETE;
+    	  }
+      });
+      copyAction.addActionListener(new ActionListener() {
+    	  public void actionPerformed(ActionEvent arg0) {
+    		  currentState = currentState.COPY;
+    	  }
+      });
+      pasteAction.addActionListener(new ActionListener() {
+    	  public void actionPerformed(ActionEvent arg0) {
+    		  currentState = currentState.PASTE;
     	  }
       });
       exitAction.addActionListener(new ActionListener() {
@@ -108,8 +157,18 @@ public class MainPanel extends JFrame {
     		 
     	  }
       });
-      
-      
+      arcButton.addActionListener(new ActionListener() {
+    	  public void actionPerformed(ActionEvent arg0) {
+    	      currentState = currentState.ARC;
+    		 
+    	  }
+      });
+      arrowButton.addActionListener(new ActionListener() {
+    	  public void actionPerformed(ActionEvent arg0) {
+    	      currentState = currentState.NOTHING;
+    		 
+    	  }
+      });
     }
     
     protected JMenu createFileMenu() {
@@ -118,7 +177,7 @@ public class MainPanel extends JFrame {
          
         newAction = new JMenuItem("New");
         openAction = new JMenuItem("Open");
-        saveAction = new JMenuItem("Save");
+        saveAction = new JMenuItem("Save As");
         exitAction = new JMenuItem("Exit");
         
         fileMenu.add(newAction);
@@ -132,13 +191,13 @@ public class MainPanel extends JFrame {
          JMenu editMenu = new JMenu("Edit");
          menuBar.add(editMenu);
       
-         JMenuItem cutAction = new JMenuItem("Cut");
-         JMenuItem copyAction = new JMenuItem("Copy");
-         JMenuItem pasteAction = new JMenuItem("Paste");
-         JMenuItem undoAction = new JMenuItem("Undo");
-         JMenuItem redoAction = new JMenuItem("Redo");
+         deleteAction = new JMenuItem("Delete");
+         copyAction = new JMenuItem("Copy");
+         pasteAction = new JMenuItem("Paste");
+         undoAction = new JMenuItem("Undo");
+         redoAction = new JMenuItem("Redo");
           
-         editMenu.add(cutAction);
+         editMenu.add(deleteAction);
          editMenu.add(copyAction);
          editMenu.add(pasteAction);
          editMenu.add(undoAction);

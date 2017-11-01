@@ -9,9 +9,9 @@ public class Transition extends TransitionGuiItem{
 	private Vector<Arc> arcVector;
 	private boolean fireable;
 	
-	public Transition(String name) 
+	public Transition() 
 	{
-		super(name);
+		super();
 		this.arcVector = new Vector<Arc>();
 		fireable=false;
 	}
