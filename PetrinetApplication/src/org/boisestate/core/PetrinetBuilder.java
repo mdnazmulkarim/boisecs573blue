@@ -15,6 +15,7 @@ import org.boisestate.petrinet.Transition;
 import org.boisestate.util.PetrinetUtility;
 import org.boisestate.graphics.DrawingPanel;
 
+
 public class PetrinetBuilder {
 	public ArrayList<Object> workingArrayList;
 	public ArrayList<Object> redoArrayList;
@@ -222,5 +223,33 @@ public class PetrinetBuilder {
 			    System.out.println("Not Changed.");
 			}
 	   }
+	
+	public void printLists()
+	{
+		System.out.println("##Printing Places:");
+    	for(Place place: petrinet.placeVector) {
+    		System.out.println(place.getName()+"|"+place.getX()+"|"+place.getY());
+    	}
+    	System.out.println("##Printing Working List:");
+    	Place placeObj;
+    	Transition transitionObj;
+    	for(Object objW: petrinet.getPetrinetBuilder().workingArrayList) {
+    		if( objW instanceof Place)
+    		{
+    			placeObj = (Place)objW;
+    			System.out.println(placeObj.getName()+"|"+placeObj.getX()+"|"+placeObj.getY());
+    		}
+    		else if( objW instanceof Transition) 
+    		{
+    			transitionObj = (Transition)objW;
+    			System.out.println(transitionObj.getName()+"|"+transitionObj.getX()+"|"+transitionObj.getY());
+    		}
+    		else
+    		{
+    			System.out.println("Undetected object");
+    		}
+    		
+    	}
+	}
 
 }
