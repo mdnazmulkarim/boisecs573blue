@@ -192,7 +192,7 @@ public class PetrinetBuilder {
 		    		    JOptionPane.showMessageDialog(panel, "Duplicate name error.", "Error", JOptionPane.ERROR_MESSAGE);
 		    		}else{
 
-		    		this.putElementInWorkingArrayList(clonePlace(place));
+		    		this.putElementInWorkingArrayList(place.clone());
 	   			    this.putElementInActionArrayList("M");
 	   			    	
 	   			    
@@ -203,8 +203,8 @@ public class PetrinetBuilder {
 
 				    	place.setName(name.getText());
 				    	if(numberOfTokens.getText()!=null){
-	   			    	place.setTokenNumbers(Integer.parseInt(numberOfTokens.getText()));
-	   			    }
+				    		place.setTokenNumbers(Integer.parseInt(numberOfTokens.getText()));
+				    	}
 				 
 				    drawingPanel.partialPaint(new Rectangle(place.getX(), place.getY(), 
 	                   		place.getRadius()+1, 

@@ -110,24 +110,9 @@ public class MainPanel extends JFrame {
     	Object obj = petrinet.getPetrinetBuilder().getElementFromWorkingArrayList();
     	Object actionObj = petrinet.getPetrinetBuilder().getElementFromActionArrayList();
     	
-    	Place pla = (Place)obj;
-    	String s = (String)actionObj;
-    	System.out.println(pla + " "+s);
 		if(obj!=null && obj instanceof Place) {
 			if(actionObj.equals("A")) {
-//				Place p = (Place)obj;
-//				Place p1=petrinet.placeVector.get(1);
-//				System.out.println("Not Matched..."+p1.getName());
-//
-//				if(p==p1){
-//					System.out.println("Matched...");
-//				}
-//				for(Place pp: petrinet.placeVector) {
-//					if(pp.getName().equals(p.getName())){
-//						petrinet.placeVector.remove(petrinet.placeVector.indexOf(pp));
-//
-//					}
-//				}
+
 				petrinet.placeVector.remove(obj);
 
 				drawingPanel.paintAgain();
@@ -152,7 +137,7 @@ public class MainPanel extends JFrame {
 				}
 				petrinet.getPetrinetBuilder().putElementInRedoActionArrayList("M");
 
-//				drawingPanel.paintAgain();
+				drawingPanel.paintAgain();
 			}
 			
 			petrinet.getPetrinetBuilder().putElementInRedoArrayList(obj);

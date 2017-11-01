@@ -63,7 +63,11 @@ public class DrawingPanel extends JPanel {
                 		if(selectedItem!=null) {
                 			if(selectedItem instanceof Place) {
                 				Place place = (Place) selectedItem;
-                    			drawPlace(place, e.getX(), e.getY());
+                				Place newPlace = (Place)place.clone();
+                    			drawPlace(newPlace, e.getX(), e.getY());
+                    			for(Place pp: petrinet.placeVector) {
+                    				System.out.println("Name "+pp.getName()+"x :"+pp.getX()+" "+pp.getY());
+                    			}
                 			}else if (selectedItem instanceof Transition) {
                 				Transition trans = (Transition) selectedItem;
                     			drawTransition(trans, e.getX(), e.getY());
@@ -76,8 +80,16 @@ public class DrawingPanel extends JPanel {
                 		if(selectedItem!=null) {
                 			if(selectedItem instanceof Place){
                 				System.out.println("delete called");
-                    			Place place = (Place) selectedItem;
-                    			petrinet.deletePlace(place);
+                    			
+//                    			for(Place pp: petrinet.placeVector) {
+//                    				System.out.println("n1 "+pp.getName()+" n2 "+((Place)obj).getName());
+//                    				if(pp.getName().equals(((Place)obj).getName())){
+//                            			petrinet.deletePlace(pp);
+//                            			break;
+//                    				}
+//                    			}
+                    			
+                   			petrinet.deletePlace((Place)selectedItem);
                     			repaint();
                 			}else if (selectedItem instanceof Transition) {
                 				System.out.println("delete called");

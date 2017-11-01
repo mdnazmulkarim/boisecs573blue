@@ -7,10 +7,9 @@ import org.boisestate.graphics.PlaceGuiItem;
  *
  * @author Nazmul
  */
-public class Place extends PlaceGuiItem{
+public class Place extends PlaceGuiItem implements Cloneable{
 	
 	private boolean isBounded;
-	private String ID;
 	/**
 	 * Constructor: creates a place with a name and .
 	 * @param name is the name of this place
@@ -39,7 +38,16 @@ public class Place extends PlaceGuiItem{
 		return this.isBounded;
 	}
 	
-	
+	public Object clone() {
+		Object o = null;
+		try {
+			o=super.clone();
+
+		} catch (CloneNotSupportedException e) {
+			// TODO: handle exception
+		}
+		return o;
+	}
 	
 	
 
