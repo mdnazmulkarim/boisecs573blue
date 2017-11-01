@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 
 import javax.swing.JLabel;
 
@@ -95,6 +96,8 @@ public class TransitionGuiItem implements GuiItemInterface
         g.drawString(name, xPos+2, yPos+height);
        
     }
-
+	public Rectangle getBounds() {
+		return new Rectangle(xPos,yPos,width,height);
+	}
 		
 }

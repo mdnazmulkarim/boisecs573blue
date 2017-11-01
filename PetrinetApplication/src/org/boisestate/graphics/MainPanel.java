@@ -192,6 +192,7 @@ public class MainPanel extends JFrame {
     	  public void actionPerformed(ActionEvent arg0) {
     		if(alertDialog() == JOptionPane.YES_OPTION) {
     			petrinet.removeAllPlace();
+    			petrinet.removeAllTransition();
      			drawingPanel.paintAgain();
     		}
     	  }

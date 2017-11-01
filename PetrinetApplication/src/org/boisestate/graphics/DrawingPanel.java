@@ -29,12 +29,12 @@ import javax.swing.SwingUtilities;
 
 import org.boisestate.petrinet.Petrinet;
 import org.boisestate.petrinet.Place;
+import org.boisestate.petrinet.Transition;
 
 public class DrawingPanel extends JPanel {
 	
 
 		
-	TransitionGuiItem transition = new TransitionGuiItem();
 
 	public int placeCount = 0;
 	int transitionCount = 0;
@@ -50,28 +50,42 @@ public class DrawingPanel extends JPanel {
             public void mousePressed(MouseEvent e){
             	if(e.getButton() == MouseEvent.BUTTON1) {
             		if(MainPanel.currentState == MainPanel.currentState.PLACE) {
-            			System.out.println("mouse event occured...."+petrinet.placeVector.size());
             			Place place = new Place();
                 		drawPlace(place, e.getX(),e.getY());                		
                 	}else if (MainPanel.currentState == MainPanel.currentState.TRANSITION){
-                		drawTransition(e.getX(),e.getY());
+                		Transition transition = new Transition();
+                		drawTransition(transition, e.getX(),e.getY());
                 	}
                 	else if (MainPanel.currentState == MainPanel.currentState.COPY){
                 		Object obj = petrinet.selectedPlace(e.getX(), e.getY());
                 		selectedItem = obj;
                 	}else if (MainPanel.currentState == MainPanel.currentState.PASTE){
-                		if(selectedItem!=null && selectedItem instanceof Place) {
-                			Place place = (Place) selectedItem;
-                			drawPlace(place, e.getX(), e.getY());
+                		if(selectedItem!=null) {
+                			if(selectedItem instanceof Place) {
+                				Place place = (Place) selectedItem;
+                    			drawPlace(place, e.getX(), e.getY());
+                			}else if (selectedItem instanceof Transition) {
+                				Transition trans = (Transition) selectedItem;
+                    			drawTransition(trans, e.getX(), e.getY());
+                			}
+                			
                 		}
                 	}else if (MainPanel.currentState == MainPanel.currentState.DELETE){
                 		Object obj = petrinet.selectedPlace(e.getX(), e.getY());
                 		selectedItem = obj;
-                		if(selectedItem!=null && selectedItem instanceof Place) {
-                			System.out.println("delete called");
-                			Place place = (Place) selectedItem;
-                			petrinet.deletePlace(place);
-                			repaint();
+                		if(selectedItem!=null) {
+                			if(selectedItem instanceof Place){
+                				System.out.println("delete called");
+                    			Place place = (Place) selectedItem;
+                    			petrinet.deletePlace(place);
+                    			repaint();
+                			}else if (selectedItem instanceof Transition) {
+                				System.out.println("delete called");
+                    			Transition transition = (Transition) selectedItem;
+                    			petrinet.deleteTransition(transition);
+                    			repaint();
+                			}
+                			
                 		}
                 	}
             	}
@@ -82,10 +96,14 @@ public class DrawingPanel extends JPanel {
             	if(e.getButton() == MouseEvent.BUTTON3) {
             		Object obj = petrinet.selectedPlace(e.getX(), e.getY());
             		selectedItem = obj;
-            		if(selectedItem!=null && selectedItem instanceof Place) {
-
-            			petrinet.getPetrinetBuilder().placeInputDialog(selectedItem);
-            			
+            		if(selectedItem!=null) {
+            			if(selectedItem instanceof Place){
+            				petrinet.getPetrinetBuilder().placeInputDialog(selectedItem);
+            			}
+            			else if (selectedItem instanceof Transition) {
+            				petrinet.getPetrinetBuilder().transitionInputDialog(selectedItem);
+            			}
+            				
             		}
             		
             	}
@@ -159,6 +177,16 @@ public class DrawingPanel extends JPanel {
 		}
 		
 	}
+	private void transitionNameSet() {
+		transitionCount++;
+		String name = "T" + transitionCount;
+		for(Transition transition: petrinet.transitionVector) {
+			if(transition.getName().equals(name)) {
+				transitionNameSet();
+			}
+		}
+		
+	}
     private void drawPlace(Place place, int x, int y){
     	placeNameSet();
     	place.setX(x);
@@ -175,8 +203,8 @@ public class DrawingPanel extends JPanel {
 		
 
     }
-    private void drawTransition(int x, int y){
-    	transitionCount ++;
+    private void drawTransition(Transition transition, int x, int y){
+    	transitionNameSet();
     	transition.setX(x);
     	transition.setY(y);
     	transition.setName("T" + transitionCount);
@@ -188,6 +216,7 @@ public class DrawingPanel extends JPanel {
         MainPanel.transitionCoordinator.add(x + "," + y);
 //		System.out.println("Current transitionCoordinator array list is:"+MainPanel.transitionCoordinator);
 	
+        petrinet.addTransition(transition);
     }
 
     public Dimension getPreferredSize() {
@@ -203,12 +232,12 @@ public class DrawingPanel extends JPanel {
     }
     public void paintComponent(Graphics g) {
         super.paintComponent(g); 
-//        System.out.println("place count :"+petrinet.placeVector.size());
-        for(PlaceGuiItem place : petrinet.placeVector){
+        for(Place place : petrinet.placeVector){
         	place.draw(g);
-//        	System.out.println(place.getX() + "  "+ place.getY());
+        }
+        for(TransitionGuiItem transition : petrinet.transitionVector){
+            transition.draw(g);
         }
         	
-        transition.draw(g);
     }  
 }

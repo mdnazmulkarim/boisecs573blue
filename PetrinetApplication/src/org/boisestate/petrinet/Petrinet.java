@@ -2,10 +2,8 @@ package org.boisestate.petrinet;
 
 import java.awt.Point;
 import java.util.ArrayList;
-import java.util.Vector;
 
 import org.boisestate.core.PetrinetBuilder;
-import org.boisestate.graphics.PlaceGuiItem;
 
 public class Petrinet {
 	
@@ -14,8 +12,8 @@ public class Petrinet {
 	private String title;
 	
 	public ArrayList<Place> placeVector;
-	private ArrayList<Transition> transitionVector;
-	private ArrayList<Arc> arcVector;
+	public ArrayList<Transition> transitionVector;
+	public ArrayList<Arc> arcVector;
 
 	private PetrinetBuilder petrinetBuilder;
 	
@@ -68,7 +66,11 @@ public class Petrinet {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	
+	public void addTransition(Transition transition) {
+		this.transitionVector.add(transition);
+//		petrinetBuilder.putElementInWorkingArrayList(place); //For Redo Undo
+//		petrinetBuilder.putElementInActionArrayList("A");
+	}
 	public void addPlace(Place place) {
 		this.placeVector.add(place);
 		System.out.println("add place called");
@@ -87,6 +89,14 @@ public class Petrinet {
 	public void removeAllPlace() {
 		this.placeVector.clear();
 	}
+	public void deleteTransition(Transition trans) {
+//		petrinetBuilder.putElementInWorkingArrayList(trans); //For Redo Undo
+//		petrinetBuilder.putElementInActionArrayList("D");
+		this.transitionVector.remove(trans);
+	}
+	public void removeAllTransition() {
+		this.transitionVector.clear();
+	}
 //	public int tokensOfPlace(int x, int y){
 //		for(int i=0; i<this.placeVector.size(); i++) {
 //			Place place = (Place)this.placeVector.get(i);
@@ -99,10 +109,21 @@ public class Petrinet {
 //	}
 	public Object selectedPlace(int x, int y){
 		
-		for(int i=0; i<this.placeVector.size(); i++) {
-			Place place = (Place)this.placeVector.get(i);
+//		for(int i=0; i<this.placeVector.size(); i++) {
+//			Place place = (Place)this.placeVector.get(i);
+//			if(place.getBounds().contains(new Point(x,y))) {
+//				return place;
+//			}
+//		}
+		
+		for(Place place: this.placeVector){
 			if(place.getBounds().contains(new Point(x,y))) {
 				return place;
+			}
+		}
+		for(Transition transition: this.transitionVector){
+			if(transition.getBounds().contains(new Point(x,y))) {
+				return transition;
 			}
 		}
 		

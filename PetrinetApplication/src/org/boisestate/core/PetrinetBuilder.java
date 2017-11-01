@@ -96,6 +96,15 @@ public class PetrinetBuilder {
 		}
 		return true;
 	}
+	private Boolean existingTransitionNameCheck(String transName,Transition pl) {
+		for(Transition trans: petrinet.transitionVector) {
+			if(trans != pl && transName.equals(trans.getName())){
+				return false;
+			}
+
+		}
+		return true;
+	}
 	public void setDrawingPanel(DrawingPanel drawingPanel) {
 		this.drawingPanel = drawingPanel;
 	}
@@ -114,6 +123,52 @@ public class PetrinetBuilder {
 			System.out.println("Clone failed.....");
 		}
 		return p;
+	}
+	public Transition cloneTransition(Transition transition) {
+		Transition p = new Transition();
+		p.setName(transition.getName());
+		p.setX(transition.getX());
+		p.setY(transition.getY());
+	
+		
+		
+		
+		if(p==transition){
+			System.out.println("Clone failed.....");
+		}
+		return p;
+	}
+	public void transitionInputDialog(Object selectedItem) {
+		Transition transition = (Transition) selectedItem;
+		
+		JTextField name = new JTextField();
+		name.setText(transition.getName());
+		Object[] message = {
+		    "Name:", name,
+		};
+
+		int option = JOptionPane.showConfirmDialog(null, message, "Input", JOptionPane.OK_CANCEL_OPTION);
+		if (option == JOptionPane.OK_OPTION) {
+			if(name.getText()!=null && (!name.getText().equals(transition.getName()))){
+	    		boolean b = existingTransitionNameCheck(name.getText(),transition);
+
+	    		if(!b){
+	    			final JPanel panel = new JPanel();
+	    		    JOptionPane.showMessageDialog(panel, "Duplicate name error.", "Error", JOptionPane.ERROR_MESSAGE);
+	    		}else{
+			    	transition.setName(name.getText());
+   			    }
+			 
+			    drawingPanel.partialPaint(new Rectangle(transition.getX(), transition.getY(), 
+                   		transition.getWidth()+1, 
+                   		transition.getHeight()+10+2));
+			}
+	    
+		} else {
+		    System.out.println("Not Changed.");
+		}
+		
+	
 	}
 	public void placeInputDialog(Object selectedItem) {
 		   Place place = (Place) selectedItem;
