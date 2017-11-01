@@ -122,7 +122,7 @@ public class PlaceGuiItem implements GuiItemInterface{
 //        	}
 //        }
         if (noOfTokens > 0) {
-    		g.drawString("{"+noOfTokens+"}", xPos+10+2, yPos+height+11);
+    		g.drawString("{"+noOfTokens+"}", xPos, yPos+height+11);
 
         }
 
