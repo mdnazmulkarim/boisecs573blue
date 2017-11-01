@@ -82,6 +82,7 @@ public class MainPanel extends JFrame {
         drawingPanel.setBackground(Color.white);
 		this.getContentPane().add(drawingPanel, BorderLayout.NORTH);
 		Toolkit.getDefaultToolkit().setDynamicLayout(true);
+		petrinet.getPetrinetBuilder().setDrawingPanel(drawingPanel);
     }
     public int alertDialog() {
     	int dialogResult = JOptionPane.showConfirmDialog (null, "Do you want to close current petrinet?","Warning",2); 
@@ -109,19 +110,49 @@ public class MainPanel extends JFrame {
     	Object obj = petrinet.getPetrinetBuilder().getElementFromWorkingArrayList();
     	Object actionObj = petrinet.getPetrinetBuilder().getElementFromActionArrayList();
     	
+    	Place pla = (Place)obj;
+    	String s = (String)actionObj;
+    	System.out.println(pla + " "+s);
 		if(obj!=null && obj instanceof Place) {
 			if(actionObj.equals("A")) {
-				System.out.println("Count "+ petrinet.placeVector.size());
+//				Place p = (Place)obj;
+//				Place p1=petrinet.placeVector.get(1);
+//				System.out.println("Not Matched..."+p1.getName());
+//
+//				if(p==p1){
+//					System.out.println("Matched...");
+//				}
+//				for(Place pp: petrinet.placeVector) {
+//					if(pp.getName().equals(p.getName())){
+//						petrinet.placeVector.remove(petrinet.placeVector.indexOf(pp));
+//
+//					}
+//				}
 				petrinet.placeVector.remove(obj);
-				System.out.println("count next ="+petrinet.placeVector.size());
+
 				drawingPanel.paintAgain();
 				petrinet.getPetrinetBuilder().putElementInRedoActionArrayList("D");
-			}else {
-				System.out.println("Count "+ petrinet.placeVector.size());
+			}else if(actionObj.equals("D")){
+				System.out.println("Delete...");
+
 				petrinet.placeVector.add((Place) obj);
-				System.out.println("count next ="+petrinet.placeVector.size());
 				drawingPanel.paintAgain();
 				petrinet.getPetrinetBuilder().putElementInRedoActionArrayList("A");
+			}else {
+				
+				Place objP = (Place)obj;
+				
+				for(Place place: petrinet.placeVector) {
+					if(place.getX()==objP.getX() && place.getY()==objP.getY()) {
+						int index = petrinet.placeVector.indexOf(place);
+						place = objP;
+						petrinet.placeVector.set(index, place);
+						drawingPanel.paintAgain();
+					}
+				}
+				petrinet.getPetrinetBuilder().putElementInRedoActionArrayList("M");
+
+//				drawingPanel.paintAgain();
 			}
 			
 			petrinet.getPetrinetBuilder().putElementInRedoArrayList(obj);
@@ -139,10 +170,15 @@ public class MainPanel extends JFrame {
 				petrinet.placeVector.remove(obj);
 				drawingPanel.paintAgain();
 				petrinet.getPetrinetBuilder().putElementInActionArrayList("D");
-			}else {
+			}else if (actionObj.equals("D")){
 				petrinet.placeVector.add((Place) obj);
 				drawingPanel.paintAgain();
 				petrinet.getPetrinetBuilder().putElementInActionArrayList("A");
+			}else {
+//				petrinet.placeVector.add((Place) obj);
+//				drawingPanel.paintAgain();
+				petrinet.getPetrinetBuilder().putElementInActionArrayList("M");
+
 			}
 			
 			petrinet.getPetrinetBuilder().putElementInWorkingArrayList(obj);

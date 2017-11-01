@@ -38,7 +38,7 @@ public class Petrinet {
 	{
 		if(this.petrinetBuilder == null)
 		{	
-			this.petrinetBuilder = new PetrinetBuilder();
+			this.petrinetBuilder = new PetrinetBuilder(this);
 		}
 		this.id = petrinetBuilder.generatePetrinetID();
 		this.name = petrinetBuilder.generatePetrinetName();
@@ -71,6 +71,7 @@ public class Petrinet {
 	
 	public void addPlace(Place place) {
 		this.placeVector.add(place);
+		System.out.println("add place called");
 		petrinetBuilder.putElementInWorkingArrayList(place); //For Redo Undo
 		petrinetBuilder.putElementInActionArrayList("A");
 	}
@@ -107,5 +108,6 @@ public class Petrinet {
 		
 		return null;
 	}
+	
 	
 }

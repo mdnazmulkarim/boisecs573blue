@@ -1,10 +1,19 @@
 package org.boisestate.core;
 
+import java.awt.Color;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Random;
 
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+import org.boisestate.petrinet.Petrinet;
+import org.boisestate.petrinet.Place;
 import org.boisestate.petrinet.Transition;
 import org.boisestate.util.PetrinetUtility;
+import org.boisestate.graphics.DrawingPanel;
 
 public class PetrinetBuilder {
 	public ArrayList<Object> workingArrayList;
@@ -13,9 +22,11 @@ public class PetrinetBuilder {
 	public ArrayList<Object> redoActionArrayList;
 	//Random rand;
 	public PetrinetUtility petrinetUtility;
-	
-	public PetrinetBuilder()
+	public Petrinet petrinet;
+	public DrawingPanel drawingPanel;
+	public PetrinetBuilder(Petrinet petrinet)
 	{
+		this.petrinet = petrinet;
 		//this.rand = new Random();
 		petrinetUtility = new PetrinetUtility();
 		workingArrayList = new ArrayList<Object>();
@@ -76,5 +87,85 @@ public class PetrinetBuilder {
 	{
 		return petrinetUtility.generateAPetrinetID();
 	}
+	private Boolean existingPlaceNameCheck(String placeName,Place pl) {
+		for(Place place: petrinet.placeVector) {
+			if(place != pl && placeName.equals(place.getName())){
+				return false;
+			}
+
+		}
+		return true;
+	}
+	public void setDrawingPanel(DrawingPanel drawingPanel) {
+		this.drawingPanel = drawingPanel;
+	}
+	public Place clonePlace(Place place) {
+		Place p = new Place();
+		p.setName(place.getName());
+		p.setTokenNumbers(place.getTokenNumbers());
+		p.setX(place.getX());
+		p.setY(place.getY());
+		p.setRadius(30);
+		p.setHight(40);
+		
+		
+		
+		if(p==place){
+			System.out.println("Clone failed.....");
+		}
+		return p;
+	}
+	public void placeInputDialog(Object selectedItem) {
+		   Place place = (Place) selectedItem;
+			
+			JTextField name = new JTextField();
+			JTextField numberOfTokens = new JTextField();
+			name.setText(place.getName());
+			numberOfTokens.setText(Integer.toString(place.getTokenNumbers()));
+			Object[] message = {
+			    "Name:", name,
+			    "NumberOfTokens:", numberOfTokens
+			};
+
+			int option = JOptionPane.showConfirmDialog(null, message, "Input", JOptionPane.OK_CANCEL_OPTION);
+			if (option == JOptionPane.OK_OPTION) {
+				if(name.getText()!=null && (!name.getText().equals(place.getName()) || Integer.parseInt(numberOfTokens.getText())!=place.getTokenNumbers())){
+		    		boolean b = existingPlaceNameCheck(name.getText(),place);
+
+		    		if(!b){
+		    			final JPanel panel = new JPanel();
+		    		    JOptionPane.showMessageDialog(panel, "Duplicate name error.", "Error", JOptionPane.ERROR_MESSAGE);
+		    		}else{
+
+		    		this.putElementInWorkingArrayList(clonePlace(place));
+	   			    this.putElementInActionArrayList("M");
+	   			    	
+	   			    
+
+	   			    
+	   			    Place pp = (Place)petrinet.getPetrinetBuilder().getElementFromWorkingArrayList();
+	   				System.out.println("oldName: "+ pp.getName()+" "+petrinet.getPetrinetBuilder().workingArrayList.size());
+
+				    	place.setName(name.getText());
+				    	if(numberOfTokens.getText()!=null){
+	   			    	place.setTokenNumbers(Integer.parseInt(numberOfTokens.getText()));
+	   			    }
+				 
+				    drawingPanel.partialPaint(new Rectangle(place.getX(), place.getY(), 
+	                   		place.getRadius()+1, 
+	                   		place.getHeight()+10+2));
+				    	
+//				    	drawingPanel.paintAgain();
+	   			   
+	   			    Place pp1 = (Place)petrinet.getPetrinetBuilder().getElementFromWorkingArrayList();
+	   				System.out.println("oldName next: "+ pp1.getName()+" "+petrinet.getPetrinetBuilder().workingArrayList.size());
+		    		}
+		    
+			    }
+			    
+			} else {
+			    System.out.println("Not Changed.");
+			}
+	   }
 
 }
