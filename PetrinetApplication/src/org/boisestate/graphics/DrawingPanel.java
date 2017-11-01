@@ -39,6 +39,7 @@ class DrawingPanel extends JPanel {
 	Object selectedItem;
 	
    Petrinet petrinet;
+
    
 	public DrawingPanel(final Petrinet petrinet) {
 		this.petrinet = petrinet;
@@ -74,7 +75,8 @@ class DrawingPanel extends JPanel {
                 		if(selectedItem!=null && selectedItem instanceof Place) {
                 			System.out.println("delete called");
                 			Place place = (Place) selectedItem;
-                			petrinet.placeVector.remove(place);
+//                			petrinet.placeVector.remove(place);
+                			petrinet.deletePlace(place);
                 			repaint();
                 		}
                 	}
@@ -148,7 +150,7 @@ class DrawingPanel extends JPanel {
 		System.out.println("Current placeCoordinator array list is:"+MainPanel.placeCoordinator);
 		
 		petrinet.addPlace(place);
-
+		
 
     }
     private void drawTransition(int x, int y){

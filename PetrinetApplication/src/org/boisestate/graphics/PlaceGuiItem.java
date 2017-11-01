@@ -100,29 +100,32 @@ public class PlaceGuiItem implements GuiItemInterface{
         g.setColor(Color.BLACK);
         g.drawOval(xPos,yPos,radius,height-nameHeight); 
         
-        if(noOfTokens > 0) {
-        	if (noOfTokens == 1) {
-        		g.fillOval(xPos+(radius/2), yPos+(radius/2), 4, 4);
-        	}
-        	else if (noOfTokens == 2) {
-        		g.fillOval(xPos+(radius/2), yPos+(radius/2), 4, 4);
-        		g.fillOval(xPos+(radius/4), yPos+(radius/2), 4, 4);
-        	}
-        	else if (noOfTokens == 3) {
-        		g.fillOval(xPos+(radius/2), yPos+(radius/2), 4, 4);
-        		g.fillOval(xPos+(radius/4), yPos+(radius/2), 4, 4);
-        		g.fillOval(xPos+(radius/4), yPos+(radius/4), 4, 4);
-        	}
-        	else if (noOfTokens == 4) {
-        		g.fillOval(xPos+(radius/2), yPos+(radius/2), 4, 4);
-        		g.fillOval(xPos+(radius/4), yPos+(radius/2), 4, 4);
-        		g.fillOval(xPos+(radius/4), yPos+(radius/4), 4, 4);
-        		g.fillOval(xPos+(radius/2), yPos+(radius/5), 4, 4);
-        	}else {
-        		g.drawString("{"+noOfTokens+"}", xPos+(radius/3), yPos+(radius/2));
-        	}
+//        if(noOfTokens > 0) {
+//        	if (noOfTokens == 1) {
+//        		g.fillOval(xPos+(radius/2), yPos+(radius/2), 4, 4);
+//        	}
+//        	else if (noOfTokens == 2) {
+//        		g.fillOval(xPos+(radius/2), yPos+(radius/2), 4, 4);
+//        		g.fillOval(xPos+(radius/4), yPos+(radius/2), 4, 4);
+//        	}
+//        	else if (noOfTokens == 3) {
+//        		g.fillOval(xPos+(radius/2), yPos+(radius/2), 4, 4);
+//        		g.fillOval(xPos+(radius/4), yPos+(radius/2), 4, 4);
+//        		g.fillOval(xPos+(radius/4), yPos+(radius/4), 4, 4);
+//        	}
+//        	else if (noOfTokens == 4) {
+//        		g.fillOval(xPos+(radius/2), yPos+(radius/2), 4, 4);
+//        		g.fillOval(xPos+(radius/4), yPos+(radius/2), 4, 4);
+//        		g.fillOval(xPos+(radius/4), yPos+(radius/4), 4, 4);
+//        		g.fillOval(xPos+(radius/2), yPos+(radius/5), 4, 4);
+//        	}else {
+//        	}
+//        }
+        if (noOfTokens > 0) {
+    		g.drawString("{"+noOfTokens+"}", xPos+10+2, yPos+height+11);
+
         }
-        
+
         g.drawString(name, xPos+10+2, yPos+height);
         
     }

@@ -22,8 +22,9 @@ import javax.swing.JPanel;
 import javax.swing.filechooser.FileSystemView;
 
 import org.boisestate.petrinet.Petrinet;
+import org.boisestate.petrinet.Place;
  
-enum State { PLACE, TRANSITION, ARC, NOTHING, COPY, PASTE, DELETE }
+enum State { PLACE, TRANSITION, ARC, NOTHING, COPY, PASTE, DELETE, UNDO, REDO }
 
 public class MainPanel extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -104,6 +105,52 @@ public class MainPanel extends JFrame {
 			drawingPanel.paintAgain();
 		}
     }
+    public void undoAction() {
+    	Object obj = petrinet.getPetrinetBuilder().getElementFromWorkingArrayList();
+    	Object actionObj = petrinet.getPetrinetBuilder().getElementFromActionArrayList();
+    	
+		if(obj!=null && obj instanceof Place) {
+			if(actionObj.equals("A")) {
+				System.out.println("Count "+ petrinet.placeVector.size());
+				petrinet.placeVector.remove(obj);
+				System.out.println("count next ="+petrinet.placeVector.size());
+				drawingPanel.paintAgain();
+				petrinet.getPetrinetBuilder().putElementInRedoActionArrayList("D");
+			}else {
+				System.out.println("Count "+ petrinet.placeVector.size());
+				petrinet.placeVector.add((Place) obj);
+				System.out.println("count next ="+petrinet.placeVector.size());
+				drawingPanel.paintAgain();
+				petrinet.getPetrinetBuilder().putElementInRedoActionArrayList("A");
+			}
+			
+			petrinet.getPetrinetBuilder().putElementInRedoArrayList(obj);
+			petrinet.getPetrinetBuilder().removeElementFromWorkingArrayList();
+			petrinet.getPetrinetBuilder().removeElementFromActionArrayList();	
+		}
+		
+    }
+    public void redoAction() {
+    	Object obj = petrinet.getPetrinetBuilder().getElementFromRedoArrayList();
+    	Object actionObj = petrinet.getPetrinetBuilder().getElementFromRedoActionArrayList();
+    	
+		if(obj!=null && obj instanceof Place) {
+			if(actionObj.equals("A")) {
+				petrinet.placeVector.remove(obj);
+				drawingPanel.paintAgain();
+				petrinet.getPetrinetBuilder().putElementInActionArrayList("D");
+			}else {
+				petrinet.placeVector.add((Place) obj);
+				drawingPanel.paintAgain();
+				petrinet.getPetrinetBuilder().putElementInActionArrayList("A");
+			}
+			
+			petrinet.getPetrinetBuilder().putElementInWorkingArrayList(obj);
+			petrinet.getPetrinetBuilder().removeElementFromRedoActionArrayList();
+			petrinet.getPetrinetBuilder().removeElementFromRedoArrayList();	
+		}
+		
+    }
     private void createActions() {
       newAction.addActionListener(new ActionListener() {
     	  public void actionPerformed(ActionEvent arg0) {
@@ -138,6 +185,22 @@ public class MainPanel extends JFrame {
       pasteAction.addActionListener(new ActionListener() {
     	  public void actionPerformed(ActionEvent arg0) {
     		  currentState = currentState.PASTE;
+    	  }
+      });
+      undoAction.addActionListener(new ActionListener() {
+    	  public void actionPerformed(ActionEvent arg0) {
+//    		  currentState = currentState.UNDO;
+    		  if(petrinet.getPetrinetBuilder().workingArrayList.size()>0) {
+        		  undoAction();
+    		  }
+    	  }
+      });
+      redoAction.addActionListener(new ActionListener() {
+    	  public void actionPerformed(ActionEvent arg0) {
+//    		  currentState = currentState.REDO;
+    		  if(petrinet.getPetrinetBuilder().redoArrayList.size()>0) {
+        		  redoAction();
+    		  }
     	  }
       });
       exitAction.addActionListener(new ActionListener() {
