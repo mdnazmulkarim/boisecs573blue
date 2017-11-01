@@ -109,8 +109,10 @@ public class MainPanel extends JFrame {
     public void undoAction() {
     	Object obj = petrinet.getPetrinetBuilder().getElementFromWorkingArrayList();
     	Object actionObj = petrinet.getPetrinetBuilder().getElementFromActionArrayList();
-    	
-		if(obj!=null && obj instanceof Place) {
+    	System.out.println("PRINTING BEFORE UNDO");
+    	petrinet.getPetrinetBuilder().printLists();
+		
+    	if(obj!=null && obj instanceof Place) {
 			if(actionObj.equals("A")) {
 
 				petrinet.placeVector.remove(obj);
@@ -144,6 +146,8 @@ public class MainPanel extends JFrame {
 			petrinet.getPetrinetBuilder().removeElementFromWorkingArrayList();
 			petrinet.getPetrinetBuilder().removeElementFromActionArrayList();	
 		}
+    	System.out.println("PRINTING AFTER UNDO");
+		petrinet.getPetrinetBuilder().printLists();
 		
     }
     public void redoAction() {
