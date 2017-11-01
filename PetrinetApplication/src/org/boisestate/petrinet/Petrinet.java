@@ -86,16 +86,16 @@ public class Petrinet {
 	public void removeAllPlace() {
 		this.placeVector.clear();
 	}
-	public int tokensOfPlace(int x, int y){
-		for(int i=0; i<this.placeVector.size(); i++) {
-			Place place = (Place)this.placeVector.get(i);
-			if(place.getBounds().contains(new Point(x,y))) {
-				return i;
-			}
-		}
-		
-		return -1;
-	}
+//	public int tokensOfPlace(int x, int y){
+//		for(int i=0; i<this.placeVector.size(); i++) {
+//			Place place = (Place)this.placeVector.get(i);
+//			if(place.getBounds().contains(new Point(x,y))) {
+//				return i;
+//			}
+//		}
+//		
+//		return -1;
+//	}
 	public Object selectedPlace(int x, int y){
 		
 		for(int i=0; i<this.placeVector.size(); i++) {

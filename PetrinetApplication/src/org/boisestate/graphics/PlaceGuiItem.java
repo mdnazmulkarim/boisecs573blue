@@ -126,7 +126,7 @@ public class PlaceGuiItem implements GuiItemInterface{
 
         }
 
-        g.drawString(name, xPos+10+2, yPos+height);
+        g.drawString(name, xPos, yPos+height);
         
     }
 

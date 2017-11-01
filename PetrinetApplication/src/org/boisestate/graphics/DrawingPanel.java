@@ -23,6 +23,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 import org.boisestate.petrinet.Petrinet;
@@ -34,7 +35,7 @@ class DrawingPanel extends JPanel {
 		
 	TransitionGuiItem transition = new TransitionGuiItem();
 
-	int placeCount = 0;
+	public int placeCount = 0;
 	int transitionCount = 0;
 	Object selectedItem;
 	
@@ -50,21 +51,14 @@ class DrawingPanel extends JPanel {
             		if(MainPanel.currentState == MainPanel.currentState.PLACE) {
             			System.out.println("mouse event occured...."+petrinet.placeVector.size());
             			Place place = new Place();
-                		drawPlace(place, e.getX(),e.getY());
-                		
-//                		petrinet.addPlace(place);
-                		
+                		drawPlace(place, e.getX(),e.getY());                		
                 	}else if (MainPanel.currentState == MainPanel.currentState.TRANSITION){
                 		drawTransition(e.getX(),e.getY());
                 	}
                 	else if (MainPanel.currentState == MainPanel.currentState.COPY){
                 		Object obj = petrinet.selectedPlace(e.getX(), e.getY());
                 		selectedItem = obj;
-//                		if(obj instanceof Place) {
-//                			
-//                		}
                 	}else if (MainPanel.currentState == MainPanel.currentState.PASTE){
-                		
                 		if(selectedItem!=null && selectedItem instanceof Place) {
                 			Place place = (Place) selectedItem;
                 			drawPlace(place, e.getX(), e.getY());
@@ -75,7 +69,6 @@ class DrawingPanel extends JPanel {
                 		if(selectedItem!=null && selectedItem instanceof Place) {
                 			System.out.println("delete called");
                 			Place place = (Place) selectedItem;
-//                			petrinet.placeVector.remove(place);
                 			petrinet.deletePlace(place);
                 			repaint();
                 		}
@@ -89,30 +82,47 @@ class DrawingPanel extends JPanel {
             		Object obj = petrinet.selectedPlace(e.getX(), e.getY());
             		selectedItem = obj;
             		if(selectedItem!=null && selectedItem instanceof Place) {
-            			System.out.println("delete called");
+
             			Place place = (Place) selectedItem;
             			
-            			String token = JOptionPane.showInputDialog("Number of tokens: ", place.getTokenNumbers());
-            			if(token != null) {
-            				place.setTokenNumbers(Integer.parseInt(token));
-                    		System.out.println(token);
-                    		repaint(place.getX(), place.getY(), 
-                            		place.getRadius()+1, 
-                            		place.getHeight()+10+2);
+            			JTextField name = new JTextField();
+            			JTextField numberOfTokens = new JTextField();
+            			name.setText(place.getName());
+            			numberOfTokens.setText(Integer.toString(place.getTokenNumbers()));
+            			Object[] message = {
+            			    "Name:", name,
+            			    "NumberOfTokens:", numberOfTokens
+            			};
+
+            			int option = JOptionPane.showConfirmDialog(null, message, "Input", JOptionPane.OK_CANCEL_OPTION);
+            			if (option == JOptionPane.OK_OPTION) {
+            			    if(name.getText()!=null){
+            			    	for(int i=0; i< petrinet.placeVector.size(); i++) {
+            			    		Place place1 = petrinet.placeVector.get(i);
+            			    		if(place1!=place && place1.getName().equals(name.getText())) {
+            			    			final JPanel panel = new JPanel();
+            			    		    JOptionPane.showMessageDialog(panel, "Duplicate name error.", "Error", JOptionPane.ERROR_MESSAGE);
+            			    			break;
+            			    		}else {
+            			    			if(i==petrinet.placeVector.size()-1){
+                        			    	place.setName(name.getText());
+                        			    	if(numberOfTokens.getText()!=null){
+                            			    	place.setTokenNumbers(Integer.parseInt(numberOfTokens.getText()));
+                            			    }
+                            			    repaint(place.getX(), place.getY(), 
+                                            		place.getRadius()+1, 
+                                            		place.getHeight()+10+2);
+            			    			}else continue;
+            			    		}
+            			    	}
+            			    }
+            			    
+            			} else {
+            			    System.out.println("Not Changed.");
             			}
             			
             		}
             		
-//            		int i = petrinet.tokensOfPlace(e.getX(), e.getY());
-//            		if (i>=0) {
-//            			String token = JOptionPane.showInputDialog("Number of tokens: ", "0");
-//            			Place place = petrinet.placeVector.get(i);
-//            			place.addToken(Integer.parseInt(token));
-//                		System.out.println(token);
-//                		repaint(place.getX(), place.getY(), 
-//                        		place.getRadius()+1, 
-//                        		place.getHeight()+10+2);
-//            		}
             	}
             		
             	
@@ -137,8 +147,18 @@ class DrawingPanel extends JPanel {
 
     }
    
+	private void existingPlaceNameCheck() {
+		placeCount++;
+		String name = "P" + placeCount;
+		for(Place place: petrinet.placeVector) {
+			if(place.getName().equals(name)) {
+				existingPlaceNameCheck();
+			}
+		}
+		
+	}
     private void drawPlace(Place place, int x, int y){
-    	placeCount++;
+    	existingPlaceNameCheck();
     	place.setX(x);
     	place.setY(y);
     	place.setName("P"+placeCount);
