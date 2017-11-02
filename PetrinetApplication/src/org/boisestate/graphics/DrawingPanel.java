@@ -14,10 +14,12 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.List;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -27,6 +29,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
+import org.boisestate.petrinet.Arc;
+import org.boisestate.petrinet.Arc.ArcDirectionType;
 import org.boisestate.petrinet.Petrinet;
 import org.boisestate.petrinet.Place;
 import org.boisestate.petrinet.Transition;
@@ -34,15 +38,21 @@ import org.boisestate.petrinet.Transition;
 public class DrawingPanel extends JPanel {
 	
 
+	ArrayList<Point> pointList = new ArrayList<Point>();
 		
-
+	public Boolean arcDrawingStarted = false;
+	Place tempPlace = null;
+	Transition tempTransition = null;
+	ArcDirectionType arcDirection = ArcDirectionType.P_2_T;
+	
+	
+	
 	public int placeCount = 0;
 	int transitionCount = 0;
 	Object selectedItem;
 	
    Petrinet petrinet;
 
-   
 	public DrawingPanel(final Petrinet petrinet) {
 		this.petrinet = petrinet;
         setBorder(BorderFactory.createLineBorder(Color.black));
@@ -50,16 +60,71 @@ public class DrawingPanel extends JPanel {
             public void mousePressed(MouseEvent e){
             	if(e.getButton() == MouseEvent.BUTTON1) {
             		if(MainPanel.currentState == MainPanel.currentState.PLACE) {
+            			erasePartialArc();
             			Place place = new Place();
                 		drawPlace(place, e.getX(),e.getY());                		
                 	}else if (MainPanel.currentState == MainPanel.currentState.TRANSITION){
+                		erasePartialArc();
                 		Transition transition = new Transition();
                 		drawTransition(transition, e.getX(),e.getY());
+                	}else if (MainPanel.currentState == MainPanel.currentState.ARC){
+                		
+                		if(arcDrawingStarted){
+                			pointList.add(new Point(e.getX(), e.getY()));
+                			
+                			// For circle points change
+//                			Point pp = petrinet.getPetrinetBuilder().intersectionPoint(pointList.get(1), pointList.get(0), tempPlace.getRadius());
+//                			pointList.get(0).setLocation(pp);
+                			
+                			repaint();
+                    		Object obj = petrinet.getPetrinetBuilder().getElementUnderThisPoint(e.getX(),e.getY());
+                    		
+                    		if(arcDirection == ArcDirectionType.P_2_T && obj!=null) {
+                    			if(obj instanceof Transition) {
+                    				arcDrawingStarted = false;
+                    				// Drawing End. create new arc object and initialize temporary variables
+                    				petrinet.getPetrinetBuilder().createArc((ArrayList<Point>)pointList.clone(), tempPlace, tempTransition, arcDirection);
+                    				pointList.clear();
+                    			}
+                    		}
+                    		else if(arcDirection == ArcDirectionType.T_2_P && obj!=null) {
+                    			if(obj instanceof Place) {
+                    				arcDrawingStarted = false;
+                    				// Drawing End. create new arc object and initialize temporary variables
+                    				petrinet.getPetrinetBuilder().createArc((ArrayList<Point>)pointList.clone(), tempPlace, tempTransition, arcDirection);
+                    				pointList.clear();
+
+                    			}
+                    		}
+                		}else {
+                			Object obj = petrinet.getPetrinetBuilder().getElementUnderThisPoint(e.getX(),e.getY());
+                    		if(obj != null) {
+                    			if(obj instanceof Place) {
+                    				tempPlace = (Place)obj;
+                    				arcDrawingStarted = true;
+                    				arcDirection = ArcDirectionType.P_2_T;
+                    				pointList.add(new Point(e.getX(), e.getY()));
+                            		repaint();
+                    			}else {
+                    				tempTransition = (Transition)obj;
+                    				arcDrawingStarted = true;
+                    				arcDirection = ArcDirectionType.T_2_P;
+                    				pointList.add(new Point(e.getX(), e.getY()));
+                            		repaint();
+                    			}
+                    			
+                        		
+                    		}
+                		}
+                		
+                		
                 	}
                 	else if (MainPanel.currentState == MainPanel.currentState.COPY){
+                		erasePartialArc();
                 		Object obj = petrinet.selectedPlace(e.getX(), e.getY());
                 		selectedItem = obj;
                 	}else if (MainPanel.currentState == MainPanel.currentState.PASTE){
+                		erasePartialArc();
                 		if(selectedItem!=null) {
                 			if(selectedItem instanceof Place) {
                 				Place place = (Place) selectedItem;
@@ -73,6 +138,7 @@ public class DrawingPanel extends JPanel {
                 			
                 		}
                 	}else if (MainPanel.currentState == MainPanel.currentState.DELETE){
+                		erasePartialArc();
                 		Object obj = petrinet.selectedPlace(e.getX(), e.getY());
                 		selectedItem = obj;
                 		if(selectedItem!=null) {
@@ -94,6 +160,7 @@ public class DrawingPanel extends JPanel {
             	if(e.getButton() == MouseEvent.BUTTON2)
             		System.out.println("button 2");
             	if(e.getButton() == MouseEvent.BUTTON3) {
+            		erasePartialArc();
             		Object obj = petrinet.selectedPlace(e.getX(), e.getY());
             		selectedItem = obj;
             		if(selectedItem!=null) {
@@ -112,55 +179,41 @@ public class DrawingPanel extends JPanel {
                 
             }
             
-            
+//            public void mouseReleased(MouseEvent e) {
+//            	if(MainPanel.currentState == MainPanel.currentState.ARC) {
+//            		if(startToGetPoint) {
+//            			System.out.println("mouseReleased...");
+//            			
+//            		}
+//            	}
+//            }
         });
         
-    }
-//   private void placeInputDialog1() {
-//	   Place place = (Place) selectedItem;
+//        addMouseMotionListener(new MouseMotionListener() {
+//			
+//			@Override
+//			public void mouseMoved(MouseEvent e) {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//			
+//			@Override
+//			public void mouseDragged(MouseEvent e) {
+//				// TODO Auto-generated method stub
+//				
+//			}
 //		
-//		JTextField name = new JTextField();
-//		JTextField numberOfTokens = new JTextField();
-//		name.setText(place.getName());
-//		numberOfTokens.setText(Integer.toString(place.getTokenNumbers()));
-//		Object[] message = {
-//		    "Name:", name,
-//		    "NumberOfTokens:", numberOfTokens
-//		};
-//
-//		int option = JOptionPane.showConfirmDialog(null, message, "Input", JOptionPane.OK_CANCEL_OPTION);
-//		if (option == JOptionPane.OK_OPTION) {
-//			if(name.getText()!=null && (!name.getText().equals(place.getName()) || Integer.parseInt(numberOfTokens.getText())!=place.getTokenNumbers())){
-//	    		boolean b = existingPlaceNameCheck(name.getText(),place);
-//
-//	    		if(!b){
-//	    			final JPanel panel = new JPanel();
-//	    		    JOptionPane.showMessageDialog(panel, "Duplicate name error.", "Error", JOptionPane.ERROR_MESSAGE);
-//	    		}else{
-//
-//	    			petrinet.getPetrinetBuilder().putElementInWorkingArrayList(petrinet.clonePlace(place));
-//   			    petrinet.getPetrinetBuilder().putElementInActionArrayList("M");
-//   			    
-//   			    Place pp = (Place)petrinet.getPetrinetBuilder().getElementFromWorkingArrayList();
-//   				System.out.println("oldName: "+ pp.getName()+" "+petrinet.getPetrinetBuilder().workingArrayList.size());
-//
-//			    	place.setName(name.getText());
-//			    	if(numberOfTokens.getText()!=null){
-//   			    	place.setTokenNumbers(Integer.parseInt(numberOfTokens.getText()));
-//   			    }
-//   			    repaint(place.getX(), place.getY(), 
-//                   		place.getRadius()+1, 
-//                   		place.getHeight()+10+2);
-//   			    Place pp1 = (Place)petrinet.getPetrinetBuilder().getElementFromWorkingArrayList();
-//   				System.out.println("oldName next: "+ pp1.getName()+" "+petrinet.getPetrinetBuilder().workingArrayList.size());
-//	    		}
-//	    
-//		    }
-//		    
-//		} else {
-//		    System.out.println("Not Changed.");
-//		}
-//   }
+//		});
+        
+    }
+	
+	public void erasePartialArc() {
+		if (arcDrawingStarted) {
+			pointList.clear();
+			arcDrawingStarted = false;
+			repaint();
+		}
+	}
    public void partialPaint(Rectangle rec){
 	   repaint(rec.x, rec.y, 
           		rec.width, 
@@ -187,6 +240,7 @@ public class DrawingPanel extends JPanel {
 		}
 		
 	}
+	
     private void drawPlace(Place place, int x, int y){
     	placeNameSet();
     	place.setX(x);
@@ -196,12 +250,8 @@ public class DrawingPanel extends JPanel {
         		place.getRadius()+1, 
         		place.getHeight()+10+2);
        
-        MainPanel.placeCoordinator.add(x + "," + y);
-//		System.out.println("Current placeCoordinator array list is:"+MainPanel.placeCoordinator);
-		
+        MainPanel.placeCoordinator.add(x + "," + y);		
 		petrinet.addPlace(place);
-		
-
     }
     private void drawTransition(Transition transition, int x, int y){
     	transitionNameSet();
@@ -239,6 +289,24 @@ public class DrawingPanel extends JPanel {
         for(TransitionGuiItem transition : petrinet.transitionVector){
             transition.draw(g);
         }
+        
+        for(int i = 0; i< pointList.size()-1; i++){
+        	Point p = pointList.get(i);
+        	Point p1 = pointList.get(i+1);
+            g.drawLine(p.x, p.y, p1.x, p1.y);
+        }
+       
+        
+        
+        for(Arc arc: petrinet.arcVector) {
+        	System.out.println("Printing 1");
+        	for(int i =0; i<arc.getPointVector().size();i++) {
+            	System.out.println(arc.getPointVector().get(i));
+
+        	}
+        	arc.draw(g);
+        }
+        
         	
     }  
 }

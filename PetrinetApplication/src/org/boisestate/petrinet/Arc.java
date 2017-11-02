@@ -1,16 +1,29 @@
 package org.boisestate.petrinet;
 
-public class Arc {
-	
+import java.awt.Graphics;
+import java.awt.Point;
+import java.util.ArrayList;
+
+import org.boisestate.graphics.ArcGuiItem;
+import org.boisestate.graphics.DrawingPanel;
+import org.boisestate.util.PetrinetUtility;
+
+public class Arc extends ArcGuiItem implements Cloneable{
+	public enum ArcDirectionType  {
+	      P_2_T, T_2_P
+   }
+	public static ArcDirectionType arcDirectionType;
 	private int weight;
 	private Place connectedPlace;
 	private Transition connectedTransition;
 	private ArcDirectionType directionType;
-	
-	public enum ArcDirectionType  {
-	      P_2_T, T_2_P
-	   }
-	
+	Point sPoint = new Point(-1, -1); 
+    Point ePoint = new Point(-1, -1); 
+   
+
+	   
+	public Arc() {
+	}
 	public Arc(Place place, Transition transition, ArcDirectionType type )
 	{
 		this.connectedPlace = place;
@@ -41,7 +54,17 @@ public class Arc {
 	public Transition getTransition(){
 	     return this.connectedTransition;
 	}
-	
+	public Object clone() {
+		Object o = null;
+		try {
+			o=super.clone();
+
+		} catch (CloneNotSupportedException e) {
+			// TODO: handle exception
+		}
+		return o;
+	}
+
 	
 
 }

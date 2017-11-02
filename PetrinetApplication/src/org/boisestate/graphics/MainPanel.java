@@ -369,7 +369,6 @@ public class MainPanel extends JFrame {
       arcButton.addActionListener(new ActionListener() {
     	  public void actionPerformed(ActionEvent arg0) {
     	      currentState = currentState.ARC;
-    		 
     	  }
       });
       arrowButton.addActionListener(new ActionListener() {
