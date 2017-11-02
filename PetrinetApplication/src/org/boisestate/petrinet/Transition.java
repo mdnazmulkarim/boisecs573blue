@@ -4,7 +4,7 @@ import java.util.Vector;
 
 import org.boisestate.graphics.TransitionGuiItem;
 
-public class Transition extends TransitionGuiItem{
+public class Transition extends TransitionGuiItem implements Cloneable{
 
 	private Vector<Arc> arcVector;
 	private boolean fireable;
@@ -35,7 +35,16 @@ public class Transition extends TransitionGuiItem{
 	}
 	
 	
-	
+	public Object clone() {
+		Object o = null;
+		try {
+			o=super.clone();
+
+		} catch (CloneNotSupportedException e) {
+			// TODO: handle exception
+		}
+		return o;
+	}
 	
 	
 	

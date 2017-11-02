@@ -172,7 +172,7 @@ public class PetrinetBuilder {
 	
 	}
 	public void placeInputDialog(Object selectedItem) {
-		   Place place = (Place) selectedItem;
+		   Place place = (Place)selectedItem;
 			
 			JTextField name = new JTextField();
 			JTextField numberOfTokens = new JTextField();
@@ -195,26 +195,20 @@ public class PetrinetBuilder {
 
 		    		this.putElementInWorkingArrayList(place.clone());
 	   			    this.putElementInActionArrayList("M");
-	   			    	
-	   			    
-
-	   			    
-	   			    Place pp = (Place)petrinet.getPetrinetBuilder().getElementFromWorkingArrayList();
-	   				System.out.println("oldName: "+ pp.getName()+" "+petrinet.getPetrinetBuilder().workingArrayList.size());
-
-				    	place.setName(name.getText());
-				    	if(numberOfTokens.getText()!=null){
-				    		place.setTokenNumbers(Integer.parseInt(numberOfTokens.getText()));
-				    	}
+	   			   
+	   			    place.setName(name.getText());
+	   			   	if(numberOfTokens.getText()!=null){
+			    		place.setTokenNumbers(Integer.parseInt(numberOfTokens.getText()));
+			    	}
 				 
+	   			   	
 				    drawingPanel.partialPaint(new Rectangle(place.getX(), place.getY(), 
 	                   		place.getRadius()+1, 
 	                   		place.getHeight()+10+2));
-				    	
-//				    	drawingPanel.paintAgain();
+				    
+				    System.out.println("name changed....");
+				    petrinet.getPetrinetBuilder().printLists();
 	   			   
-	   			    Place pp1 = (Place)petrinet.getPetrinetBuilder().getElementFromWorkingArrayList();
-	   				System.out.println("oldName next: "+ pp1.getName()+" "+petrinet.getPetrinetBuilder().workingArrayList.size());
 		    		}
 		    
 			    }
@@ -234,6 +228,25 @@ public class PetrinetBuilder {
     	Place placeObj;
     	Transition transitionObj;
     	for(Object objW: petrinet.getPetrinetBuilder().workingArrayList) {
+    		if( objW instanceof Place)
+    		{
+    			placeObj = (Place)objW;
+    			System.out.println(placeObj.getName()+"|"+placeObj.getX()+"|"+placeObj.getY());
+    		}
+    		else if( objW instanceof Transition) 
+    		{
+    			transitionObj = (Transition)objW;
+    			System.out.println(transitionObj.getName()+"|"+transitionObj.getX()+"|"+transitionObj.getY());
+    		}
+    		else
+    		{
+    			System.out.println("Undetected object");
+    		}
+    		
+    	}
+    	System.out.println("##Printing Redo List:");
+
+    	for(Object objW: petrinet.getPetrinetBuilder().redoArrayList) {
     		if( objW instanceof Place)
     		{
     			placeObj = (Place)objW;

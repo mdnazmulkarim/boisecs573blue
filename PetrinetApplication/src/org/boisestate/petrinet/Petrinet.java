@@ -73,12 +73,11 @@ public class Petrinet {
 	}
 	public void addPlace(Place place) {
 		this.placeVector.add(place);
-		System.out.println("add place called");
-		petrinetBuilder.putElementInWorkingArrayList(place); //For Redo Undo
+		petrinetBuilder.putElementInWorkingArrayList(place.clone()); //For Redo Undo
 		petrinetBuilder.putElementInActionArrayList("A");
 	}
 	public void deletePlace(Place place) {
-		petrinetBuilder.putElementInWorkingArrayList(place); //For Redo Undo
+		petrinetBuilder.putElementInWorkingArrayList(place.clone()); //For Redo Undo
 		petrinetBuilder.putElementInActionArrayList("D");
 		this.placeVector.remove(place);
 	}

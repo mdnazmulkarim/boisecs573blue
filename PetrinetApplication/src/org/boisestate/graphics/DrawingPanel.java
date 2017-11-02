@@ -65,12 +65,10 @@ public class DrawingPanel extends JPanel {
                 				Place place = (Place) selectedItem;
                 				Place newPlace = (Place)place.clone();
                     			drawPlace(newPlace, e.getX(), e.getY());
-                    			for(Place pp: petrinet.placeVector) {
-                    				System.out.println("Name "+pp.getName()+"x :"+pp.getX()+" "+pp.getY());
-                    			}
                 			}else if (selectedItem instanceof Transition) {
                 				Transition trans = (Transition) selectedItem;
-                    			drawTransition(trans, e.getX(), e.getY());
+                				Transition newTrans = (Transition)trans.clone();
+                    			drawTransition(newTrans, e.getX(), e.getY());
                 			}
                 			
                 		}
@@ -80,21 +78,11 @@ public class DrawingPanel extends JPanel {
                 		if(selectedItem!=null) {
                 			if(selectedItem instanceof Place){
                 				System.out.println("delete called");
-                    			
-//                    			for(Place pp: petrinet.placeVector) {
-//                    				System.out.println("n1 "+pp.getName()+" n2 "+((Place)obj).getName());
-//                    				if(pp.getName().equals(((Place)obj).getName())){
-//                            			petrinet.deletePlace(pp);
-//                            			break;
-//                    				}
-//                    			}
-                    			
-                   			petrinet.deletePlace((Place)selectedItem);
+                				petrinet.deletePlace((Place)selectedItem);
                     			repaint();
                 			}else if (selectedItem instanceof Transition) {
                 				System.out.println("delete called");
-                    			Transition transition = (Transition) selectedItem;
-                    			petrinet.deleteTransition(transition);
+                    			petrinet.deleteTransition((Transition) selectedItem);
                     			repaint();
                 			}
                 			
@@ -220,7 +208,6 @@ public class DrawingPanel extends JPanel {
     	transition.setX(x);
     	transition.setY(y);
     	transition.setName("T" + transitionCount);
-        // Repaint the square at the new location.
         repaint(transition.getX(), transition.getY(), 
         		transition.getWidth()+1, 
         		transition.getHeight()+10+2);
