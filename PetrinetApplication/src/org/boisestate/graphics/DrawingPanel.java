@@ -216,6 +216,8 @@ public class DrawingPanel extends JPanel {
 //		System.out.println("Current transitionCoordinator array list is:"+MainPanel.transitionCoordinator);
 	
         petrinet.addTransition(transition);
+        
+        petrinet.getPetrinetBuilder().printLists();
     }
 
     public Dimension getPreferredSize() {

@@ -68,8 +68,8 @@ public class Petrinet {
 	}
 	public void addTransition(Transition transition) {
 		this.transitionVector.add(transition);
-//		petrinetBuilder.putElementInWorkingArrayList(place); //For Redo Undo
-//		petrinetBuilder.putElementInActionArrayList("A");
+		petrinetBuilder.putElementInWorkingArrayList(transition.clone()); //For Redo Undo
+		petrinetBuilder.putElementInActionArrayList("A");
 	}
 	public void addPlace(Place place) {
 		this.placeVector.add(place);
@@ -89,8 +89,8 @@ public class Petrinet {
 		this.placeVector.clear();
 	}
 	public void deleteTransition(Transition trans) {
-//		petrinetBuilder.putElementInWorkingArrayList(trans); //For Redo Undo
-//		petrinetBuilder.putElementInActionArrayList("D");
+		petrinetBuilder.putElementInWorkingArrayList(trans.clone()); //For Redo Undo
+		petrinetBuilder.putElementInActionArrayList("D");
 		this.transitionVector.remove(trans);
 	}
 	public void removeAllTransition() {

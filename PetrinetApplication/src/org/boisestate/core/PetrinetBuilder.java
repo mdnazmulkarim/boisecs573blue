@@ -140,35 +140,45 @@ public class PetrinetBuilder {
 		return p;
 	}
 	public void transitionInputDialog(Object selectedItem) {
-		Transition transition = (Transition) selectedItem;
+		Transition trans = (Transition)selectedItem;
 		
 		JTextField name = new JTextField();
-		name.setText(transition.getName());
+		name.setText(trans.getName());
 		Object[] message = {
 		    "Name:", name,
 		};
 
 		int option = JOptionPane.showConfirmDialog(null, message, "Input", JOptionPane.OK_CANCEL_OPTION);
 		if (option == JOptionPane.OK_OPTION) {
-			if(name.getText()!=null && (!name.getText().equals(transition.getName()))){
-	    		boolean b = existingTransitionNameCheck(name.getText(),transition);
+			if(name.getText()!=null && (!name.getText().equals(trans.getName()))){
+	    		boolean b = existingTransitionNameCheck(name.getText(),trans);
 
 	    		if(!b){
 	    			final JPanel panel = new JPanel();
 	    		    JOptionPane.showMessageDialog(panel, "Duplicate name error.", "Error", JOptionPane.ERROR_MESSAGE);
 	    		}else{
-			    	transition.setName(name.getText());
-   			    }
+
+	    		this.putElementInWorkingArrayList(trans.clone());
+   			    this.putElementInActionArrayList("M");
+   			   
+   			    trans.setName(name.getText());
+   			   	
 			 
-			    drawingPanel.partialPaint(new Rectangle(transition.getX(), transition.getY(), 
-                   		transition.getWidth()+1, 
-                   		transition.getHeight()+10+2));
-			}
+   			   	
+			    drawingPanel.partialPaint(new Rectangle(trans.getX(), trans.getY(), 
+			    		trans.getWidth()+1, 
+			    		trans.getHeight()+10+2));
+			    
+			    System.out.println("name changed....");
+			    petrinet.getPetrinetBuilder().printLists();
+   			   
+	    		}
 	    
+		    }
+		    
 		} else {
 		    System.out.println("Not Changed.");
 		}
-		
 	
 	}
 	public void placeInputDialog(Object selectedItem) {
@@ -223,6 +233,10 @@ public class PetrinetBuilder {
 		System.out.println("##Printing Places:");
     	for(Place place: petrinet.placeVector) {
     		System.out.println(place.getName()+"|"+place.getX()+"|"+place.getY());
+    	}
+    	System.out.println("##Printing Transitions:");
+    	for(Transition trans: petrinet.transitionVector) {
+    		System.out.println(trans.getName()+"|"+trans.getX()+"|"+trans.getY());
     	}
     	System.out.println("##Printing Working List:");
     	Place placeObj;
