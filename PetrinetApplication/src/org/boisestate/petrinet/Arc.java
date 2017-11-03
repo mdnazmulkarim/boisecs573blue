@@ -9,22 +9,23 @@ import org.boisestate.graphics.DrawingPanel;
 import org.boisestate.util.PetrinetUtility;
 
 public class Arc extends ArcGuiItem implements Cloneable{
-	public enum ArcDirectionType  {
-	      P_2_T, T_2_P
-   }
-	public static ArcDirectionType arcDirectionType;
+//	public enum ArcDirectionType  {
+//	      P_2_T, T_2_P
+//   }
+//	public static ArcDirectionType arcDirectionType;
 	private int weight;
 	private Place connectedPlace;
 	private Transition connectedTransition;
-	private ArcDirectionType directionType;
+	private String directionType;
 	Point sPoint = new Point(-1, -1); 
     Point ePoint = new Point(-1, -1); 
    
 
 	   
 	public Arc() {
+		
 	}
-	public Arc(Place place, Transition transition, ArcDirectionType type )
+	public Arc(Place place, Transition transition, String type )
 	{
 		this.connectedPlace = place;
 		this.connectedTransition = transition;
@@ -32,7 +33,7 @@ public class Arc extends ArcGuiItem implements Cloneable{
 		this.weight = 1;
 	}
 	
-	public Arc(Place place, Transition transition, int w, ArcDirectionType type ){
+	public Arc(Place place, Transition transition, int w, String type ){
 		this.connectedPlace = place;
 		this.connectedTransition = transition;
 		this.directionType = type;
@@ -53,6 +54,12 @@ public class Arc extends ArcGuiItem implements Cloneable{
 	
 	public Transition getTransition(){
 	     return this.connectedTransition;
+	}
+	public void setDirectionType(String type) {
+		this.directionType = type;
+	}
+	public String getDirectionType() {
+		return this.directionType;
 	}
 	public Object clone() {
 		Object o = null;

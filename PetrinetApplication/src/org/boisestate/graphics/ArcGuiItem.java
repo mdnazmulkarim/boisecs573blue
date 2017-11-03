@@ -18,14 +18,14 @@ public class ArcGuiItem implements GuiItemInterface{
     
     
 
-    public static ArrayList<Point> pointsVector;
+    public ArrayList<Point> pointsVector;
     
     public ArcGuiItem()
     {
 
     	this.fillColor = Color.BLACK;
     	this.borderColor = Color.BLACK;
-    	pointsVector = new ArrayList<Point>();
+    	this.pointsVector = new ArrayList<Point>();
     	
     	
     } 
@@ -97,12 +97,14 @@ public class ArcGuiItem implements GuiItemInterface{
 	     /* Draw old lines.Every 2 points construct a line.*/
 		
 		
-		System.out.println("Point Array...");
-		 for(int i = 0; i< pointsVector.size()-1; i++){
-	        	Point p = pointsVector.get(i);
-	        	Point p1 = pointsVector.get(i+1);
+		 for(int i = 0; i< this.pointsVector.size()-1; i++){
+	        	Point p = this.pointsVector.get(i);
+	        	Point p1 = this.pointsVector.get(i+1);
 	        	g.setColor(fillColor);
 	            g.drawLine(p.x, p.y, p1.x, p1.y);
+	            if(i==this.pointsVector.size()-2) {
+	            	g.fillOval(p1.x-5, p1.y-5, 10, 10);
+	            }
 	      }
 	}
 	

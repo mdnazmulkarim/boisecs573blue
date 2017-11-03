@@ -14,7 +14,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.boisestate.petrinet.Arc;
-import org.boisestate.petrinet.Arc.ArcDirectionType;
 import org.boisestate.petrinet.Petrinet;
 import org.boisestate.petrinet.Place;
 import org.boisestate.petrinet.Transition;
@@ -27,7 +26,6 @@ public class PetrinetBuilder {
 	public ArrayList<Object> redoArrayList;
 	public ArrayList<Object> actionArrayList;
 	public ArrayList<Object> redoActionArrayList;
-    public ArrayList<Point> arcPointArrayList;
 
 	//Random rand;
 	public PetrinetUtility petrinetUtility;
@@ -42,7 +40,6 @@ public class PetrinetBuilder {
 		redoArrayList = new ArrayList<Object>();
 		actionArrayList = new ArrayList<Object>();
 		redoActionArrayList = new ArrayList<Object>();
-		arcPointArrayList = new ArrayList<Point>();
 	}
 	public Object getElementFromWorkingArrayList() {
 		if(workingArrayList.size()>0)
@@ -302,16 +299,17 @@ public class PetrinetBuilder {
     		
     	}
 	}
-	public void createArc(ArrayList<Point> pointArray, Place place, Transition trans, ArcDirectionType arcType) {
+	public void createArc(ArrayList<Point> pointArray, Place place, Transition trans, String arcType) {
 		Arc arc = new Arc();
 		
 		arc.setPointVector((ArrayList<Point>)pointArray);
 		arc.setPlace(place);
 		arc.setTransition(trans);
-		arc.arcDirectionType = arcType;
-		this.petrinet.arcVector.add((Arc)arc.clone());
+		arc.setDirectionType(arcType);
+		System.out.println(this.petrinet.arcVector.size());
+		this.petrinet.arcVector.add(arc);
 		
-		//drawingPanel.paintAgain();
+		drawingPanel.paintAgain();
 				
 	}
 	 public Point intersectionPoint(Point p, Point center, int r) {

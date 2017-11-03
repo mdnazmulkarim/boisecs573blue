@@ -28,6 +28,12 @@ public class Constants {
 	
 	public static String ARCS = "Arcs";
 	public static String ARC = "Arc";
+	public static String ARC_DIRECTION_TYPE = "Direction";
+	public static String ARC_PLACE_NAME = "ArcPlaceName";
+	public static String ARC_TRANSITION_NAME = "ArcTransitionName";
+	public static String ARC_POINTS = "ArcPointsString";
+
+
 	public static String ORIGIN_X_OF_ARC = "OriginXOfArc";
 	public static String ORIGIN_Y_OF_ARC = "OriginYOfArc";
 }

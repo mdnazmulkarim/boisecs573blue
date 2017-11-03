@@ -3,6 +3,7 @@ package org.boisestate.graphics;
 //import Constants;
 //import XmlParse;
 
+import java.awt.Point;
 import java.io.File;
 import java.util.Vector;
 
@@ -19,8 +20,10 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.boisestate.petrinet.Arc;
 import org.boisestate.petrinet.Petrinet;
 import org.boisestate.petrinet.Place;
+import org.boisestate.petrinet.Transition;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -83,10 +86,10 @@ public class PetriNetSaver {
 			rootElement.appendChild(transitions);
 			createTransitions(doc,transitions);
 
-//			// Arc elements
-//			Element arcs = doc.createElement(Constants.ARCS);
-//			rootElement.appendChild(arcs);
-//			createArcs(doc,arcs);
+			// Arc elements
+			Element arcs = doc.createElement(Constants.ARCS);
+			rootElement.appendChild(arcs);
+			createArcs(doc,arcs);
 			
 			// write the content into xml file
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -220,5 +223,59 @@ public class PetriNetSaver {
 			}
 		}
 		
+	}
+	public void createArcs(Document doc, Element arcs) {
+		Vector<Object> arcVector = new Vector<Object>();
+		for(Arc arc : petrinet.arcVector) {
+			Vector<String>arcVector1 = new Vector<String>();
+			arcVector1.addElement(arc.getDirectionType().toString());
+			
+			Place place = arc.getPlace();
+			arcVector1.addElement(place.getName());
+			Transition trans = arc.getTransition();
+			arcVector1.addElement(trans.getName());
+
+			String s = new String("");
+			for(int i=0; i<arc.getPointVector().size(); i++) {
+				Point p = (Point)arc.getPointVector().get(i);
+				int x = p.x;
+				int y = p.y;
+				s = (s.concat(Integer.toString(x) + "," + Integer.toString(y)).concat(";"));
+			}
+			System.out.println("Place name : "+place.getName() + " " + arc.getDirectionType().toString() + " " + trans.getName() + " " + s);
+
+			arcVector1.addElement(s);
+
+			arcVector.addElement(arcVector1);
+		}
+		if(arcVector.size() > 0) {
+			int count = arcVector.size();
+			
+			for (int i=0; i<count; i++) {
+				Element arc = doc.createElement(Constants.ARC);
+				arcs.appendChild(arc);
+				arc.setAttribute("id", Integer.toString(i+1));						
+				
+				Vector<Object> vector = new Vector<Object>();
+				vector = (Vector<Object>) arcVector.elementAt(i);				
+				
+				Element arcDirectionType = doc.createElement(Constants.ARC_DIRECTION_TYPE);
+				arcDirectionType.appendChild(doc.createTextNode(vector.elementAt(0).toString()));
+				arc.appendChild(arcDirectionType);
+								
+				Element arcPlaceName = doc.createElement(Constants.ARC_PLACE_NAME);
+				arcPlaceName.appendChild(doc.createTextNode(vector.elementAt(1).toString()));
+				arc.appendChild(arcPlaceName);
+				
+				Element arcTransitionName = doc.createElement(Constants.ARC_TRANSITION_NAME);
+				arcTransitionName.appendChild(doc.createTextNode(vector.elementAt(2).toString()));
+				arc.appendChild(arcTransitionName);
+				
+				Element arcPointsString = doc.createElement(Constants.ARC_POINTS);
+				arcPointsString.appendChild(doc.createTextNode(vector.elementAt(3).toString()));
+				arc.appendChild(arcPointsString);
+				
+			}
+		}
 	}
 }

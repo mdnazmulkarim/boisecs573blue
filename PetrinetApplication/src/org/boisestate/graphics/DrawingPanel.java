@@ -30,7 +30,6 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 import org.boisestate.petrinet.Arc;
-import org.boisestate.petrinet.Arc.ArcDirectionType;
 import org.boisestate.petrinet.Petrinet;
 import org.boisestate.petrinet.Place;
 import org.boisestate.petrinet.Transition;
@@ -43,8 +42,8 @@ public class DrawingPanel extends JPanel {
 	public Boolean arcDrawingStarted = false;
 	Place tempPlace = null;
 	Transition tempTransition = null;
-	ArcDirectionType arcDirection = ArcDirectionType.P_2_T;
-	
+//	ArcDirectionType arcDirection = ArcDirectionType.P_2_T;
+	String arcDirection = "";
 	
 	
 	public int placeCount = 0;
@@ -79,21 +78,28 @@ public class DrawingPanel extends JPanel {
                 			repaint();
                     		Object obj = petrinet.getPetrinetBuilder().getElementUnderThisPoint(e.getX(),e.getY());
                     		
-                    		if(arcDirection == ArcDirectionType.P_2_T && obj!=null) {
+                    		if(arcDirection == "P_2_T" && obj!=null) {
                     			if(obj instanceof Transition) {
                     				arcDrawingStarted = false;
                     				// Drawing End. create new arc object and initialize temporary variables
+                    				tempTransition = (Transition)obj;
                     				petrinet.getPetrinetBuilder().createArc((ArrayList<Point>)pointList.clone(), tempPlace, tempTransition, arcDirection);
                     				pointList.clear();
+                    				tempPlace = null;
+                    				tempTransition = null;
+                    				arcDirection = "";
                     			}
                     		}
-                    		else if(arcDirection == ArcDirectionType.T_2_P && obj!=null) {
+                    		else if(arcDirection == "T_2_P" && obj!=null) {
                     			if(obj instanceof Place) {
                     				arcDrawingStarted = false;
                     				// Drawing End. create new arc object and initialize temporary variables
+                    				tempPlace = (Place) obj;
                     				petrinet.getPetrinetBuilder().createArc((ArrayList<Point>)pointList.clone(), tempPlace, tempTransition, arcDirection);
                     				pointList.clear();
-
+                    				tempPlace = null;
+                    				tempTransition = null;
+                    				arcDirection = "";
                     			}
                     		}
                 		}else {
@@ -102,13 +108,13 @@ public class DrawingPanel extends JPanel {
                     			if(obj instanceof Place) {
                     				tempPlace = (Place)obj;
                     				arcDrawingStarted = true;
-                    				arcDirection = ArcDirectionType.P_2_T;
+                    				arcDirection = "P_2_T";
                     				pointList.add(new Point(e.getX(), e.getY()));
                             		repaint();
                     			}else {
                     				tempTransition = (Transition)obj;
                     				arcDrawingStarted = true;
-                    				arcDirection = ArcDirectionType.T_2_P;
+                    				arcDirection = "T_2_P";
                     				pointList.add(new Point(e.getX(), e.getY()));
                             		repaint();
                     			}
@@ -179,31 +185,7 @@ public class DrawingPanel extends JPanel {
                 
             }
             
-//            public void mouseReleased(MouseEvent e) {
-//            	if(MainPanel.currentState == MainPanel.currentState.ARC) {
-//            		if(startToGetPoint) {
-//            			System.out.println("mouseReleased...");
-//            			
-//            		}
-//            	}
-//            }
         });
-        
-//        addMouseMotionListener(new MouseMotionListener() {
-//			
-//			@Override
-//			public void mouseMoved(MouseEvent e) {
-//				// TODO Auto-generated method stub
-//				
-//			}
-//			
-//			@Override
-//			public void mouseDragged(MouseEvent e) {
-//				// TODO Auto-generated method stub
-//				
-//			}
-//		
-//		});
         
     }
 	
@@ -299,11 +281,6 @@ public class DrawingPanel extends JPanel {
         
         
         for(Arc arc: petrinet.arcVector) {
-        	System.out.println("Printing 1");
-        	for(int i =0; i<arc.getPointVector().size();i++) {
-            	System.out.println(arc.getPointVector().get(i));
-
-        	}
         	arc.draw(g);
         }
         

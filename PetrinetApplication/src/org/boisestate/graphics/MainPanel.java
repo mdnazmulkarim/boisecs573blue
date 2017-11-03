@@ -103,6 +103,8 @@ public class MainPanel extends JFrame {
 			File selectedFile = jfc.getSelectedFile();
 			System.out.println(selectedFile.getAbsolutePath());
 			petrinet.removeAllPlace();
+			petrinet.removeAllTransition();
+			petrinet.removeAllArcs();
 			XMLParser parser = new XMLParser(selectedFile,petrinet);
 			drawingPanel.paintAgain();
 		}
@@ -302,6 +304,7 @@ public class MainPanel extends JFrame {
     		if(alertDialog() == JOptionPane.YES_OPTION) {
     			petrinet.removeAllPlace();
     			petrinet.removeAllTransition();
+    			petrinet.removeAllArcs();
      			drawingPanel.paintAgain();
     		}
     	  }

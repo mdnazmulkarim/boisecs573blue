@@ -45,7 +45,7 @@ public class Petrinet {
 	private void initVectors()
 	{
 		placeVector = new ArrayList<Place>();
-		placeVector.add(new Place());
+//		placeVector.add(new Place());
 		transitionVector = new ArrayList<Transition>();
 		arcVector = new ArrayList<Arc>();
 	}
@@ -95,6 +95,9 @@ public class Petrinet {
 	}
 	public void removeAllTransition() {
 		this.transitionVector.clear();
+	}
+	public void removeAllArcs() {
+		this.arcVector.clear();
 	}
 //	public int tokensOfPlace(int x, int y){
 //		for(int i=0; i<this.placeVector.size(); i++) {
