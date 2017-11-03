@@ -93,6 +93,11 @@ public class Petrinet {
 		petrinetBuilder.putElementInActionArrayList("D");
 		this.transitionVector.remove(trans);
 	}
+	public void deleteArc(Arc arc) {
+		petrinetBuilder.putElementInWorkingArrayList(arc.clone()); //For Redo Undo
+		petrinetBuilder.putElementInActionArrayList("D");
+		this.arcVector.remove(arc);
+	}
 	public void removeAllTransition() {
 		this.transitionVector.clear();
 	}
@@ -128,7 +133,11 @@ public class Petrinet {
 				return transition;
 			}
 		}
-		
+//		for(Arc arc: this.arcVector){
+//			if(arc.getBounds().contains(new Point(x,y))) {
+//				return arc;
+//			}
+//		}
 		return null;
 	}
 	

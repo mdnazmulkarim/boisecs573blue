@@ -88,6 +88,7 @@ public class DrawingPanel extends JPanel {
                     				tempPlace = null;
                     				tempTransition = null;
                     				arcDirection = "";
+                    				repaint();
                     			}
                     		}
                     		else if(arcDirection == "T_2_P" && obj!=null) {
@@ -100,6 +101,7 @@ public class DrawingPanel extends JPanel {
                     				tempPlace = null;
                     				tempTransition = null;
                     				arcDirection = "";
+                    				repaint();
                     			}
                     		}
                 		}else {
@@ -155,6 +157,10 @@ public class DrawingPanel extends JPanel {
                 			}else if (selectedItem instanceof Transition) {
                 				System.out.println("delete called");
                     			petrinet.deleteTransition((Transition) selectedItem);
+                    			repaint();
+                			}else {
+                				System.out.println("delete called");
+                    			petrinet.deleteArc((Arc) selectedItem);
                     			repaint();
                 			}
                 			

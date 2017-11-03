@@ -311,20 +311,31 @@ public class PetrinetBuilder {
     	}
 	}
 	public void createArc(ArrayList<Point> pointArray, Place place, Transition trans, String arcType) {
-		Arc arc = new Arc();
-		
-		arc.setPointVector((ArrayList<Point>)pointArray);
-		arc.setPlace(place);
-		arc.setTransition(trans);
-		arc.setDirectionType(arcType);
-		System.out.println(this.petrinet.arcVector.size());
-		this.petrinet.arcVector.add(arc);
-		
-		petrinet.getPetrinetBuilder().workingArrayList.add(arc.clone());
-		petrinet.getPetrinetBuilder().actionArrayList.add("A");
-		System.out.println("Added or not in working list");
-		petrinet.getPetrinetBuilder().printLists();
-		drawingPanel.paintAgain();
+		Boolean isExistingTheSameArc = false;
+		for(Arc arc: petrinet.arcVector) {
+			if(arc.getDirectionType().equals(arcType)) {
+				if(arc.getPlace().getName().equals(place.getName()) && arc.getTransition().getName().equals(trans.getName())) {
+					isExistingTheSameArc = true;
+					break;
+				}
+			}
+		}
+		if(!isExistingTheSameArc) {
+			Arc arc = new Arc();
+			
+			arc.setPointVector((ArrayList<Point>)pointArray);
+			arc.setPlace(place);
+			arc.setTransition(trans);
+			arc.setDirectionType(arcType);
+			System.out.println(this.petrinet.arcVector.size());
+			this.petrinet.arcVector.add(arc);
+			
+			petrinet.getPetrinetBuilder().workingArrayList.add(arc.clone());
+			petrinet.getPetrinetBuilder().actionArrayList.add("A");
+			System.out.println("Added or not in working list");
+			petrinet.getPetrinetBuilder().printLists();
+//			drawingPanel.paintAgain();
+		}
 				
 	}
 	 public Point intersectionPoint(Point p, Point center, int r) {
