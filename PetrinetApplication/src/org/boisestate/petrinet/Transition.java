@@ -20,18 +20,75 @@ public class Transition extends TransitionGuiItem implements Cloneable{
 		return fireable;
 	}
 	
-	public void setFireable(boolean fireable) {
+	private void setFireable(boolean fireable) {
 		this.fireable = fireable;
 	}
 	
-	public boolean isTransitionFireable() 
+	public void validateFiringStatus()
 	{
-		return false;
+		if(isTransitionFireable())
+			setFireable(true);
+		else
+			setFireable(false);
+	}
+	
+	private boolean isTransitionFireable() 
+	{
+	    boolean canBeFired = false;	
+	    if(getNumberOfPlayableIncomingPlaces() >= getNoOfIncomiongPlaces())
+	    {
+	    	canBeFired = true;
+	    }		
+		return canBeFired;
+		
+		
+	}
+	
+	private int getNoOfIncomiongPlaces()
+	{
+		int incomingPlaces = 0;
+		for(Arc arc : arcVector)
+		{
+			if(arc.getDirectionType().equals("P2T"))
+					incomingPlaces++;
+		}
+		return incomingPlaces;
+	}
+	
+	private int getNumberOfPlayableIncomingPlaces()
+	{
+		int noOfPlayableIncomingPlaces = 0;
+		for(Arc arc : arcVector)
+		{
+			if(arc.getDirectionType().equals("P2T") && arc.getPlace().getTokenNumbers()>=arc.getWeight())
+				noOfPlayableIncomingPlaces++;
+		}
+		return noOfPlayableIncomingPlaces;
 	}
 	
 	public void  fireTransition()
 	{
-		
+		if(isFireable())
+		{
+			for(Arc arc : arcVector)
+			{
+				if(arc.getDirectionType().equals("P2T"))
+				{	
+					arc.getPlace().removeToken(arc.getWeight()); }
+				else if(arc.getDirectionType().equals("T2P"))
+				{	
+					arc.getPlace().addToken(arc.getWeight());
+				}
+				else
+				{
+					
+				}
+			}
+		}
+		else
+		{
+			System.out.println("Are you kidding!!....You can't fire me without fuel.");
+		}
 	}
 	
 	

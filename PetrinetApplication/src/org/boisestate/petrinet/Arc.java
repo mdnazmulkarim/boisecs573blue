@@ -14,6 +14,7 @@ public class Arc extends ArcGuiItem implements Cloneable{
 //   }
 //	public static ArcDirectionType arcDirectionType;
 	private int weight;
+	
 	private Place connectedPlace;
 	private Transition connectedTransition;
 	private String directionType;
@@ -55,6 +56,14 @@ public class Arc extends ArcGuiItem implements Cloneable{
 	public Transition getTransition(){
 	     return this.connectedTransition;
 	}
+	
+	public int getWeight() {
+		return weight;
+	}
+	public void setWeight(int weight) {
+		this.weight = weight;
+	}
+	
 	public void setDirectionType(String type) {
 		this.directionType = type;
 	}

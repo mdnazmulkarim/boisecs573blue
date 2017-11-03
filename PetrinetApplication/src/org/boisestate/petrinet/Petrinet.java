@@ -154,5 +154,12 @@ public class Petrinet {
 		return null;
 	}
 	
+	public void getAllfireableTransitions()
+	{
+		//get all transition list
+		//check whether it is fireable
+		//fire
+	}
+	
 	
 }
