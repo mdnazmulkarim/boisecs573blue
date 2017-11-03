@@ -209,6 +209,10 @@ public class MainPanel extends JFrame {
 			for(Arc arc: petrinet.arcVector){
 				if(arc.getDirectionType().equals(objP.getDirectionType()) && arc.getPlace().equals(objP.getPlace()) && arc.getTransition().equals(objP.getTransition())) {
 					petrinet.arcVector.remove(arc);
+					//remove arc from arcDetectionMap
+					
+					petrinet.getPetrinetBuilder().removeFromArcDetectionMap(arc);
+					
 					drawingPanel.paintAgain();
 					petrinet.getPetrinetBuilder().putElementInActionArrayList("D");
 					petrinet.getPetrinetBuilder().putElementInWorkingArrayList(objP.clone());
@@ -218,6 +222,9 @@ public class MainPanel extends JFrame {
 		}else if(actionObj.equals("D")){
 			petrinet.arcVector.add(objP);
 
+			////add arc from arcDetectionMap
+			petrinet.getPetrinetBuilder().createPolygonMapForArc(objP);
+			
 			drawingPanel.paintAgain();
 			petrinet.getPetrinetBuilder().putElementInActionArrayList("A");
 			petrinet.getPetrinetBuilder().putElementInWorkingArrayList(objP.clone());
@@ -302,6 +309,9 @@ public class MainPanel extends JFrame {
 			for(Arc arc: petrinet.arcVector){
 				if(arc.getDirectionType().equals(objP.getDirectionType()) && arc.getPlace().equals(objP.getPlace()) && arc.getTransition().equals(objP.getTransition())) {
 					petrinet.arcVector.remove(arc);
+					//remove arc from arcDetectionMap
+					petrinet.getPetrinetBuilder().removeFromArcDetectionMap(arc);
+					
 					drawingPanel.paintAgain();
 					petrinet.getPetrinetBuilder().putElementInRedoActionArrayList("D");
 					petrinet.getPetrinetBuilder().putElementInRedoArrayList(arc.clone());
@@ -310,6 +320,9 @@ public class MainPanel extends JFrame {
     		}
 		}else if(actionObj.equals("D")){
 			petrinet.arcVector.add(objP);
+			////add arc from arcDetectionMap
+			petrinet.getPetrinetBuilder().createPolygonMapForArc(objP);
+			
 			drawingPanel.paintAgain();
 			petrinet.getPetrinetBuilder().putElementInRedoActionArrayList("A");
 			petrinet.getPetrinetBuilder().putElementInRedoArrayList(objP.clone());

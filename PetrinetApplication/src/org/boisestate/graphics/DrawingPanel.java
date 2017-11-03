@@ -46,6 +46,7 @@ public class DrawingPanel extends JPanel {
 	String arcDirection = "";
 	
 	
+	
 	public int placeCount = 0;
 	int transitionCount = 0;
 	Object selectedItem;
@@ -160,8 +161,11 @@ public class DrawingPanel extends JPanel {
                     			repaint();
                 			}else {
                 				System.out.println("delete called");
+                				
                     			petrinet.deleteArc((Arc) selectedItem);
                     			repaint();
+                    			
+                    			
                 			}
                 			
                 		}
@@ -192,7 +196,7 @@ public class DrawingPanel extends JPanel {
             }
             
         });
-        
+         
     }
 	
 	public void erasePartialArc() {

@@ -1,7 +1,10 @@
 package org.boisestate.petrinet;
 
 import java.awt.Point;
+import java.awt.Polygon;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
 
 import org.boisestate.core.PetrinetBuilder;
 
@@ -97,6 +100,9 @@ public class Petrinet {
 		petrinetBuilder.putElementInWorkingArrayList(arc.clone()); //For Redo Undo
 		petrinetBuilder.putElementInActionArrayList("D");
 		this.arcVector.remove(arc);
+		//remove arc from arcDetectionMap
+		
+		petrinetBuilder.removeFromArcDetectionMap(arc);
 	}
 	public void removeAllTransition() {
 		this.transitionVector.clear();
@@ -133,11 +139,18 @@ public class Petrinet {
 				return transition;
 			}
 		}
-//		for(Arc arc: this.arcVector){
-//			if(arc.getBounds().contains(new Point(x,y))) {
-//				return arc;
-//			}
-//		}
+		
+		Iterator it = petrinetBuilder.arcDetectionMap.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry pair = (Map.Entry)it.next();
+			Polygon p = (Polygon) pair.getKey();
+			if(p.contains(x, y)) {
+				Arc arc = (Arc) pair.getValue();
+				return arc;
+			}
+			
+		}
+		
 		return null;
 	}
 	

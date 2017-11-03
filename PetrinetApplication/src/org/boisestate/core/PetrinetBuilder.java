@@ -3,10 +3,13 @@ package org.boisestate.core;
 import java.awt.Color;
 import java.awt.List;
 import java.awt.Point;
+import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import javax.swing.JOptionPane;
@@ -322,20 +325,20 @@ public class PetrinetBuilder {
 		}
 		if(!isExistingTheSameArc) {
 			Arc arc = new Arc();
-			
 			arc.setPointVector((ArrayList<Point>)pointArray);
 			arc.setPlace(place);
 			arc.setTransition(trans);
 			arc.setDirectionType(arcType);
-			System.out.println(this.petrinet.arcVector.size());
 			this.petrinet.arcVector.add(arc);
+			
+			createPolygonMapForArc(arc);
 			
 			petrinet.getPetrinetBuilder().workingArrayList.add(arc.clone());
 			petrinet.getPetrinetBuilder().actionArrayList.add("A");
-			System.out.println("Added or not in working list");
 			petrinet.getPetrinetBuilder().printLists();
 //			drawingPanel.paintAgain();
 		}
+		
 				
 	}
 	 public Point intersectionPoint(Point p, Point center, int r) {
@@ -350,5 +353,40 @@ public class PetrinetBuilder {
 		 }
 		return null;
 	 }
+	 public Map<Polygon, Arc> arcDetectionMap  = new HashMap<Polygon, Arc>();
+	 public void createPolygonMapForArc(Arc arc) {
+		 
+		 int xPoly[] = {0,0,0,0};
+		 int yPoly[] = {0,0,0,0};
+		 for(int i=0; i<arc.pointsVector.size()-1; i++) {
+			 Point p1 = arc.pointsVector.get(i);
+			 Point p2 = arc.pointsVector.get(i+1);
+			 
+			 xPoly[0] = p1.x;
+			 xPoly[1] = p2.x;
+			 xPoly[2] = p2.x;
+			 xPoly[3] = p1.x;
+			 
+			 yPoly[0] = p1.y-5;
+			 yPoly[1] = p2.y-5;
+			 yPoly[2] = p2.y+5;
+			 yPoly[3] = p1.y+5;
+			 
+			 Polygon polygon = new Polygon(xPoly,yPoly,xPoly.length);
+			 
+			 arcDetectionMap.put(polygon, arc);
+		 }
+		 
+		 System.out.println("arc map size ---" +arcDetectionMap.size());
+	 }
+	 public void removeFromArcDetectionMap(Arc arc) {
+//		 arcDetectionMap.values().remove(arc);
+		 if(arcDetectionMap.size()>0) {
+			 arcDetectionMap.values().removeAll(Collections.singleton(arc));
+		 }
+		 
+		 System.out.println("arc map size after removing...." + arcDetectionMap.size());
+	 }
+
 }
 
