@@ -21,6 +21,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileSystemView;
 
+import org.boisestate.petrinet.Arc;
 import org.boisestate.petrinet.Petrinet;
 import org.boisestate.petrinet.Place;
 import org.boisestate.petrinet.Transition;
@@ -201,6 +202,30 @@ public class MainPanel extends JFrame {
 		petrinet.getPetrinetBuilder().removeElementFromRedoActionArrayList();
 		petrinet.getPetrinetBuilder().removeElementFromRedoArrayList();	
     }
+    public void redoActionForArc(Object obj, Object actionObj) {
+    	Arc objP = (Arc)obj;
+
+		if(actionObj.equals("A")) {
+			for(Arc arc: petrinet.arcVector){
+				if(arc.getDirectionType().equals(objP.getDirectionType()) && arc.getPlace().equals(objP.getPlace()) && arc.getTransition().equals(objP.getTransition())) {
+					petrinet.arcVector.remove(arc);
+					drawingPanel.paintAgain();
+					petrinet.getPetrinetBuilder().putElementInActionArrayList("D");
+					petrinet.getPetrinetBuilder().putElementInWorkingArrayList(objP.clone());
+					break;
+				}
+    		}
+		}else if(actionObj.equals("D")){
+			petrinet.arcVector.add(objP);
+
+			drawingPanel.paintAgain();
+			petrinet.getPetrinetBuilder().putElementInActionArrayList("A");
+			petrinet.getPetrinetBuilder().putElementInWorkingArrayList(objP.clone());
+		}
+		petrinet.getPetrinetBuilder().removeElementFromRedoActionArrayList();
+		petrinet.getPetrinetBuilder().removeElementFromRedoArrayList();	
+	}
+
     public void undoActionsForPlace(Object obj, Object actionObj) {
     	Place objP = (Place)obj;
 
@@ -219,7 +244,7 @@ public class MainPanel extends JFrame {
 			drawingPanel.paintAgain();
 			petrinet.getPetrinetBuilder().putElementInRedoActionArrayList("A");
 			petrinet.getPetrinetBuilder().putElementInRedoArrayList(objP.clone());
-		}else {
+		}else if(actionObj.equals("M")) {
 			for(Place place: petrinet.placeVector) {
 				if(place.getX()==objP.getX() && place.getY()==objP.getY()) {
 					petrinet.getPetrinetBuilder().putElementInRedoArrayList(place.clone());
@@ -270,6 +295,29 @@ public class MainPanel extends JFrame {
 		petrinet.getPetrinetBuilder().removeElementFromWorkingArrayList();
 		petrinet.getPetrinetBuilder().removeElementFromActionArrayList();	
     }
+    public void undoActionsForArc(Object obj, Object actionObj) {
+    	Arc objP = (Arc)obj;
+
+		if(actionObj.equals("A")) {
+			for(Arc arc: petrinet.arcVector){
+				if(arc.getDirectionType().equals(objP.getDirectionType()) && arc.getPlace().equals(objP.getPlace()) && arc.getTransition().equals(objP.getTransition())) {
+					petrinet.arcVector.remove(arc);
+					drawingPanel.paintAgain();
+					petrinet.getPetrinetBuilder().putElementInRedoActionArrayList("D");
+					petrinet.getPetrinetBuilder().putElementInRedoArrayList(arc.clone());
+					break;		
+				}
+    		}
+		}else if(actionObj.equals("D")){
+			petrinet.arcVector.add(objP);
+			drawingPanel.paintAgain();
+			petrinet.getPetrinetBuilder().putElementInRedoActionArrayList("A");
+			petrinet.getPetrinetBuilder().putElementInRedoArrayList(objP.clone());
+		}
+		
+		petrinet.getPetrinetBuilder().removeElementFromWorkingArrayList();
+		petrinet.getPetrinetBuilder().removeElementFromActionArrayList();	
+    }
     public void undoAction() {
     	Object obj = petrinet.getPetrinetBuilder().getElementFromWorkingArrayList();
     	Object actionObj = petrinet.getPetrinetBuilder().getElementFromActionArrayList();
@@ -279,6 +327,8 @@ public class MainPanel extends JFrame {
         		undoActionsForPlace(obj,actionObj);
     		}else if(obj instanceof Transition) {
     			undoActionsForTransition(obj,actionObj);
+    		}else {
+    			undoActionsForArc(obj,actionObj);
     		}
     	}
     	System.out.println("PRINTING AFTER UNDO");
@@ -294,6 +344,8 @@ public class MainPanel extends JFrame {
 				redoActionForPlace(obj,actionObj);
 			}else if(obj instanceof Transition) {
 				redoActionForTransition(obj,actionObj);
+			}else {
+				redoActionForArc(obj,actionObj);
 			}
 		}
 		

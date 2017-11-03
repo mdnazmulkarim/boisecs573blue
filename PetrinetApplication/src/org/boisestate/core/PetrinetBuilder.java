@@ -262,6 +262,7 @@ public class PetrinetBuilder {
     	System.out.println("##Printing Working List:");
     	Place placeObj;
     	Transition transitionObj;
+    	Arc arcObj;
     	for(Object objW: petrinet.getPetrinetBuilder().workingArrayList) {
     		if( objW instanceof Place)
     		{
@@ -272,6 +273,11 @@ public class PetrinetBuilder {
     		{
     			transitionObj = (Transition)objW;
     			System.out.println(transitionObj.getName()+"|"+transitionObj.getX()+"|"+transitionObj.getY());
+    		}
+    		else if( objW instanceof Arc) 
+    		{
+    			arcObj = (Arc)objW;
+    			System.out.println(arcObj.getDirectionType());
     		}
     		else
     		{
@@ -292,6 +298,11 @@ public class PetrinetBuilder {
     			transitionObj = (Transition)objW;
     			System.out.println(transitionObj.getName()+"|"+transitionObj.getX()+"|"+transitionObj.getY());
     		}
+    		else if( objW instanceof Arc) 
+    		{
+    			arcObj = (Arc)objW;
+    			System.out.println(arcObj.getDirectionType());
+    		}
     		else
     		{
     			System.out.println("Undetected object");
@@ -309,6 +320,10 @@ public class PetrinetBuilder {
 		System.out.println(this.petrinet.arcVector.size());
 		this.petrinet.arcVector.add(arc);
 		
+		petrinet.getPetrinetBuilder().workingArrayList.add(arc.clone());
+		petrinet.getPetrinetBuilder().actionArrayList.add("A");
+		System.out.println("Added or not in working list");
+		petrinet.getPetrinetBuilder().printLists();
 		drawingPanel.paintAgain();
 				
 	}
