@@ -81,7 +81,7 @@ public class Transition extends TransitionGuiItem implements Cloneable{
 				}
 				else
 				{
-					
+					System.out.println("This should not happen.");
 				}
 			}
 		}

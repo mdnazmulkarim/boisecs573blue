@@ -236,6 +236,53 @@ public class PetrinetBuilder {
 			    System.out.println("Not Changed.");
 			}
 	   }
+	
+	public void arcInputDialog(Object selectedItem) {
+		   Place place = (Place)selectedItem;
+			
+			JTextField name = new JTextField();
+			JTextField numberOfTokens = new JTextField();
+			name.setText(place.getName());
+			numberOfTokens.setText(Integer.toString(place.getTokenNumbers()));
+			Object[] message = {
+			    "Name:", name,
+			    "NumberOfTokens:", numberOfTokens
+			};
+
+			int option = JOptionPane.showConfirmDialog(null, message, "Input", JOptionPane.OK_CANCEL_OPTION);
+			if (option == JOptionPane.OK_OPTION) {
+				if(name.getText()!=null && (!name.getText().equals(place.getName()) || Integer.parseInt(numberOfTokens.getText())!=place.getTokenNumbers())){
+		    		boolean b = existingPlaceNameCheck(name.getText(),place);
+
+		    		if(!b){
+		    			final JPanel panel = new JPanel();
+		    		    JOptionPane.showMessageDialog(panel, "Duplicate name error.", "Error", JOptionPane.ERROR_MESSAGE);
+		    		}else{
+
+		    		this.putElementInWorkingArrayList(place.clone());
+	   			    this.putElementInActionArrayList("M");
+	   			   
+	   			    place.setName(name.getText());
+	   			   	if(numberOfTokens.getText()!=null){
+			    		place.setTokenNumbers(Integer.parseInt(numberOfTokens.getText()));
+			    	}
+				 
+	   			   	
+				    drawingPanel.partialPaint(new Rectangle(place.getX(), place.getY(), 
+	                   		place.getRadius()+1, 
+	                   		place.getHeight()+10+2));
+				    
+				    System.out.println("name changed....");
+				    petrinet.getPetrinetBuilder().printLists();
+	   			   
+		    		}
+		    
+			    }
+			    
+			} else {
+			    System.out.println("Not Changed.");
+			}
+	   }
 	public Object getElementUnderThisPoint(int x, int y) {
 		Object obj = null;
 		for (Place place: petrinet.placeVector) {

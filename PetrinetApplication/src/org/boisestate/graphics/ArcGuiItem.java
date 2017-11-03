@@ -15,6 +15,7 @@ public class ArcGuiItem implements GuiItemInterface{
     private int height = 40;
     private int nameHeight = 10;
     private String name = "";
+    //private int weight = 1;
     
     
 
@@ -105,6 +106,17 @@ public class ArcGuiItem implements GuiItemInterface{
 	            if(i==this.pointsVector.size()-2) {
 	            	g.fillOval(p1.x-5, p1.y-5, 10, 10);
 	            }
+	            
+//	            int middleIndex = 0+this.pointsVector.size()/2; 
+//	            if(this.pointsVector.size()>1)
+//	            {
+//		            Point pi = this.pointsVector.get(middleIndex);
+//		            Point pj = this.pointsVector.get(middleIndex+1);
+//		            
+//		            int x = (pi.x+ pj.x)/2;
+//		            int y = (pi.y+ pj.y)/2;
+//		            g.drawString(""+weight, x, y);
+//	            }
 	      }
 	}
 	

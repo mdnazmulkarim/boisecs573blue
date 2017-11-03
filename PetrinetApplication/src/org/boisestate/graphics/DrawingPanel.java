@@ -186,6 +186,10 @@ public class DrawingPanel extends JPanel {
             			else if (selectedItem instanceof Transition) {
             				petrinet.getPetrinetBuilder().transitionInputDialog(selectedItem);
             			}
+            			else if(selectedItem instanceof Arc)
+            			{
+            				System.out.println("Arc found:");
+            			}
             				
             		}
             		
