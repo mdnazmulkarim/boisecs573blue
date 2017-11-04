@@ -105,6 +105,7 @@ public class XMLParser {
 		            for(Transition trans: petrinet.transitionVector) {
 		            	if(trans.getName().equals(transitionName)) {
 		            		arc.setTransition(trans);
+		            		trans.getArcList().add(arc);
 		            		break;
 		            	}
 		            }
