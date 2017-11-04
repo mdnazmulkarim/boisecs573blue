@@ -32,86 +32,83 @@ public class PetriNetSaver {
 	public PetriNetSaver(Petrinet petrinet) {
 		this.petrinet = petrinet;
 	}
-	 public void xmlFileName() {
-		  
-		String fileName = JOptionPane.showInputDialog("File name :", "");
-		if(fileName!=null && !(fileName.isEmpty())) {
-			savePetriNet(fileName);
-		}
+	 public void xmlFileName(String petriName) {
+		 try {
+				
+				
+				DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+				DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+
+				// root elements
+				Document doc = docBuilder.newDocument();
+				Element rootElement = doc.createElement(Constants.ROOT_OF_XML);
+				doc.appendChild(rootElement);
+
+				Element title = doc.createElement(Constants.PETRI_NET_TITLE);
+				title.appendChild(doc.createTextNode("PetriNet"));
+				rootElement.appendChild(title);
+				
+				Element ID = doc.createElement(Constants.PETRI_NET_ID);
+				ID.appendChild(doc.createTextNode("100"));
+				rootElement.appendChild(ID);
+				
+				Element name = doc.createElement(Constants.PETRI_NET_NAME);
+				name.appendChild(doc.createTextNode(petriName));
+				rootElement.appendChild(name);
+				
+				Element numberOfPlaces = doc.createElement(Constants.PETRI_NET_NUMBER_OF_PALCES);
+				numberOfPlaces.appendChild(doc.createTextNode("10"));
+				rootElement.appendChild(numberOfPlaces);
+				
+				Element numberOfTransitions = doc.createElement(Constants.PETRI_NET_NUMBER_OF_TRANSITIONS);
+				numberOfTransitions.appendChild(doc.createTextNode("10"));
+				rootElement.appendChild(numberOfTransitions);
+				
+				Element numberOfArcs = doc.createElement(Constants.PETRI_NET_NUMBER_OF_ARCS);
+				numberOfArcs.appendChild(doc.createTextNode("10"));
+				rootElement.appendChild(numberOfArcs);
+				
+				
+				// Places elements
+				Element places = doc.createElement(Constants.PLACES);
+				rootElement.appendChild(places);
+				createPlaces(doc,places);
+				
+				
+				// Transitions elements
+				Element transitions = doc.createElement(Constants.TRANSITIONS);
+				rootElement.appendChild(transitions);
+				createTransitions(doc,transitions);
+
+				// Arc elements
+				Element arcs = doc.createElement(Constants.ARCS);
+				rootElement.appendChild(arcs);
+				createArcs(doc,arcs);
+				
+				// write the content into xml file
+				TransformerFactory transformerFactory = TransformerFactory.newInstance();
+				Transformer transformer = transformerFactory.newTransformer();
+				DOMSource source = new DOMSource(doc);
+				StreamResult result = new StreamResult(new File(petriName + ".xml"));
+
+				// Output to console for testing
+				// StreamResult result = new StreamResult(System.out);
+
+				transformer.transform(source, result);
+
+				System.out.println("File saved!");
+				
+//				XmlParse.xmlParse();
+
+			  } catch (ParserConfigurationException pce) {
+				pce.printStackTrace();
+			  } catch (TransformerException tfe) {
+				tfe.printStackTrace();
+			  }
+		
+		
 	 }
 	  
-	public void savePetriNet(String petriName) {
-		try {
-			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-
-			// root elements
-			Document doc = docBuilder.newDocument();
-			Element rootElement = doc.createElement(Constants.ROOT_OF_XML);
-			doc.appendChild(rootElement);
-
-			Element title = doc.createElement(Constants.PETRI_NET_TITLE);
-			title.appendChild(doc.createTextNode("PetriNet"));
-			rootElement.appendChild(title);
-			
-			Element ID = doc.createElement(Constants.PETRI_NET_ID);
-			ID.appendChild(doc.createTextNode("100"));
-			rootElement.appendChild(ID);
-			
-			Element name = doc.createElement(Constants.PETRI_NET_NAME);
-			name.appendChild(doc.createTextNode("Stuck"));
-			rootElement.appendChild(name);
-			
-			Element numberOfPlaces = doc.createElement(Constants.PETRI_NET_NUMBER_OF_PALCES);
-			numberOfPlaces.appendChild(doc.createTextNode("10"));
-			rootElement.appendChild(numberOfPlaces);
-			
-			Element numberOfTransitions = doc.createElement(Constants.PETRI_NET_NUMBER_OF_TRANSITIONS);
-			numberOfTransitions.appendChild(doc.createTextNode("10"));
-			rootElement.appendChild(numberOfTransitions);
-			
-			Element numberOfArcs = doc.createElement(Constants.PETRI_NET_NUMBER_OF_ARCS);
-			numberOfArcs.appendChild(doc.createTextNode("10"));
-			rootElement.appendChild(numberOfArcs);
-			
-			
-			// Places elements
-			Element places = doc.createElement(Constants.PLACES);
-			rootElement.appendChild(places);
-			createPlaces(doc,places);
-			
-			
-			// Transitions elements
-			Element transitions = doc.createElement(Constants.TRANSITIONS);
-			rootElement.appendChild(transitions);
-			createTransitions(doc,transitions);
-
-			// Arc elements
-			Element arcs = doc.createElement(Constants.ARCS);
-			rootElement.appendChild(arcs);
-			createArcs(doc,arcs);
-			
-			// write the content into xml file
-			TransformerFactory transformerFactory = TransformerFactory.newInstance();
-			Transformer transformer = transformerFactory.newTransformer();
-			DOMSource source = new DOMSource(doc);
-			StreamResult result = new StreamResult(new File(petriName + ".xml"));
-
-			// Output to console for testing
-			// StreamResult result = new StreamResult(System.out);
-
-			transformer.transform(source, result);
-
-			System.out.println("File saved!");
-			
-//			XmlParse.xmlParse();
-
-		  } catch (ParserConfigurationException pce) {
-			pce.printStackTrace();
-		  } catch (TransformerException tfe) {
-			tfe.printStackTrace();
-		  }
-	}
 	
 	public void createPlaces(Document doc, Element places) {
 		Vector<Object> placesVector = new Vector<Object>();

@@ -41,14 +41,16 @@ public class MainPanel extends JFrame {
 	public static ArrayList<String> placeCoordinator = new ArrayList<String>();
 	public static ArrayList<String> transitionCoordinator = new ArrayList<String>();
 	public static JComboBox activeFiringStatesList = new JComboBox();
+	public static String petriNetName = "Untitled document";
 	int width, height;
+	JFrame thisFrame = null;
     public MainPanel() {
-        setTitle("Draw Petri Net");
+    	this.setTitle(petriNetName);
         petrinet = new Petrinet("Vending Machine");
         savePetrinet = new PetriNetSaver(petrinet);
      // get the screen size as a java dimension
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-
+        thisFrame = this;
          height = screenSize.height * 3 / 4;
          width = screenSize.width * 5/6;
 
@@ -128,6 +130,9 @@ public class MainPanel extends JFrame {
 			petrinet.removeAllArcs();
 			XMLParser parser = new XMLParser(selectedFile,petrinet);
 			drawingPanel.paintAgain();
+			
+			thisFrame.setTitle(selectedFile.getName());
+			thisFrame.validate();
 		}
     }
     public void redoActionForPlace(Object obj, Object actionObj) {
@@ -410,7 +415,21 @@ public class MainPanel extends JFrame {
     	  public void actionPerformed(ActionEvent arg0) {
     		  if(!isSimulationModeOn()) {
     			  
-        		  savePetrinet.xmlFileName();
+    				JFileChooser chooser=new JFileChooser();
+    				chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+    				chooser.showSaveDialog(null);
+
+    				String path=chooser.getSelectedFile().getAbsolutePath();
+    				String filename=chooser.getSelectedFile().getName();
+    				    				
+    			  
+    				if(filename!=null && !(filename.isEmpty())) {
+    					savePetrinet.xmlFileName(path);
+    					thisFrame.setTitle(filename);
+    					thisFrame.validate();
+    				}
+        		  
+        		  
     		  }
     	  }
       });
