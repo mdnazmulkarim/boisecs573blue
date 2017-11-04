@@ -6,7 +6,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+
 import org.boisestate.core.PetrinetBuilder;
+import org.boisestate.graphics.MainPanel;
 
 public class Petrinet {
 	
@@ -17,6 +21,8 @@ public class Petrinet {
 	public ArrayList<Place> placeVector;
 	public ArrayList<Transition> transitionVector;
 	public ArrayList<Arc> arcVector;
+	
+	public static ArrayList<Transition> currentFirableTransitionList = new ArrayList<Transition>();
 
 	private PetrinetBuilder petrinetBuilder;
 	
@@ -99,6 +105,10 @@ public class Petrinet {
 	public void deleteArc(Arc arc) {
 		petrinetBuilder.putElementInWorkingArrayList(arc.clone()); //For Redo Undo
 		petrinetBuilder.putElementInActionArrayList("D");
+		
+		Transition trans = arc.getTransition();
+		trans.removeArc(arc);
+		
 		this.arcVector.remove(arc);
 		//remove arc from arcDetectionMap
 		
@@ -154,12 +164,38 @@ public class Petrinet {
 		return null;
 	}
 	
-	public void getAllfireableTransitions()
+	public void populatefireableTransitions()
 	{
-		//get all transition list
-		//check whether it is fireable
-		//fire
+//		ArrayList<Transition> firableArrayList = new ArrayList<Transition>();
+		currentFirableTransitionList.clear();
+		for(Transition trans: this.transitionVector) {
+			trans.validateFiringStatus();
+			if(trans.isFireable()) {
+				currentFirableTransitionList.add(trans);
+			}
+		}
+	}
+	public void setFirableComboList() {
+		populatefireableTransitions();
+			MainPanel.activeFiringStatesList.removeAllItems();
+			for(Transition trans: currentFirableTransitionList) {
+				
+				MainPanel.activeFiringStatesList.addItem(trans.getName().toString());
+
+			}
 	}
 	
 	
+	public void playTransition() {
+		int ind = MainPanel.activeFiringStatesList.getSelectedIndex();
+		if(ind>=0){
+			Transition trans  = currentFirableTransitionList.get(ind);
+			trans.fireTransition();
+		}else {
+			JOptionPane.showConfirmDialog (null, "No firable transition is available.","Warning",2); 
+	    	
+		}
+		
+		
+	}
 }

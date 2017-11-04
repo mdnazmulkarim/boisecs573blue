@@ -378,6 +378,10 @@ public class PetrinetBuilder {
 			arc.setDirectionType(arcType);
 			this.petrinet.arcVector.add(arc);
 			
+			trans.setArc(arc);
+			
+			System.out.println("its transition arc list..."+trans.getArcList().size());
+			
 			createPolygonMapForArc(arc);
 			
 			petrinet.getPetrinetBuilder().workingArrayList.add(arc.clone());

@@ -24,7 +24,8 @@ public class Arc extends ArcGuiItem implements Cloneable{
 
 	   
 	public Arc() {
-		
+		this.weight = 1;
+
 	}
 	public Arc(Place place, Transition transition, String type )
 	{

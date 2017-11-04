@@ -1,18 +1,20 @@
 package org.boisestate.petrinet;
 
+import java.awt.Color;
+import java.util.ArrayList;
 import java.util.Vector;
 
 import org.boisestate.graphics.TransitionGuiItem;
 
 public class Transition extends TransitionGuiItem implements Cloneable{
 
-	private Vector<Arc> arcVector;
+	private ArrayList<Arc> arcVector;
 	private boolean fireable;
 	
 	public Transition() 
 	{
 		super();
-		this.arcVector = new Vector<Arc>();
+		this.arcVector = new ArrayList<Arc>();
 		fireable=false;
 	}
 	
@@ -24,17 +26,23 @@ public class Transition extends TransitionGuiItem implements Cloneable{
 		this.fireable = fireable;
 	}
 	
+	
 	public void validateFiringStatus()
 	{
-		if(isTransitionFireable())
+		if(isTransitionFireable()){
+			super.setFillColor(Color.RED);
 			setFireable(true);
-		else
+		}else{
+			super.setFillColor(Color.GRAY);
 			setFireable(false);
+		}
 	}
 	
 	private boolean isTransitionFireable() 
 	{
 	    boolean canBeFired = false;	
+		System.out.println("isTransitionFireable---"+getNumberOfPlayableIncomingPlaces()+" "+getNoOfIncomiongPlaces());
+
 	    if(getNumberOfPlayableIncomingPlaces() >= getNoOfIncomiongPlaces())
 	    {
 	    	canBeFired = true;
@@ -43,13 +51,21 @@ public class Transition extends TransitionGuiItem implements Cloneable{
 		
 		
 	}
-	
+	public void setArc(Arc arc) {
+		this.arcVector.add(arc);
+	}
+	public ArrayList getArcList() {
+		return this.arcVector;
+	}
+	public void removeArc(Arc arc) {
+		this.arcVector.remove(arc);
+	}
 	private int getNoOfIncomiongPlaces()
 	{
 		int incomingPlaces = 0;
 		for(Arc arc : arcVector)
 		{
-			if(arc.getDirectionType().equals("P2T"))
+			if(arc.getDirectionType().equals("P_2_T"))
 					incomingPlaces++;
 		}
 		return incomingPlaces;
@@ -60,7 +76,8 @@ public class Transition extends TransitionGuiItem implements Cloneable{
 		int noOfPlayableIncomingPlaces = 0;
 		for(Arc arc : arcVector)
 		{
-			if(arc.getDirectionType().equals("P2T") && arc.getPlace().getTokenNumbers()>=arc.getWeight())
+			System.out.println("getNumberOfPlayableIncomingPlaces---"+arc.getPlace().getTokenNumbers()+" "+arc.getWeight());
+			if(arc.getDirectionType().equals("P_2_T") && arc.getPlace().getTokenNumbers()>=arc.getWeight())
 				noOfPlayableIncomingPlaces++;
 		}
 		return noOfPlayableIncomingPlaces;
@@ -72,10 +89,10 @@ public class Transition extends TransitionGuiItem implements Cloneable{
 		{
 			for(Arc arc : arcVector)
 			{
-				if(arc.getDirectionType().equals("P2T"))
+				if(arc.getDirectionType().equals("P_2_T"))
 				{	
 					arc.getPlace().removeToken(arc.getWeight()); }
-				else if(arc.getDirectionType().equals("T2P"))
+				else if(arc.getDirectionType().equals("T_2_P"))
 				{	
 					arc.getPlace().addToken(arc.getWeight());
 				}

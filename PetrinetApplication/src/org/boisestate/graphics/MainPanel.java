@@ -12,6 +12,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -26,19 +27,20 @@ import org.boisestate.petrinet.Petrinet;
 import org.boisestate.petrinet.Place;
 import org.boisestate.petrinet.Transition;
  
-enum State { PLACE, TRANSITION, ARC, NOTHING, COPY, PASTE, DELETE, UNDO, REDO }
+enum State { PLACE, TRANSITION, ARC, NOTHING, COPY, PASTE, DELETE, UNDO, REDO, SIMULATING,PLAY }
 
 public class MainPanel extends JFrame {
 	private static final long serialVersionUID = 1L;
 	protected JMenuBar menuBar;
 	protected JMenuItem newAction,openAction,saveAction,exitAction,deleteAction,copyAction,pasteAction,undoAction,redoAction;
-	protected JButton placeButton,transitionButton,arcButton,arrowButton;
+	protected JButton placeButton,transitionButton,arcButton,arrowButton,simulateButton,playButton,activeFiringStates;
 	protected DrawingPanel drawingPanel;
 	public static State currentState;
 	public Petrinet petrinet;
 	public PetriNetSaver savePetrinet;
 	public static ArrayList<String> placeCoordinator = new ArrayList<String>();
 	public static ArrayList<String> transitionCoordinator = new ArrayList<String>();
+	public static JComboBox activeFiringStatesList = new JComboBox();
 	int width, height;
     public MainPanel() {
         setTitle("Draw Petri Net");
@@ -74,6 +76,21 @@ public class MainPanel extends JFrame {
 	    arrowButton.setVisible(true);
 	    add(arrowButton);
 	    
+	    simulateButton = new JButton("Simulate");
+	    simulateButton.setVisible(true);
+	    add(simulateButton);
+	    
+	    playButton = new JButton("Play");
+	    playButton.setVisible(true);
+	    add(playButton);
+	    
+
+	  
+//	   activeFiringStatesList = new JComboBox();
+//	  activeFiringStatesList.setSelectedIndex(0);
+	   
+	    add(activeFiringStatesList);
+	    	    
         createFileMenu();
         createEditMenu();
         createActions();
@@ -86,6 +103,9 @@ public class MainPanel extends JFrame {
 		Toolkit.getDefaultToolkit().setDynamicLayout(true);
 		petrinet.getPetrinetBuilder().setDrawingPanel(drawingPanel);
     }
+//    public void addItemInComboBox(String str) {
+//    	activeFiringStatesList.addItem(str);
+//    }
     public int alertDialog() {
     	int dialogResult = JOptionPane.showConfirmDialog (null, "Do you want to close current petrinet?","Warning",2); 
     	if(dialogResult == JOptionPane.YES_OPTION){ 
@@ -445,6 +465,23 @@ public class MainPanel extends JFrame {
     		 
     	  }
       });
+      simulateButton.addActionListener(new ActionListener() {
+    	  public void actionPerformed(ActionEvent arg0) {
+    	      currentState = currentState.SIMULATING;
+    	      
+    	      petrinet.setFirableComboList();
+    	  }
+      });
+      playButton.addActionListener(new ActionListener() {
+    	  public void actionPerformed(ActionEvent arg0) {
+    	      currentState = currentState.PLAY;
+    	      petrinet.playTransition();
+    	      petrinet.setFirableComboList();
+    	      drawingPanel.paintAgain();
+    	      
+    	  }
+      });
+
     }
     
     protected JMenu createFileMenu() {

@@ -128,6 +128,7 @@ public class DrawingPanel extends JPanel {
                 		
                 		
                 	}
+                	
                 	else if (MainPanel.currentState == MainPanel.currentState.COPY){
                 		erasePartialArc();
                 		Object obj = petrinet.selectedPlace(e.getX(), e.getY());
