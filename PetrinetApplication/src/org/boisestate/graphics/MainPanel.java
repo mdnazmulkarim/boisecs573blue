@@ -27,7 +27,7 @@ import org.boisestate.petrinet.Petrinet;
 import org.boisestate.petrinet.Place;
 import org.boisestate.petrinet.Transition;
  
-enum State { PLACE, TRANSITION, ARC, NOTHING, COPY, PASTE, DELETE, UNDO, REDO, SIMULATING,PLAY }
+enum State { PLACE, TRANSITION, ARC, NOTHING, COPY, PASTE, DELETE, UNDO, REDO, SIMULATING,PLAY,DRAWING }
 
 public class MainPanel extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -76,7 +76,7 @@ public class MainPanel extends JFrame {
 	    arrowButton.setVisible(true);
 	    add(arrowButton);
 	    
-	    simulateButton = new JButton("Simulate");
+	    simulateButton = new JButton("Simulation Mode");
 	    simulateButton.setVisible(true);
 	    add(simulateButton);
 	    
@@ -386,55 +386,73 @@ public class MainPanel extends JFrame {
     private void createActions() {
       newAction.addActionListener(new ActionListener() {
     	  public void actionPerformed(ActionEvent arg0) {
-    		if(alertDialog() == JOptionPane.YES_OPTION) {
-    			petrinet.removeAllPlace();
-    			petrinet.removeAllTransition();
-    			petrinet.removeAllArcs();
-     			drawingPanel.paintAgain();
-    		}
+    		  if(!isSimulationModeOn()) {
+    			  if(alertDialog() == JOptionPane.YES_OPTION) {
+    	    			petrinet.removeAllPlace();
+    	    			petrinet.removeAllTransition();
+    	    			petrinet.removeAllArcs();
+    	     			drawingPanel.paintAgain();
+    	    		}
+    		  }
+    		
     	  }
       });
       openAction.addActionListener(new ActionListener() {
     	  public void actionPerformed(ActionEvent arg0) {
-    		  if(alertDialog() == JOptionPane.YES_OPTION) {
-        		  fileChoose();
-      		}
+    		  if(!isSimulationModeOn()) {
+    			  if(alertDialog() == JOptionPane.YES_OPTION) {
+            		  fileChoose();
+          			}
+    		  }
     	  }
       });
       saveAction.addActionListener(new ActionListener() {
     	  public void actionPerformed(ActionEvent arg0) {
-    		  savePetrinet.xmlFileName();
+    		  if(!isSimulationModeOn()) {
+    			  
+        		  savePetrinet.xmlFileName();
+    		  }
     	  }
       });
       deleteAction.addActionListener(new ActionListener() {
     	  public void actionPerformed(ActionEvent arg0) {
-    		  currentState = currentState.DELETE;
+    		  if(!isSimulationModeOn()) {
+        		  currentState = currentState.DELETE;
+    		  }
     	  }
       });
       copyAction.addActionListener(new ActionListener() {
     	  public void actionPerformed(ActionEvent arg0) {
-    		  currentState = currentState.COPY;
+    		  if(!isSimulationModeOn()) {
+        		  currentState = currentState.COPY;
+    		  }
     	  }
       });
       pasteAction.addActionListener(new ActionListener() {
     	  public void actionPerformed(ActionEvent arg0) {
-    		  currentState = currentState.PASTE;
+    		  if(!isSimulationModeOn()) {
+        		  currentState = currentState.PASTE;	
+    		  }
     	  }
       });
       undoAction.addActionListener(new ActionListener() {
     	  public void actionPerformed(ActionEvent arg0) {
-//    		  currentState = currentState.UNDO;
-    		  if(petrinet.getPetrinetBuilder().workingArrayList.size()>0) {
-        		  undoAction();
+    		  if(!isSimulationModeOn()) {
+    			  if(petrinet.getPetrinetBuilder().workingArrayList.size()>0) {
+            		  undoAction();
+        		  }
     		  }
+    		  
     	  }
       });
       redoAction.addActionListener(new ActionListener() {
     	  public void actionPerformed(ActionEvent arg0) {
-//    		  currentState = currentState.REDO;
-    		  if(petrinet.getPetrinetBuilder().redoArrayList.size()>0) {
-        		  redoAction();
+    		  if(!isSimulationModeOn()) {
+    			  if(petrinet.getPetrinetBuilder().redoArrayList.size()>0) {
+            		  redoAction();
+        		  }
     		  }
+    		  
     	  }
       });
       exitAction.addActionListener(new ActionListener() {
@@ -444,37 +462,60 @@ public class MainPanel extends JFrame {
       });
       placeButton.addActionListener(new ActionListener() {
     	  public void actionPerformed(ActionEvent arg0) {
-    	      currentState = currentState.PLACE;
-    		 
+    		  if(!isSimulationModeOn()) {
+        	      currentState = currentState.PLACE;
+    		  }    		 
     	  }
       });
       transitionButton.addActionListener(new ActionListener() {
     	  public void actionPerformed(ActionEvent arg0) {
-    	      currentState = currentState.TRANSITION;
-    		 
+    		  if(!isSimulationModeOn()) {
+        	      currentState = currentState.TRANSITION;
+    		  }    		 
     	  }
       });
       arcButton.addActionListener(new ActionListener() {
     	  public void actionPerformed(ActionEvent arg0) {
-    	      currentState = currentState.ARC;
+    		  if(!isSimulationModeOn()) {
+        	      currentState = currentState.ARC;
+    		  }
     	  }
       });
       arrowButton.addActionListener(new ActionListener() {
     	  public void actionPerformed(ActionEvent arg0) {
-    	      currentState = currentState.NOTHING;
-    		 
+    		  if(!isSimulationModeOn()) {
+        	      currentState = currentState.NOTHING;
+    		  }
     	  }
       });
       simulateButton.addActionListener(new ActionListener() {
     	  public void actionPerformed(ActionEvent arg0) {
-    	      currentState = currentState.SIMULATING;
+    		  
+    		  if(simulateButton.getText().equals("Simulation Mode")) {
+    			  currentState = currentState.SIMULATING;
+        	      petrinet.setFirableComboList();
+        	      toggleSimulateButton("Drawing Mode");
+        	      
+        	      
+        	      petrinet.saveCurrentMarking();
+        	      
+    		  }else {
+        	      petrinet.restorePreviousMarking();
+    			  currentState = currentState.DRAWING;
+        	      toggleSimulateButton("Simulation Mode");
+        	      petrinet.currentFirableTransitionList.clear();
+        	      
+        	      for(Transition trans: petrinet.transitionVector) {
+        	    	  trans.setFillColor(Color.GRAY);
+        	      }
+        	      drawingPanel.paintAgain();
+    		  }
     	      
-    	      petrinet.setFirableComboList();
     	  }
       });
       playButton.addActionListener(new ActionListener() {
     	  public void actionPerformed(ActionEvent arg0) {
-    	      currentState = currentState.PLAY;
+//    	      currentState = currentState.PLAY;
     	      petrinet.playTransition();
     	      petrinet.setFirableComboList();
     	      drawingPanel.paintAgain();
@@ -483,7 +524,18 @@ public class MainPanel extends JFrame {
       });
 
     }
-    
+    public Boolean isSimulationModeOn() {
+    	Boolean isSimulationModeOn = false;
+    	if(currentState == currentState.SIMULATING) {
+    		isSimulationModeOn = true;
+    		JOptionPane.showConfirmDialog (null, "Disable the simulation mode at first.","Warning",2); 
+    	}
+    	return isSimulationModeOn;
+    }
+
+    public void toggleSimulateButton(String str) {
+    	simulateButton.setText(str);
+    }
     protected JMenu createFileMenu() {
         JMenu fileMenu = new JMenu("File");
         menuBar.add(fileMenu);

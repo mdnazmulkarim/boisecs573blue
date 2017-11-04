@@ -177,21 +177,24 @@ public class DrawingPanel extends JPanel {
             	if(e.getButton() == MouseEvent.BUTTON2)
             		System.out.println("button 2");
             	if(e.getButton() == MouseEvent.BUTTON3) {
-            		erasePartialArc();
-            		Object obj = petrinet.selectedPlace(e.getX(), e.getY());
-            		selectedItem = obj;
-            		if(selectedItem!=null) {
-            			if(selectedItem instanceof Place){
-            				petrinet.getPetrinetBuilder().placeInputDialog(selectedItem);
-            			}
-            			else if (selectedItem instanceof Transition) {
-            				petrinet.getPetrinetBuilder().transitionInputDialog(selectedItem);
-            			}
-            			else if(selectedItem instanceof Arc)
-            			{
-            				System.out.println("Arc found:");
-            			}
-            				
+            		if(MainPanel.currentState != MainPanel.currentState.SIMULATING){
+            			erasePartialArc();
+                		Object obj = petrinet.selectedPlace(e.getX(), e.getY());
+                		selectedItem = obj;
+                		if(selectedItem!=null) {
+                			if(selectedItem instanceof Place){
+                				petrinet.getPetrinetBuilder().placeInputDialog(selectedItem);
+                			}
+                			else if (selectedItem instanceof Transition) {
+                				petrinet.getPetrinetBuilder().transitionInputDialog(selectedItem);
+                			}
+                			else if(selectedItem instanceof Arc)
+                			{
+                				System.out.println("Arc found:");
+                			}
+                				
+                		}
+                		
             		}
             		
             	}

@@ -43,7 +43,8 @@ public class Transition extends TransitionGuiItem implements Cloneable{
 	    boolean canBeFired = false;	
 		System.out.println("isTransitionFireable---"+getNumberOfPlayableIncomingPlaces()+" "+getNoOfIncomiongPlaces());
 
-	    if(getNumberOfPlayableIncomingPlaces() >= getNoOfIncomiongPlaces())
+		
+	    if(getNumberOfPlayableIncomingPlaces()!=0 && getNumberOfPlayableIncomingPlaces() >= getNoOfIncomiongPlaces())
 	    {
 	    	canBeFired = true;
 	    }		

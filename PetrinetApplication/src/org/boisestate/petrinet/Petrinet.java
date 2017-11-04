@@ -1,8 +1,11 @@
 package org.boisestate.petrinet;
 
+import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Polygon;
+import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -24,6 +27,8 @@ public class Petrinet {
 	
 	public static ArrayList<Transition> currentFirableTransitionList = new ArrayList<Transition>();
 
+	public static Map<Place, Integer> petrinetMarking = new HashMap<Place, Integer>(); 
+	
 	private PetrinetBuilder petrinetBuilder;
 	
 	public Petrinet(PetrinetBuilder pb, String title) 
@@ -193,9 +198,21 @@ public class Petrinet {
 			trans.fireTransition();
 		}else {
 			JOptionPane.showConfirmDialog (null, "No firable transition is available.","Warning",2); 
-	    	
-		}
-		
-		
+		}	
 	}
+	public void saveCurrentMarking() {
+		petrinetMarking.clear();
+		for(Place place: this.placeVector) {
+			petrinetMarking.put(place, place.getTokenNumbers());
+		}
+	}
+	public void restorePreviousMarking() {
+		for(Place place: this.placeVector) {
+			place.setTokenNumbers(petrinetMarking.get(place));
+		}
+	}
+	
+	
+
+
 }
