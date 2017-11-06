@@ -16,39 +16,37 @@ public class Place extends PlaceGuiItem implements Cloneable{
 	 * noOfTokens is intialized to zero(0) a default value
 	 * isBounded is false by default
 	 */
-	public Place(){
-		
+	public Place() {
+
 		super();
 		this.isBounded = false;
 	}
-	
+
 	public void addToken(int num) {
-		super.setTokenNumbers(super.getTokenNumbers()+ num);
+		super.setTokenNumbers(super.getTokenNumbers() + num);
 	}
-	
+
 	public void removeToken(int num) {
-		super.setTokenNumbers(super.getTokenNumbers()-num);
+		super.setTokenNumbers(super.getTokenNumbers() - num);
 	}
-	
+
 	public void setBounded(boolean b) {
 		this.isBounded = b;
 	}
-	
+
 	public boolean getBounded() {
 		return this.isBounded;
 	}
-	
+
 	public Object clone() {
 		Object o = null;
 		try {
-			o=super.clone();
+			o = super.clone();
 
 		} catch (CloneNotSupportedException e) {
-			// TODO: handle exception
+			System.out.println("Clone Not Supported" + e.toString());
 		}
 		return o;
 	}
-	
-	
 
 }

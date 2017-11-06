@@ -6,132 +6,127 @@ import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.Rectangle;
 
-
-public class PlaceGuiItem implements GuiItemInterface{
+public class PlaceGuiItem implements GuiItemInterface {
 	private Color fillColor;
 	private Color borderColor;
 	private int xPos = -50;
-    private int yPos = -50;
-    private int radius = 30;
-    private int height = 40;
-    private int nameHeight = 10;
-    private String name = "";
-    private int noOfTokens = 0;
-    
-    public PlaceGuiItem()
-    {
+	private int yPos = -50;
+	private int radius = 30;
+	private int height = 40;
+	private int nameHeight = 10;
+	private String name = "";
+	private int noOfTokens = 0;
 
-    	this.fillColor = Color.GRAY;
-    	this.borderColor = Color.BLACK;
-    } 
-    
-    @Override
-    public void setX(int xPos){ 
-        this.xPos = xPos;
-    }
+	public PlaceGuiItem() {
 
-    @Override
-    public int getX(){
-        return xPos;
-    }
+		this.fillColor = Color.GRAY;
+		this.borderColor = Color.BLACK;
+	}
 
-    @Override
-    public void setY(int yPos){
-        this.yPos = yPos;
-    }
+	@Override
+	public void setX(int xPos) {
+		this.xPos = xPos;
+	}
 
-    @Override
-    public int getY(){
-        return yPos;
-    }
+	@Override
+	public int getX() {
+		return xPos;
+	}
 
-   
-    
-    @Override
+	@Override
+	public void setY(int yPos) {
+		this.yPos = yPos;
+	}
+
+	@Override
+	public int getY() {
+		return yPos;
+	}
+
+	@Override
 	public void setName(String name) {
 		this.name = name;
-		
+
 	}
+
 	@Override
 	public String getName() {
 		return this.name;
 	}
-	
+
 	public void setTokenNumbers(int num) {
 		this.noOfTokens = num;
 	}
-	
+
 	public int getTokenNumbers() {
 		return this.noOfTokens;
 	}
-	
+
 	@Override
 	public void setBorderColor(Color color) {
 		this.borderColor = color;
-		
+
 	}
 
 	@Override
 	public void setFillColor(Color color) {
 		this.fillColor = color;
-		
+
 	}
-	
-	public void setRadius(int w){
-        this.radius =w;
-    } 
-	
-	public int getRadius(){
-        return radius;
-    } 
 
-	public void setHight(int h){
-        this.height = h;
-    }
-	
-	public int getHeight(){
-        return height;
-    }
-	    
+	public void setRadius(int w) {
+		this.radius = w;
+	}
 
-   
-    public void draw(Graphics g){
-        g.setColor(Color.white);
-        g.fillOval(xPos, yPos, radius, height-nameHeight);
-        g.setColor(Color.BLACK);
-        g.drawOval(xPos,yPos,radius,height-nameHeight); 
-        
-//        if(noOfTokens > 0) {
-//        	if (noOfTokens == 1) {
-//        		g.fillOval(xPos+(radius/2), yPos+(radius/2), 4, 4);
-//        	}
-//        	else if (noOfTokens == 2) {
-//        		g.fillOval(xPos+(radius/2), yPos+(radius/2), 4, 4);
-//        		g.fillOval(xPos+(radius/4), yPos+(radius/2), 4, 4);
-//        	}
-//        	else if (noOfTokens == 3) {
-//        		g.fillOval(xPos+(radius/2), yPos+(radius/2), 4, 4);
-//        		g.fillOval(xPos+(radius/4), yPos+(radius/2), 4, 4);
-//        		g.fillOval(xPos+(radius/4), yPos+(radius/4), 4, 4);
-//        	}
-//        	else if (noOfTokens == 4) {
-//        		g.fillOval(xPos+(radius/2), yPos+(radius/2), 4, 4);
-//        		g.fillOval(xPos+(radius/4), yPos+(radius/2), 4, 4);
-//        		g.fillOval(xPos+(radius/4), yPos+(radius/4), 4, 4);
-//        		g.fillOval(xPos+(radius/2), yPos+(radius/5), 4, 4);
-//        	}else {
-//        	}
-//        }
-        if (noOfTokens > 0) {
-    		g.drawString("{"+noOfTokens+"}", xPos, yPos+height+11);
+	public int getRadius() {
+		return radius;
+	}
 
-        }
+	public void setHight(int h) {
+		this.height = h;
+	}
 
-        g.drawString(name, xPos, yPos+height);
-        
-    }
+	public int getHeight() {
+		return height;
+	}
+
+	public void draw(Graphics g) {
+		g.setColor(Color.white);
+		g.fillOval(xPos, yPos, radius, height - nameHeight);
+		g.setColor(Color.BLACK);
+		g.drawOval(xPos, yPos, radius, height - nameHeight);
+
+		// if(noOfTokens > 0) {
+		// if (noOfTokens == 1) {
+		// g.fillOval(xPos+(radius/2), yPos+(radius/2), 4, 4);
+		// }
+		// else if (noOfTokens == 2) {
+		// g.fillOval(xPos+(radius/2), yPos+(radius/2), 4, 4);
+		// g.fillOval(xPos+(radius/4), yPos+(radius/2), 4, 4);
+		// }
+		// else if (noOfTokens == 3) {
+		// g.fillOval(xPos+(radius/2), yPos+(radius/2), 4, 4);
+		// g.fillOval(xPos+(radius/4), yPos+(radius/2), 4, 4);
+		// g.fillOval(xPos+(radius/4), yPos+(radius/4), 4, 4);
+		// }
+		// else if (noOfTokens == 4) {
+		// g.fillOval(xPos+(radius/2), yPos+(radius/2), 4, 4);
+		// g.fillOval(xPos+(radius/4), yPos+(radius/2), 4, 4);
+		// g.fillOval(xPos+(radius/4), yPos+(radius/4), 4, 4);
+		// g.fillOval(xPos+(radius/2), yPos+(radius/5), 4, 4);
+		// }else {
+		// }
+		// }
+		if (noOfTokens > 0) {
+			g.drawString("{" + noOfTokens + "}", xPos, yPos + height + 11);
+
+		}
+
+		g.drawString(name, xPos, yPos + height);
+
+	}
 
 	public Rectangle getBounds() {
-		return new Rectangle(xPos,yPos,radius,height);
+		return new Rectangle(xPos, yPos, radius, height);
 	}
 }

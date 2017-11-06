@@ -18,8 +18,6 @@ public class Arc extends ArcGuiItem implements Cloneable{
 	private Place connectedPlace;
 	private Transition connectedTransition;
 	private String directionType;
-	Point sPoint = new Point(-1, -1); 
-    Point ePoint = new Point(-1, -1); 
    
 
 	   
@@ -75,9 +73,8 @@ public class Arc extends ArcGuiItem implements Cloneable{
 		Object o = null;
 		try {
 			o=super.clone();
-
 		} catch (CloneNotSupportedException e) {
-			// TODO: handle exception
+			System.out.println("Clone Not Supported"+e.toString());
 		}
 		return o;
 	}

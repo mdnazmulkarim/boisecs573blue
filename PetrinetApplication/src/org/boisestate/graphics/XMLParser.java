@@ -2,7 +2,6 @@ package org.boisestate.graphics;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
-
 import org.boisestate.petrinet.Arc;
 import org.boisestate.petrinet.Petrinet;
 import org.boisestate.petrinet.Place;
@@ -11,7 +10,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import org.w3c.dom.Element;
-
 import java.awt.Point;
 import java.io.File;
 
