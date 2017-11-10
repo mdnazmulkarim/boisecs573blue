@@ -332,6 +332,7 @@ public class PetrinetBuilder {
 				if (arc.getPlace().getName().equals(place.getName())
 						&& arc.getTransition().getName().equals(trans.getName())) {
 					isExistingTheSameArc = true;
+					JOptionPane.showConfirmDialog(null, "You have the same Arc.", "Warning", 2);
 					break;
 				}
 			}

@@ -67,11 +67,6 @@ public class DrawingPanel extends JPanel {
 						if (arcDrawingStarted) {
 							pointList.add(new Point(e.getX(), e.getY()));
 
-							// For circle points change
-							// Point pp = petrinet.getPetrinetBuilder().intersectionPoint(pointList.get(1),
-							// pointList.get(0), tempPlace.getRadius());
-							// pointList.get(0).setLocation(pp);
-
 							repaint();
 							Object obj = petrinet.getPetrinetBuilder().getElementUnderThisPoint(e.getX(), e.getY());
 
