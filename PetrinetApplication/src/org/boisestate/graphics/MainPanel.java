@@ -4,12 +4,16 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Image;
 import java.awt.MouseInfo;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
@@ -20,6 +24,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileSystemView;
+
 import org.boisestate.petrinet.Arc;
 import org.boisestate.petrinet.Petrinet;
 import org.boisestate.petrinet.Place;
@@ -32,7 +37,7 @@ public class MainPanel extends JFrame {
 	protected JMenuBar menuBar;
 	protected JMenuItem newAction, openAction, saveAction, exitAction, deleteAction, copyAction, pasteAction,
 			undoAction, redoAction;
-	protected JButton placeButton, transitionButton, arcButton, arrowButton, simulateButton, playButton,
+	protected JButton placeButton, transitionButton, arcButton, simulateButton, playButton,
 			activeFiringStates;
 	protected DrawingPanel drawingPanel;
 	public static State currentState;
@@ -63,21 +68,40 @@ public class MainPanel extends JFrame {
 		menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 
-		placeButton = new JButton("Place");
-		placeButton.setVisible(true);
+		
+		placeButton = new JButton();
+		try {
+		    Image img = ImageIO.read(getClass().getResource("circle.jpg"));
+		    placeButton.setIcon(new ImageIcon(img));
+		  } catch (Exception ex) {
+		    System.out.println(ex);
+		  }
+		placeButton.setBorderPainted(false);
 		add(placeButton);
 
-		transitionButton = new JButton("Transition");
-		transitionButton.setVisible(true);
+		transitionButton = new JButton();
+		try {
+		    Image img = ImageIO.read(getClass().getResource("rectangle.png"));
+		    transitionButton.setIcon(new ImageIcon(img));
+		  } catch (Exception ex) {
+		    System.out.println(ex);
+		  }
+		transitionButton.setBorderPainted(false);
 		add(transitionButton);
 
-		arcButton = new JButton("Arc");
-		arcButton.setVisible(true);
+		arcButton = new JButton();
+		try {
+		    Image img = ImageIO.read(getClass().getResource("Arrow.png"));
+		    arcButton.setIcon(new ImageIcon(img));
+		  } catch (Exception ex) {
+		    System.out.println(ex);
+		  }
+		arcButton.setBorderPainted(false);
 		add(arcButton);
 
-		arrowButton = new JButton("Arrow");
-		arrowButton.setVisible(true);
-		add(arrowButton);
+//		arrowButton = new JButton("Arrow");
+//		arrowButton.setVisible(true);
+//		add(arrowButton);
 
 		simulateButton = new JButton("Drawing Mode");
 		simulateButton.setVisible(true);
@@ -502,13 +526,13 @@ public class MainPanel extends JFrame {
 				}
 			}
 		});
-		arrowButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				if (!isSimulationModeOn()) {
-					currentState = currentState.NOTHING;
-				}
-			}
-		});
+//		arrowButton.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent arg0) {
+//				if (!isSimulationModeOn()) {
+//					currentState = currentState.NOTHING;
+//				}
+//			}
+//		});
 		simulateButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 
