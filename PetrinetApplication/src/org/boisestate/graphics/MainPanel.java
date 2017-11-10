@@ -79,7 +79,7 @@ public class MainPanel extends JFrame {
 		arrowButton.setVisible(true);
 		add(arrowButton);
 
-		simulateButton = new JButton("Simulation Mode");
+		simulateButton = new JButton("Drawing Mode");
 		simulateButton.setVisible(true);
 		add(simulateButton);
 
@@ -512,10 +512,10 @@ public class MainPanel extends JFrame {
 		simulateButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 
-				if (simulateButton.getText().equals("Simulation Mode")) {
+				if (simulateButton.getText().equals("Drawing Mode")) {
 					currentState = currentState.SIMULATING;
 					petrinet.setFirableComboList();
-					toggleSimulateButton("Drawing Mode");
+					toggleSimulateButton("Simulation Mode");
 
 					petrinet.saveCurrentMarking();
 
@@ -524,7 +524,7 @@ public class MainPanel extends JFrame {
 				} else {
 					petrinet.restorePreviousMarking();
 					currentState = currentState.DRAWING;
-					toggleSimulateButton("Simulation Mode");
+					toggleSimulateButton("Drawing Mode");
 					petrinet.currentFirableTransitionList.clear();
 
 					for (Transition trans : petrinet.transitionVector) {
