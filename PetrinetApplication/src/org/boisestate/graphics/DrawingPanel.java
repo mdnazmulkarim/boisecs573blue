@@ -149,6 +149,7 @@ public class DrawingPanel extends JPanel {
 								repaint();
 							} else if (selectedItem instanceof Transition) {
 								System.out.println("delete called");
+								petrinet.deleteLinkedArcWithTransition((Transition) selectedItem);
 								petrinet.deleteTransition((Transition) selectedItem);
 								repaint();
 							} else {

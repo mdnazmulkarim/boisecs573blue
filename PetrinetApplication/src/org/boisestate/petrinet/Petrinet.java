@@ -120,6 +120,25 @@ public class Petrinet {
 		}
 	}
 	
+	public void deleteLinkedArcWithTransition(Transition trans) {
+		System.out.println(this.arcVector.size());
+		ArrayList<Arc> av = new ArrayList<Arc>();
+
+		for(Arc arc: this.arcVector) {
+
+			if(arc.getTransition().equals(trans)) {
+				petrinetBuilder.putElementInWorkingArrayList(arc.clone()); // For Redo Undo
+				petrinetBuilder.putElementInActionArrayList("D");
+				av.add(arc);
+			}
+		}
+		
+		for(Arc arc: av) {
+			this.arcVector.remove(arc);
+			System.out.println(this.arcVector.size());
+		}
+	}
+	
 	public void removeLastPlace() {
 		petrinetBuilder.workingArrayList.add(placeVector.size() - 1); // For Redo Undo
 		this.placeVector.remove(placeVector.size() - 1);
