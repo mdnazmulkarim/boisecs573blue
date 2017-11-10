@@ -93,6 +93,33 @@ public class Petrinet {
 		this.placeVector.remove(place);
 	}
 
+	public void deleteLinkedArcWithPlace(Place place) {
+		System.out.println(this.arcVector.size());
+		ArrayList<Arc> av = new ArrayList<Arc>();
+
+		for(Arc arc: this.arcVector) {
+
+			if(arc.getPlace().equals(place)) {
+				petrinetBuilder.putElementInWorkingArrayList(arc.clone()); // For Redo Undo
+				petrinetBuilder.putElementInActionArrayList("D");
+				for(Transition trans: this.transitionVector) {
+					if (trans.getArcList().contains(arc)) {
+						trans.getArcList().remove(arc);
+						System.out.println(trans.getArcList().size());
+						
+						av.add(arc);
+						break;
+					}
+				}
+			}
+		}
+		
+		for(Arc arc: av) {
+			this.arcVector.remove(arc);
+			System.out.println(this.arcVector.size());
+		}
+	}
+	
 	public void removeLastPlace() {
 		petrinetBuilder.workingArrayList.add(placeVector.size() - 1); // For Redo Undo
 		this.placeVector.remove(placeVector.size() - 1);

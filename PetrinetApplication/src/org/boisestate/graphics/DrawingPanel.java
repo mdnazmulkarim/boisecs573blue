@@ -144,6 +144,7 @@ public class DrawingPanel extends JPanel {
 						if (selectedItem != null) {
 							if (selectedItem instanceof Place) {
 								System.out.println("delete called");
+								petrinet.deleteLinkedArcWithPlace((Place) selectedItem);
 								petrinet.deletePlace((Place) selectedItem);
 								repaint();
 							} else if (selectedItem instanceof Transition) {
