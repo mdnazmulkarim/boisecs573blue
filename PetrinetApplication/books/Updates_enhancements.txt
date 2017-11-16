@@ -1,0 +1,49 @@
+Here is the list of changes Dr Xu suggested during review.
+
+- Revise title of Object Diagram to be "Class" Diagram (Mike)
+
+- Rethink the current Drawing panel/Simulation buttons
+
+- Revise the steps for Copy/Paste/Delete: select object(s) first,
+then select the action; to allow operations on multiple objects
+at the same time.
+
+- Rethink the Arc/Arrow design: functionality is good but need
+to signal what the program is doing.
+
+- While preventing the creation of two lines between P1 to T1,
+add acceptance criterion and report error message.
+
+- Add icons to tool bar and hint text
+
+- Add move functionality to reposition A, P, T1
+
+- When deleting P/T delete arcs.
+
+- Find class auto-diagramming tool (Eclipse plug-in?)
+
+- Test names of P, T in various formats, e.g., include comments.
+
+- See how Mista handles multi-language.
+
+Mike's addition--include Mike in the java coding team.
+
+
+Mousume update:
+
+I have done the following points for this project-
+
+- Rethink the current Drawing panel/Simulation buttons
+
+- Rethink the Arc/Arrow design: functionality is good but need
+to signal what the program is doing.
+
+- While preventing the creation of two lines between P1 to T1,
+add acceptance criterion and report an error message.
+
+- Add icons to toolbar and hint text
+
+- When deleting P/T delete arcs.
+
+You can find the update code on GitHub.
+
