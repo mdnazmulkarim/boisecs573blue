@@ -589,6 +589,7 @@ public class MainPanel extends JFrame {
 				 drawingPanel.add(coverabilityTreePanel,BorderLayout.EAST);
 				 coverabilityTreeButton.setText("Hide Tree");
 				 drawingPanel.validate();
+				 System.out.println(petrinet.getPetrinetBuilder().generateInitialmarkingFromCurrentPlaces());
 				 
 				}
 				else if (currentState == currentState.COVERABILITY)

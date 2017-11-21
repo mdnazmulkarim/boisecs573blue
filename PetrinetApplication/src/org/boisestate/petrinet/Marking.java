@@ -2,21 +2,23 @@ package org.boisestate.petrinet;
 
 public class Marking{
 	
-	private String name;
-	private String details;
+	private String name;               //M0
+	private String placeSequence;     //(P1,P2,P3,P4,P5)
+	private String tokensNoSequence;  //(1,1,0,0,0)
 	
 	
 	public Marking(String name) {
-		this.name = name;
-		this.details = "";
+		this.setName(name);
+		this.setPlaceSequence("");
+		this.setTokenSequence("");
 	}
 
 
-	public Marking(String name, String details) {
-		this.name = name;
-		this.details = details;
+	public Marking(String name, String placeSeq ,String tokenSeq) {
+		this.setName(name);
+		this.setPlaceSequence(placeSeq);
+		this.setTokenSequence(tokenSeq);
 	}
-
 
 	public String getName() {
 		return name;
@@ -28,13 +30,29 @@ public class Marking{
 	}
 
 
-	public String getDetails() {
-		return details;
+	public String getTokenSequence() {
+		return tokensNoSequence;
 	}
 
 
-	public void setDetails(String details) {
-		this.details = details;
+	public void setTokenSequence(String details) {
+		this.tokensNoSequence = details;
+	}
+	
+	public String getPlaceSequence() {
+		return placeSequence;
+	}
+
+
+	public void setPlaceSequence(String placeSequence) {
+		this.placeSequence = placeSequence;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return name+":"+placeSequence+":"+tokensNoSequence;
+		
 	}
 	
 	

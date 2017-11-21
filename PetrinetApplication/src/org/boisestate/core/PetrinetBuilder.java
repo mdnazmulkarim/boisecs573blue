@@ -421,7 +421,7 @@ public class PetrinetBuilder {
 	public boolean checkPlaceMarkingValidity(Marking inputMarking) {
 		int[] tokensSerialBy;
 		
-		String tempDetails = inputMarking.getDetails();
+		String tempDetails = inputMarking.getTokenSequence();
 		tempDetails = tempDetails.replaceAll("(", "");
 		tempDetails = tempDetails.replaceAll(")", "");
 		String[] tokens = tempDetails.split("[,]");
@@ -444,7 +444,7 @@ public class PetrinetBuilder {
 	public void resetPlaceWithinitialMarking()
 	{
 		int[] tokensSerialBy;
-		String tempDetails = petrinet.getInitialMarking().getDetails();
+		String tempDetails = petrinet.getInitialMarking().getTokenSequence();
 		tempDetails = tempDetails.replaceAll("(", "");
 		tempDetails = tempDetails.replaceAll(")", "");
 		String[] tokens = tempDetails.split("[,]");
@@ -461,23 +461,37 @@ public class PetrinetBuilder {
 		}
 	}
 	
-	public void generateInitialmarkingFromCurrentPlaces()
+	/**
+	 * 
+	 */
+	public Marking generateInitialmarkingFromCurrentPlaces()
 	{
 		Marking initialMarking = new Marking("M0");
 		String details ="(";
+		String detailsPlace ="(";
 		for(Place place : petrinet.placeVector)
 		{
 			details +=  place.getTokenNumbers();
 			details += ",";
+			
+			detailsPlace +=  place.getName();
+			detailsPlace += ",";
 		}
 		details  = details.substring(0, details.length()-1);
 		details += ")";
 		
-		initialMarking.setDetails(details);
+		detailsPlace  = detailsPlace.substring(0, detailsPlace.length()-1);
+		detailsPlace += ")";
+		
+		initialMarking.setTokenSequence(details);
+		initialMarking.setPlaceSequence(detailsPlace);
+		return initialMarking;
 	}
 	
-	public void printCurrentPlaceMark()
-	{
+	/**
+	 * This method just prints current Place tokens
+	 */
+	public void printCurrentPlaceMark() {
 		System.out.println("Printing Current Places mark:");
 		for(Place place : petrinet.placeVector)
 		{

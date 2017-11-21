@@ -14,7 +14,7 @@ public class CoverabilityTreePanel extends JPanel{
 	public CoverabilityTreePanel(Petrinet  petrinet,int width,int height) {
 		this.petrinet = petrinet;
 		this.setPreferredSize(new Dimension(width, height));
-		this.setBackground(Color.gray);
+		this.setBackground(new Color(204,204,255));
 		this.setVisible(true);
 	}
 	
