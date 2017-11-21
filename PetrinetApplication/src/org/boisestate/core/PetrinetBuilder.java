@@ -498,5 +498,20 @@ public class PetrinetBuilder {
 			System.out.println(place.getName() + ":"+place.getTokenNumbers());
 		}
 	}
+	
+	/**
+	 * This method return current Place sequence
+	 */
+	public String getCurrentPlaceSequence() {
+		String returnString = "(";
+		for(Place place : petrinet.placeVector)
+		{
+			returnString +=place.getName()+",";
+			//System.out.println(place.getName() + ":"+place.getTokenNumbers());
+		}
+		returnString  = returnString.substring(0, returnString.length()-1);
+		returnString += ")";
+		return returnString;
+	}
 
 }
