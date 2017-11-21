@@ -418,26 +418,44 @@ public class PetrinetBuilder {
 		}
 	}
 	
-	public boolean checkPlaceMarkingValidity(Marking inputMarking) {
+	public boolean checkMarkingValidity(Marking inputMarking) {
 		int[] tokensSerialBy;
 		
 		String tempDetails = inputMarking.getTokenSequence();
-		tempDetails = tempDetails.replaceAll("(", "");
-		tempDetails = tempDetails.replaceAll(")", "");
+		System.out.println("Seq:"+tempDetails);
+		if(tempDetails.isEmpty())
+			return false;
+		tempDetails = tempDetails.replace("(", "");
+		tempDetails = tempDetails.replace(")", "");
 		String[] tokens = tempDetails.split("[,]");
 		tokensSerialBy = new int[tokens.length];
 		for(int i=0;i<tokens.length;i++)
 		{
+			try {
 			tokensSerialBy[i] = Integer.parseInt(tokens[i]);
-		}
-		int i=0;
-		for(Place place : petrinet.placeVector)
-		{
-			if(place.getTokenNumbers() != tokensSerialBy[i]) {
+			if(tokensSerialBy[i]<0)
 				return false;
 			}
-			i++;
+			catch(NumberFormatException nfe)
+			{
+				System.out.println(nfe.getMessage());
+				return false;
+			}
 		}
+		
+		//System.out.println("input length : "+tokensSerialBy.length);
+		//System.out.println("Place length : "+petrinet.placeVector.size());
+		if(tokensSerialBy.length != petrinet.placeVector.size())
+			return false;
+		
+//		int i=0;
+//		for(Place place : petrinet.placeVector)
+//		{
+//			if(place.getTokenNumbers() != tokensSerialBy[i]) {
+//				return false;
+//			}
+//			i++;
+//		}
 		return true;
 	}
 	
@@ -445,8 +463,8 @@ public class PetrinetBuilder {
 	{
 		int[] tokensSerialBy;
 		String tempDetails = petrinet.getInitialMarking().getTokenSequence();
-		tempDetails = tempDetails.replaceAll("(", "");
-		tempDetails = tempDetails.replaceAll(")", "");
+		tempDetails = tempDetails.replace("(", "");
+		tempDetails = tempDetails.replace(")", "");
 		String[] tokens = tempDetails.split("[,]");
 		tokensSerialBy = new int[tokens.length];
 		for(int i=0;i<tokens.length;i++)
