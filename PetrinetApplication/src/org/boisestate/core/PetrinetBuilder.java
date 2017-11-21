@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.boisestate.petrinet.Arc;
+import org.boisestate.petrinet.Marking;
 import org.boisestate.petrinet.Petrinet;
 import org.boisestate.petrinet.Place;
 import org.boisestate.petrinet.Transition;
@@ -407,6 +408,81 @@ public class PetrinetBuilder {
 		}
 
 		System.out.println("arc map size after removing...." + arcDetectionMap.size());
+	}
+	
+	public void printInitialMarking()
+	{
+		if(petrinet.getInitialMarking() != null)
+		{
+			
+		}
+	}
+	
+	public boolean checkPlaceMarkingValidity(Marking inputMarking) {
+		int[] tokensSerialBy;
+		
+		String tempDetails = inputMarking.getDetails();
+		tempDetails = tempDetails.replaceAll("(", "");
+		tempDetails = tempDetails.replaceAll(")", "");
+		String[] tokens = tempDetails.split("[,]");
+		tokensSerialBy = new int[tokens.length];
+		for(int i=0;i<tokens.length;i++)
+		{
+			tokensSerialBy[i] = Integer.parseInt(tokens[i]);
+		}
+		int i=0;
+		for(Place place : petrinet.placeVector)
+		{
+			if(place.getTokenNumbers() != tokensSerialBy[i]) {
+				return false;
+			}
+			i++;
+		}
+		return true;
+	}
+	
+	public void resetPlaceWithinitialMarking()
+	{
+		int[] tokensSerialBy;
+		String tempDetails = petrinet.getInitialMarking().getDetails();
+		tempDetails = tempDetails.replaceAll("(", "");
+		tempDetails = tempDetails.replaceAll(")", "");
+		String[] tokens = tempDetails.split("[,]");
+		tokensSerialBy = new int[tokens.length];
+		for(int i=0;i<tokens.length;i++)
+		{
+			tokensSerialBy[i] = Integer.parseInt(tokens[i]);
+		}
+		int i=0;
+		for(Place place : petrinet.placeVector)
+		{
+			place.setTokenNumbers(tokensSerialBy[i]);
+			i++;
+		}
+	}
+	
+	public void generateInitialmarkingFromCurrentPlaces()
+	{
+		Marking initialMarking = new Marking("M0");
+		String details ="(";
+		for(Place place : petrinet.placeVector)
+		{
+			details +=  place.getTokenNumbers();
+			details += ",";
+		}
+		details  = details.substring(0, details.length()-1);
+		details += ")";
+		
+		initialMarking.setDetails(details);
+	}
+	
+	public void printCurrentPlaceMark()
+	{
+		System.out.println("Printing Current Places mark:");
+		for(Place place : petrinet.placeVector)
+		{
+			System.out.println(place.getName() + ":"+place.getTokenNumbers());
+		}
 	}
 
 }

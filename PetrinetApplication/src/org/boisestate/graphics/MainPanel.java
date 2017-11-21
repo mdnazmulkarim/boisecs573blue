@@ -30,7 +30,7 @@ import org.boisestate.petrinet.Petrinet;
 import org.boisestate.petrinet.Place;
 import org.boisestate.petrinet.Transition;
  
-enum State { PLACE, TRANSITION, ARC, NOTHING, COPY, PASTE, DELETE, UNDO, REDO, SIMULATING,PLAY,DRAWING }
+enum State { PLACE, TRANSITION, ARC, NOTHING, COPY, PASTE, DELETE, UNDO, REDO, SIMULATING,PLAY,DRAWING, COVERABILITY,HIDECOVERABILITY }
 
 public class MainPanel extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -38,9 +38,10 @@ public class MainPanel extends JFrame {
 	protected JMenuItem newAction, openAction, saveAction, exitAction, deleteAction, copyAction, pasteAction,
 			undoAction, redoAction;
 	protected JButton placeButton, transitionButton, arcButton, simulateButton, playButton,
-			activeFiringStates;
-	protected DrawingPanel drawingPanel;
+			activeFiringStates,coverabilityTreeButton;
 	public static State currentState;
+	protected DrawingPanel drawingPanel;
+	protected CoverabilityTreePanel coverabilityTreePanel;
 	public Petrinet petrinet;
 	public PetriNetSaver savePetrinet;
 	public static ArrayList<String> placeCoordinator = new ArrayList<String>();
@@ -59,11 +60,10 @@ public class MainPanel extends JFrame {
 		thisFrame = this;
 		height = screenSize.height * 3 / 4;
 		width = screenSize.width * 5 / 6;
+	//	width = screenSize.width;
 
 		setSize(width, height);
 		this.getContentPane().setLayout(new FlowLayout());
-
-		JPanel panel = new JPanel();
 
 		menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -110,17 +110,27 @@ public class MainPanel extends JFrame {
 		playButton = new JButton("Play");
 		playButton.setVisible(true);
 		add(playButton);
-
+		
 		add(activeFiringStatesList);
 
+		coverabilityTreeButton = new JButton("Coverability Tree");
+		coverabilityTreeButton.setVisible(true);
+		add(coverabilityTreeButton);
+		
 		createFileMenu();
 		createEditMenu();
 		createActions();
 
 		drawingPanel = new DrawingPanel(petrinet);
-		drawingPanel.setPreferredSize(new Dimension(width, height));
+		drawingPanel.setPreferredSize(new Dimension(width, height/4));
 		drawingPanel.setBackground(Color.white);
-		this.getContentPane().add(drawingPanel, BorderLayout.NORTH);
+		drawingPanel.setLayout(new BorderLayout());
+		
+		
+		
+		
+		this.getContentPane().add(drawingPanel);
+		//this.getContentPane().add(coverabilityTreePanel);
 		Toolkit.getDefaultToolkit().setDynamicLayout(true);
 		petrinet.getPetrinetBuilder().setDrawingPanel(drawingPanel);
 	}
@@ -565,6 +575,35 @@ public class MainPanel extends JFrame {
 				petrinet.playTransition();
 				petrinet.setFirableComboList();
 				drawingPanel.paintAgain();
+
+			}
+		});
+		
+		coverabilityTreeButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(currentState != currentState.COVERABILITY)
+				{
+				 currentState = currentState.COVERABILITY;
+				 coverabilityTreePanel = new CoverabilityTreePanel(petrinet,width*1/5,height/2-100);
+				 coverabilityTreePanel.setVisible(true);
+				 drawingPanel.add(coverabilityTreePanel,BorderLayout.EAST);
+				 coverabilityTreeButton.setText("Hide Tree");
+				 drawingPanel.validate();
+				 
+				}
+				else if (currentState == currentState.COVERABILITY)
+				{
+					currentState = currentState.HIDECOVERABILITY;
+					 drawingPanel.remove(coverabilityTreePanel);
+					 coverabilityTreeButton.setText("Coverability Tree");
+					 coverabilityTreePanel.setVisible(false);
+					 
+					 drawingPanel.revalidate();
+					 drawingPanel.validate();
+					 drawingPanel.repaint();
+					// thisFrame.invalidate();
+					 thisFrame.validate();
+				}
 
 			}
 		});

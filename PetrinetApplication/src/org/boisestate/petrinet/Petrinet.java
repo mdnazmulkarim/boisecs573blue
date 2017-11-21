@@ -20,6 +20,7 @@ public class Petrinet {
 	private String id;
 	private String name;
 	private String title;
+	private Marking initialMarking = null;
 
 	public ArrayList<Place> placeVector;
 	public ArrayList<Transition> transitionVector;
@@ -73,6 +74,15 @@ public class Petrinet {
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	
+	public Marking getInitialMarking() {
+		return initialMarking;
+	}
+
+	public void setInitialMarking(Marking initialMarking) {
+		this.initialMarking = initialMarking;
 	}
 
 	public void addTransition(Transition transition) {
