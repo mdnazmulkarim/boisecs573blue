@@ -7,7 +7,7 @@ import org.boisestate.graphics.TransitionGuiItem;
 
 public class Transition extends TransitionGuiItem implements Cloneable{
 
-	private ArrayList<Arc> arcVector;
+	public ArrayList<Arc> arcVector;
 	private boolean fireable;
 	
 	public Transition() {
@@ -36,8 +36,8 @@ public class Transition extends TransitionGuiItem implements Cloneable{
 
 	private boolean isTransitionFireable() {
 		boolean canBeFired = false;
-		System.out.println(
-				"isTransitionFireable---" + getNumberOfPlayableIncomingPlaces() + " " + getNoOfIncomiongPlaces());
+		//System.out.println(
+		//		"isTransitionFireable---" + getNumberOfPlayableIncomingPlaces() + " " + getNoOfIncomiongPlaces());
 
 		if (getNumberOfPlayableIncomingPlaces() != 0
 				&& getNumberOfPlayableIncomingPlaces() >= getNoOfIncomiongPlaces()) {
@@ -71,8 +71,8 @@ public class Transition extends TransitionGuiItem implements Cloneable{
 	private int getNumberOfPlayableIncomingPlaces() {
 		int noOfPlayableIncomingPlaces = 0;
 		for (Arc arc : arcVector) {
-			System.out.println(
-					"getNumberOfPlayableIncomingPlaces---" + arc.getPlace().getTokenNumbers() + " " + arc.getWeight());
+			//System.out.println(
+			//		"getNumberOfPlayableIncomingPlaces---" + arc.getPlace().getTokenNumbers() + " " + arc.getWeight());
 			if (arc.getDirectionType().equals("P_2_T") && arc.getPlace().getTokenNumbers() >= arc.getWeight())
 				noOfPlayableIncomingPlaces++;
 		}

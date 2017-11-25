@@ -11,9 +11,13 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.JTree;
+import javax.swing.tree.DefaultMutableTreeNode;
 
+import org.boisestate.core.PetrinetBuilder;
 import org.boisestate.petrinet.Marking;
 import org.boisestate.petrinet.Petrinet;
+import org.boisestate.petrinet.TreeNode;
 
 public class CoverabilityTreePanel extends JPanel{
 	
@@ -24,6 +28,7 @@ public class CoverabilityTreePanel extends JPanel{
 	
 	private String placeSequence = "";
 	private String tokenSequence = "";
+	private JPanel treePanel;
 	
 	public CoverabilityTreePanel(Petrinet  petrinet,int width,int height) {
 		this.petrinet = petrinet;
@@ -44,6 +49,38 @@ public class CoverabilityTreePanel extends JPanel{
 		add(inputInitialMarkingTextField);
 		add(inputInitialMarkingButton);
 		this.setVisible(true);
+		this.treePanel = this;
+	}
+	
+	private JTree test()
+	{
+		   JTree tree;
+		   DefaultMutableTreeNode root = new DefaultMutableTreeNode("Coverability Tree");
+	        
+	        
+	        DefaultMutableTreeNode vegetableNode = new DefaultMutableTreeNode("Vegetables");
+	        DefaultMutableTreeNode capsicumNode = new DefaultMutableTreeNode("capsicumNode");
+	        vegetableNode.add(capsicumNode);
+	        capsicumNode.add(new DefaultMutableTreeNode("YellowCapsicum"));
+	        vegetableNode.add(new DefaultMutableTreeNode("Carrot"));
+	        vegetableNode.add(new DefaultMutableTreeNode("Tomato"));
+	        vegetableNode.add(new DefaultMutableTreeNode("Potato"));
+	        DefaultMutableTreeNode fruitNode = new DefaultMutableTreeNode("Fruits");
+	        fruitNode.add(new DefaultMutableTreeNode("Banana"));
+	        fruitNode.add(new DefaultMutableTreeNode("Mango"));
+	        fruitNode.add(new DefaultMutableTreeNode("Apple"));
+	        fruitNode.add(new DefaultMutableTreeNode("Grapes"));
+	        fruitNode.add(new DefaultMutableTreeNode("Orange"));
+	        
+	        
+	        
+	        
+	        root.add(vegetableNode);
+	        root.add(fruitNode);
+	         
+	        //create the tree by passing in the root node
+	        tree = new JTree(root);
+	        return tree;
 	}
 	
 	private class InitialMarkingBurronListener implements ActionListener{
@@ -58,6 +95,7 @@ public class CoverabilityTreePanel extends JPanel{
 			else
 			{
 				Marking tempMarking = new Marking("M0");
+				PetrinetBuilder.markingIndex = 0;
 				tempMarking.setPlaceSequence(placeSequence);
 	            tokenSequence = inputInitialMarkingTextField.getText();
 				tempMarking.setTokenSequence(tokenSequence);
@@ -71,12 +109,24 @@ public class CoverabilityTreePanel extends JPanel{
 				{
 					
 					petrinet.setInitialMarking(tempMarking);
-					petrinet.getPetrinetBuilder().resetPlaceWithinitialMarking();
+					petrinet.getPetrinetBuilder().resetPlaceWithMarking(tempMarking);
 					petrinet.getPetrinetBuilder().drawingPanel.revalidate();
 					petrinet.getPetrinetBuilder().drawingPanel.repaint();
+					TreeNode tree = petrinet.getPetrinetBuilder().generateCoverabilityTree();
+					DefaultMutableTreeNode node =null;
+					petrinet.getPetrinetBuilder().traverseTree(tree, node);
+					JTree atree = new JTree(petrinet.getPetrinetBuilder().testTree);
+					treePanel.add(atree);
+					treePanel.revalidate();
+					treePanel.repaint();
 				}
 			}
 		}
+		
+	}
+	
+	private void traverseTree(TreeNode node)
+	{
 		
 	}
 	

@@ -26,6 +26,7 @@ import javax.swing.JPanel;
 import javax.swing.filechooser.FileSystemView;
 
 import org.boisestate.petrinet.Arc;
+import org.boisestate.petrinet.Marking;
 import org.boisestate.petrinet.Petrinet;
 import org.boisestate.petrinet.Place;
 import org.boisestate.petrinet.Transition;
@@ -589,7 +590,9 @@ public class MainPanel extends JFrame {
 				 drawingPanel.add(coverabilityTreePanel,BorderLayout.EAST);
 				 coverabilityTreeButton.setText("Hide Tree");
 				 drawingPanel.validate();
-				 System.out.println(petrinet.getPetrinetBuilder().generateInitialmarkingFromCurrentPlaces());
+				 //Marking marking = petrinet.getPetrinetBuilder().generateMarkingFromCurrentPlaces();
+				 
+				 //System.out.println(marking);
 				 
 				}
 				else if (currentState == currentState.COVERABILITY)

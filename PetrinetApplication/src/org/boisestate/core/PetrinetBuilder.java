@@ -8,6 +8,7 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -15,9 +16,11 @@ import java.util.Random;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 import org.boisestate.petrinet.Arc;
 import org.boisestate.petrinet.Marking;
+import org.boisestate.petrinet.TreeNode;
 import org.boisestate.petrinet.Petrinet;
 import org.boisestate.petrinet.Place;
 import org.boisestate.petrinet.Transition;
@@ -459,10 +462,10 @@ public class PetrinetBuilder {
 		return true;
 	}
 	
-	public void resetPlaceWithinitialMarking()
+	public void resetPlaceWithMarking(Marking marking)
 	{
 		int[] tokensSerialBy;
-		String tempDetails = petrinet.getInitialMarking().getTokenSequence();
+		String tempDetails = marking.getTokenSequence();
 		tempDetails = tempDetails.replace("(", "");
 		tempDetails = tempDetails.replace(")", "");
 		String[] tokens = tempDetails.split("[,]");
@@ -479,12 +482,14 @@ public class PetrinetBuilder {
 		}
 	}
 	
+	public static int markingIndex = 0;
 	/**
 	 * 
 	 */
-	public Marking generateInitialmarkingFromCurrentPlaces()
+	public Marking generateMarkingFromCurrentPlaces()
 	{
-		Marking initialMarking = new Marking("M0");
+		markingIndex++;
+		Marking initialMarking = new Marking("M"+markingIndex);
 		String details ="(";
 		String detailsPlace ="(";
 		for(Place place : petrinet.placeVector)
@@ -503,6 +508,10 @@ public class PetrinetBuilder {
 		
 		initialMarking.setTokenSequence(details);
 		initialMarking.setPlaceSequence(detailsPlace);
+		
+		System.out.println("Marking generated:");
+		System.out.println(initialMarking.getName()+"|"+initialMarking.getPlaceSequence()+"|"+initialMarking.getTokenSequence());
+		
 		return initialMarking;
 	}
 	
@@ -531,5 +540,235 @@ public class PetrinetBuilder {
 		returnString += ")";
 		return returnString;
 	}
+	
+	private String getPresentableTreeNode(Marking marking)
+	{
+		return marking.getName()+":"+marking.getTokenSequence()+marking.getPrecedenceTransitionName();
+	}
+	
+	
+	Map<String,Marking> allMarking = new HashMap<String,Marking>();
+	ArrayList<TreeNode> bfsQueue = new ArrayList<TreeNode>();
+	int queueIndex = 0;
+	
+	//public static int markingCount = 1;
+	
+	public TreeNode generateCoverabilityTree()
+	{
+		TreeNode<Marking> root = new TreeNode<>(petrinet.getInitialMarking());
+		allMarking.put(root.getData().getTokenSequence(), root.getData());
+		bfsQueue.add(root);
+		
+		TreeNode node=getElementFromQueue();
+		int counter = 0;
+		while(node != null) {
+			counter++;
+			//if(counter<30) {
+			traverseNode(node);			
+	        node = getElementFromQueue();		
+		//}
+			}
+	
+		return root;
+	}
+	
+	private void traverseNode(TreeNode node)
+	{
+		Marking marking = (Marking) node.getData();
+		
+		if(node.getStatus() != TreeNode.MARK_NEW)
+			return;
+		
+		System.out.println("Traverse Node:"+marking);
+		
+		resetPlaceWithMarking(marking);
+		petrinet.populatefireableTransitions();
+		if(petrinet.currentFirableTransitionList.size()==0)
+		{
+			node.setStatus(TreeNode.MARK_DEAD);
+			System.out.println("NO fireable transition");
+		}
+		else
+		{
+			System.out.println("Found fireable transitions:");
+			for(Transition transition : petrinet.currentFirableTransitionList )
+			{
+				resetPlaceWithMarking(marking);
+				transition.fireTransition();
+				Marking newMarking = generateMarkingFromCurrentPlaces();				
+				newMarking = transformMarkingWithOmegaFactor(marking,newMarking,transition);
+				
+				newMarking.setPrecedenceTransitionName(transition.getName());
+				TreeNode<Marking> newNode = new TreeNode<>(newMarking);	
+				
+				if(isOldMarking(newMarking))
+				{
+					System.out.println("OLD:"+newMarking);
+					newNode.setStatus(TreeNode.MARK_OLD);
+				}
+				else
+				{
+					System.out.println("New:"+newMarking);
+					allMarking.put(newNode.getData().getTokenSequence(), newNode.getData());
+					bfsQueue.add(newNode);					
+				}
+				node.addChild(newNode);
+				
+				
+			}
+		}
+		
+		if(node.getStatus() == TreeNode.MARK_NEW)
+			node.setStatus(TreeNode.MARK_VISITED);
+	}
+	
+	/**
+	 * @param priorMarking
+	 * @param postMarking
+	 * @param transition
+	 * @return
+	 */
+	private Marking transformMarkingWithOmegaFactor(Marking priorMarking, Marking postMarking,Transition transition )
+	{
+		int[] tokensSerialByPre;
+		int[] tokensSerialByPost;
+		
+		String tempDetailsPlaces = postMarking.getPlaceSequence();
+		tempDetailsPlaces = tempDetailsPlaces.replace("(", "");
+		tempDetailsPlaces = tempDetailsPlaces.replace(")", "");
+		String[] tokensPlaces = tempDetailsPlaces.split("[,]");
+		
+		int[] placeOmegaStatus = new int[tokensPlaces.length];
+		for(int i=0;i<placeOmegaStatus.length;i++)
+		{
+			placeOmegaStatus[i] = 0;
+		}
+		
+		String tempDetailsPre = priorMarking.getTokenSequence();
+		tempDetailsPre = tempDetailsPre.replace("(", "");
+		tempDetailsPre = tempDetailsPre.replace(")", "");
+		String[] tokensPre = tempDetailsPre.split("[,]");
+		tokensSerialByPre = new int[tokensPre.length];
+		
+		String tempDetailsPost = postMarking.getTokenSequence();
+		tempDetailsPost = tempDetailsPost.replace("(", "");
+		tempDetailsPost = tempDetailsPost.replace(")", "");
+		String[] tokensPost = tempDetailsPost.split("[,]");
+		tokensSerialByPost = new int[tokensPost.length];
+		
+		ArrayList<String> incmingPlaces = new ArrayList<String>();
+		ArrayList<String> outgoingPlaces = new ArrayList<String>();
+		
+		for (Arc arc : transition.arcVector) {
+			if(arc.getDirectionType().equals("P_2_T"))
+			{
+				incmingPlaces.add(arc.getPlace().getName());
+			}
+			else if(arc.getDirectionType().equals("T_2_P"))
+			{
+				outgoingPlaces.add(arc.getPlace().getName());
+			}
+		}
+		
+		boolean hasOmegaOccurance = false;
+		for(int i=0;i<outgoingPlaces.size();i++)
+		{
+			for(int j=0;j<incmingPlaces.size();j++)
+			{
+				if(outgoingPlaces.get(i).equalsIgnoreCase(incmingPlaces.get(j)))
+				{
+					hasOmegaOccurance = true;
+					for(int k=0;k<tokensPlaces.length;k++)
+					{
+						if(outgoingPlaces.get(i).equalsIgnoreCase(tokensPlaces[k]))
+						{
+							placeOmegaStatus[k] =1;
+						}
+					}
+				}
+			}
+		}
+		
+		if(hasOmegaOccurance)
+		{
+			for(int i=0;i<placeOmegaStatus.length;i++)
+			{
+				if(placeOmegaStatus[i] ==0)
+				{
+					tokensPost[i] = "999";
+				}
+			}
+		}
+		
+		String details ="(";		
+		for(int i=0;i<tokensPost.length;i++)
+		{
+			details += tokensPost[i];
+			details += ",";
+		}
+		details  = details.substring(0, details.length()-1);
+		details += ")";
+		
+//		for(int i=0;i<tokensPre.length;i++)
+//		{
+//			tokensSerialBy[i] = Integer.parseInt(tokens[i]);
+//		}
+		postMarking.setTokenSequence(details);
+		return postMarking;
+	}
+	
+	private boolean isOldMarking(Marking marking)
+	{
+		Marking probableMarking = allMarking.get(marking.getTokenSequence());
+		if( probableMarking != null)
+			return true;
+		//else
+		//	allMarking.put(marking.getTokenSequence(),marking);
+		return false;
+	}
+	
+	public DefaultMutableTreeNode testTree;
+	public void traverseTree(TreeNode tree,DefaultMutableTreeNode node) {
+
+	    // print, increment counter, whatever
+	   // System.out.println(tree.toString());
+		//DefaultMutableTreeNode root;
+		if(node ==null)
+		{     
+			node = new DefaultMutableTreeNode((String)getPresentableTreeNode((Marking)tree.getData()));
+	        System.out.println(getPresentableTreeNode((Marking)tree.getData()));
+	        testTree = node;
+		}// traverse children
+	    int childCount = tree.getChildren().size();
+	    if (childCount == 0) {
+	        // leaf node, we're done
+	    } else {
+	        for (int i = 0; i < childCount; i++) {
+	            TreeNode child = (TreeNode) tree.getChildren().get(i);
+	            DefaultMutableTreeNode childNode = new DefaultMutableTreeNode((String)getPresentableTreeNode((Marking)child.getData()));
+	            System.out.println(getPresentableTreeNode((Marking)child.getData()));
+	            traverseTree(child,childNode);
+	            node.add(childNode);
+	        }
+	    }
+	}
+	
+	private TreeNode getElementFromQueue() {
+		if(queueIndex >=bfsQueue.size())
+			return null;
+		TreeNode node = bfsQueue.get(queueIndex);
+		queueIndex++;
+		return node;
+	}
+	
+//	private TreeNode getNextNewMarking()
+//	{
+//		
+//	}
+	
+	
+	
+	
+	
 
 }
