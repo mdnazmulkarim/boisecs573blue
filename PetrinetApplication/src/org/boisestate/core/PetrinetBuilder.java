@@ -562,7 +562,7 @@ public class PetrinetBuilder {
 	
 	private String getPresentableTreeNode(Marking marking)
 	{
-		return marking.getName()+":"+marking.getTokenSequence().replace("999", "W")+marking.getPrecedenceTransitionName();
+		return marking.getPrecedenceTransitionName()+"->"+marking.getName()+":"+marking.getTokenSequence().replace("999", "W");
 	}
 	
 	/*
@@ -577,7 +577,7 @@ public class PetrinetBuilder {
 	public ArrayList<TreeNode> bfsQueue = new ArrayList<TreeNode>();
 	public int queueIndex = 0;
 	
-	public ArrayList<Marking> tokensHistory = new ArrayList<Marking>();
+	public ArrayList<Marking> tokensHistory = new ArrayList<Marking>();  //used for omega
 	//public static int markingCount = 1;
 	
 	public TreeNode generateCoverabilityTree()
@@ -715,62 +715,62 @@ public class PetrinetBuilder {
 		tokensHistory.add(mark);
 
 	}
-	private void updateTokenplaceHistory(Marking marking)
-	{
-		String tempDetailsPre = marking.getTokenSequence();
-		tempDetailsPre = tempDetailsPre.replace("(", "");
-		tempDetailsPre = tempDetailsPre.replace(")", "");
-		String[] tokensPre = tempDetailsPre.split("[,]");
-		
-		for(int i=0;i<tokensPre.length;i++)
-		{
-			if(Integer.parseInt(tokensPre[i])>=1 && (int)tokenPlaceHistory.get(i) <= new Integer(0))
-			{
-				
-				tokenPlaceHistory.remove(i);
-				tokenPlaceHistory.add(i, Integer.parseInt(tokensPre[i]));			
-			}
-		}
-	}
+//	private void updateTokenplaceHistory(Marking marking)
+//	{
+//		String tempDetailsPre = marking.getTokenSequence();
+//		tempDetailsPre = tempDetailsPre.replace("(", "");
+//		tempDetailsPre = tempDetailsPre.replace(")", "");
+//		String[] tokensPre = tempDetailsPre.split("[,]");
+//		
+//		for(int i=0;i<tokensPre.length;i++)
+//		{
+//			if(Integer.parseInt(tokensPre[i])>=1 && (int)tokenPlaceHistory.get(i) <= new Integer(0))
+//			{
+//				
+//				tokenPlaceHistory.remove(i);
+//				tokenPlaceHistory.add(i, Integer.parseInt(tokensPre[i]));			
+//			}
+//		}
+//	}
 	
 	
-	private Marking transformMarkingWithOmegaFactorUpdated(Marking priorMarking, Marking postMarking)
-	{
-		int[] tokensSerialByPre;
-		int[] tokensSerialByPost;
-		
-		String tempDetailsPre = priorMarking.getTokenSequence();
-		tempDetailsPre = tempDetailsPre.replace("(", "");
-		tempDetailsPre = tempDetailsPre.replace(")", "");
-		String[] tokensPre = tempDetailsPre.split("[,]");
-		tokensSerialByPre = new int[tokensPre.length];
-		
-		for(int i=0;i<tokensSerialByPre.length;i++)
-		{
-			tokensSerialByPre[i] = Integer.parseInt(tokensPre[i]);
-		}
-		
-		
-		String tempDetailsPost = postMarking.getTokenSequence();
-		tempDetailsPost = tempDetailsPost.replace("(", "");
-		tempDetailsPost = tempDetailsPost.replace(")", "");
-		String[] tokensPost = tempDetailsPost.split("[,]");
-		tokensSerialByPost = new int[tokensPost.length];
-		
-		for(int i=0;i<tokensSerialByPost.length;i++)
-		{
-			tokensSerialByPost[i] = Integer.parseInt(tokensPost[i]);
-		}
-		
-		boolean hasOmega = false;
-		for(int i=0;i<tokensSerialByPre.length;i++)
-		{
-			
-		}
-		
-		return postMarking;
-	}
-	
+//	private Marking transformMarkingWithOmegaFactorUpdated(Marking priorMarking, Marking postMarking)
+//	{
+//		int[] tokensSerialByPre;
+//		int[] tokensSerialByPost;
+//		
+//		String tempDetailsPre = priorMarking.getTokenSequence();
+//		tempDetailsPre = tempDetailsPre.replace("(", "");
+//		tempDetailsPre = tempDetailsPre.replace(")", "");
+//		String[] tokensPre = tempDetailsPre.split("[,]");
+//		tokensSerialByPre = new int[tokensPre.length];
+//		
+//		for(int i=0;i<tokensSerialByPre.length;i++)
+//		{
+//			tokensSerialByPre[i] = Integer.parseInt(tokensPre[i]);
+//		}
+//		
+//		
+//		String tempDetailsPost = postMarking.getTokenSequence();
+//		tempDetailsPost = tempDetailsPost.replace("(", "");
+//		tempDetailsPost = tempDetailsPost.replace(")", "");
+//		String[] tokensPost = tempDetailsPost.split("[,]");
+//		tokensSerialByPost = new int[tokensPost.length];
+//		
+//		for(int i=0;i<tokensSerialByPost.length;i++)
+//		{
+//			tokensSerialByPost[i] = Integer.parseInt(tokensPost[i]);
+//		}
+//		
+//		boolean hasOmega = false;
+//		for(int i=0;i<tokensSerialByPre.length;i++)
+//		{
+//			
+//		}
+//		
+//		return postMarking;
+//	}
+//	
 	
 	
 	/**
@@ -779,94 +779,94 @@ public class PetrinetBuilder {
 	 * @param transition
 	 * @return
 	 */
-	private Marking transformMarkingWithOmegaFactor(Marking priorMarking, Marking postMarking,Transition transition )
-	{
-		int[] tokensSerialByPre;
-		int[] tokensSerialByPost;
-		
-		String tempDetailsPlaces = postMarking.getPlaceSequence();
-		tempDetailsPlaces = tempDetailsPlaces.replace("(", "");
-		tempDetailsPlaces = tempDetailsPlaces.replace(")", "");
-		String[] tokensPlaces = tempDetailsPlaces.split("[,]");
-		
-		int[] placeOmegaStatus = new int[tokensPlaces.length];
-		for(int i=0;i<placeOmegaStatus.length;i++)
-		{
-			placeOmegaStatus[i] = 0;
-		}
-		
-		String tempDetailsPre = priorMarking.getTokenSequence();
-		tempDetailsPre = tempDetailsPre.replace("(", "");
-		tempDetailsPre = tempDetailsPre.replace(")", "");
-		String[] tokensPre = tempDetailsPre.split("[,]");
-		tokensSerialByPre = new int[tokensPre.length];
-		
-		String tempDetailsPost = postMarking.getTokenSequence();
-		tempDetailsPost = tempDetailsPost.replace("(", "");
-		tempDetailsPost = tempDetailsPost.replace(")", "");
-		String[] tokensPost = tempDetailsPost.split("[,]");
-		tokensSerialByPost = new int[tokensPost.length];
-		
-		ArrayList<String> incmingPlaces = new ArrayList<String>();
-		ArrayList<String> outgoingPlaces = new ArrayList<String>();
-		
-		for (Arc arc : transition.arcVector) {
-			if(arc.getDirectionType().equals("P_2_T"))
-			{
-				incmingPlaces.add(arc.getPlace().getName());
-			}
-			else if(arc.getDirectionType().equals("T_2_P"))
-			{
-				outgoingPlaces.add(arc.getPlace().getName());
-			}
-		}
-		
-		boolean hasOmegaOccurance = false;
-		for(int i=0;i<outgoingPlaces.size();i++)
-		{
-			for(int j=0;j<incmingPlaces.size();j++)
-			{
-				if(outgoingPlaces.get(i).equalsIgnoreCase(incmingPlaces.get(j)))
-				{
-					hasOmegaOccurance = true;
-					for(int k=0;k<tokensPlaces.length;k++)
-					{
-						if(outgoingPlaces.get(i).equalsIgnoreCase(tokensPlaces[k]))
-						{
-							placeOmegaStatus[k] =1;
-						}
-					}
-				}
-			}
-		}
-		
-		if(hasOmegaOccurance)
-		{
-			for(int i=0;i<placeOmegaStatus.length;i++)
-			{
-				if(placeOmegaStatus[i] ==0)
-				{
-					tokensPost[i] = "999";
-				}
-			}
-		}
-		
-		String details ="(";		
-		for(int i=0;i<tokensPost.length;i++)
-		{
-			details += tokensPost[i];
-			details += ",";
-		}
-		details  = details.substring(0, details.length()-1);
-		details += ")";
-		
-//		for(int i=0;i<tokensPre.length;i++)
+//	private Marking transformMarkingWithOmegaFactor(Marking priorMarking, Marking postMarking,Transition transition )
+//	{
+//		int[] tokensSerialByPre;
+//		int[] tokensSerialByPost;
+//		
+//		String tempDetailsPlaces = postMarking.getPlaceSequence();
+//		tempDetailsPlaces = tempDetailsPlaces.replace("(", "");
+//		tempDetailsPlaces = tempDetailsPlaces.replace(")", "");
+//		String[] tokensPlaces = tempDetailsPlaces.split("[,]");
+//		
+//		int[] placeOmegaStatus = new int[tokensPlaces.length];
+//		for(int i=0;i<placeOmegaStatus.length;i++)
 //		{
-//			tokensSerialBy[i] = Integer.parseInt(tokens[i]);
+//			placeOmegaStatus[i] = 0;
 //		}
-		postMarking.setTokenSequence(details);
-		return postMarking;
-	}
+//		
+//		String tempDetailsPre = priorMarking.getTokenSequence();
+//		tempDetailsPre = tempDetailsPre.replace("(", "");
+//		tempDetailsPre = tempDetailsPre.replace(")", "");
+//		String[] tokensPre = tempDetailsPre.split("[,]");
+//		tokensSerialByPre = new int[tokensPre.length];
+//		
+//		String tempDetailsPost = postMarking.getTokenSequence();
+//		tempDetailsPost = tempDetailsPost.replace("(", "");
+//		tempDetailsPost = tempDetailsPost.replace(")", "");
+//		String[] tokensPost = tempDetailsPost.split("[,]");
+//		tokensSerialByPost = new int[tokensPost.length];
+//		
+//		ArrayList<String> incmingPlaces = new ArrayList<String>();
+//		ArrayList<String> outgoingPlaces = new ArrayList<String>();
+//		
+//		for (Arc arc : transition.arcVector) {
+//			if(arc.getDirectionType().equals("P_2_T"))
+//			{
+//				incmingPlaces.add(arc.getPlace().getName());
+//			}
+//			else if(arc.getDirectionType().equals("T_2_P"))
+//			{
+//				outgoingPlaces.add(arc.getPlace().getName());
+//			}
+//		}
+//		
+//		boolean hasOmegaOccurance = false;
+//		for(int i=0;i<outgoingPlaces.size();i++)
+//		{
+//			for(int j=0;j<incmingPlaces.size();j++)
+//			{
+//				if(outgoingPlaces.get(i).equalsIgnoreCase(incmingPlaces.get(j)))
+//				{
+//					hasOmegaOccurance = true;
+//					for(int k=0;k<tokensPlaces.length;k++)
+//					{
+//						if(outgoingPlaces.get(i).equalsIgnoreCase(tokensPlaces[k]))
+//						{
+//							placeOmegaStatus[k] =1;
+//						}
+//					}
+//				}
+//			}
+//		}
+//		
+//		if(hasOmegaOccurance)
+//		{
+//			for(int i=0;i<placeOmegaStatus.length;i++)
+//			{
+//				if(placeOmegaStatus[i] ==0)
+//				{
+//					tokensPost[i] = "999";
+//				}
+//			}
+//		}
+//		
+//		String details ="(";		
+//		for(int i=0;i<tokensPost.length;i++)
+//		{
+//			details += tokensPost[i];
+//			details += ",";
+//		}
+//		details  = details.substring(0, details.length()-1);
+//		details += ")";
+//		
+////		for(int i=0;i<tokensPre.length;i++)
+////		{
+////			tokensSerialBy[i] = Integer.parseInt(tokens[i]);
+////		}
+//		postMarking.setTokenSequence(details);
+//		return postMarking;
+//	}
 	
 	private boolean isOldMarking(Marking marking)
 	{
@@ -879,21 +879,7 @@ public class PetrinetBuilder {
 	}
 	
 	public DefaultMutableTreeNode testTree;
-	public String getStatusName(int status) {
-		String returnStr = "";
-		switch (status) {
-		case 300:
-			returnStr = "Dead End";
-			break;
-		case 200:
-			returnStr = "Old";
-			break;
-		default:
-			returnStr = "";
-			break;
-		}
-		return returnStr;
-	}
+	
 	public void traverseTree(TreeNode tree,DefaultMutableTreeNode node) {
 
 	    // print, increment counter, whatever
@@ -901,12 +887,12 @@ public class PetrinetBuilder {
 		//DefaultMutableTreeNode root;
 		if(node ==null)
 		{     
-			String str = (String)getPresentableTreeNode((Marking)tree.getData())+getStatusName(tree.getStatus());
-			System.out.println("traverseTree----!@@@@"+tree.getStatus());
-			System.out.println("traverseTree----!@@@@---"+getStatusName(tree.getStatus()));
+			String str = (String)getPresentableTreeNode((Marking)tree.getData())+tree.getStatusName(tree.getStatus());
+			//System.out.println("traverseTree----!@@@@STATUS"+tree.getStatus());
+			//System.out.println("traverseTree1----!@@@@---"+getStatusName(tree.getStatus()));
 
 			node = new DefaultMutableTreeNode(str);
-	        System.out.println(getPresentableTreeNode((Marking)tree.getData()));
+	       //System.out.println(getPresentableTreeNode((Marking)tree.getData()));
 	        testTree = node;
 		}// traverse children
 	    int childCount = tree.getChildren().size();
@@ -915,9 +901,9 @@ public class PetrinetBuilder {
 	    } else {
 	        for (int i = 0; i < childCount; i++) {
 	            TreeNode child = (TreeNode) tree.getChildren().get(i);
-	            DefaultMutableTreeNode childNode = new DefaultMutableTreeNode((String)getPresentableTreeNode((Marking)child.getData())+getStatusName(tree.getStatus()));
-				System.out.println("traverseTree----!@@@@---"+tree.getStatus());
-	            System.out.println(getPresentableTreeNode((Marking)child.getData()));
+	            DefaultMutableTreeNode childNode = new DefaultMutableTreeNode((String)getPresentableTreeNode((Marking)child.getData())+child.getStatusName(child.getStatus()));
+				//System.out.println("traverseTree2----!@@@@---"+child.getStatus());
+	            //System.out.println(getPresentableTreeNode((Marking)child.getData()));
 	            traverseTree(child,childNode);
 	            node.add(childNode);
 	        }

@@ -9,7 +9,7 @@ public class TreeNode<Marking>{
 	public static final int MARK_OLD = 200;  //old node
 	public static final int MARK_DEAD = 300;  //dead node
 	public static final int MARK_NEW = 100;   // new node
-	public static final int MARK_VISITED = 99;   // new node
+	public static final int MARK_VISITED = 400;   // visited
 	
 	private int status = 0;
     private Marking data = null;
@@ -65,5 +65,17 @@ public class TreeNode<Marking>{
 
     public TreeNode getParent() {
         return parent;
+    }
+    public String getStatusName(int code)
+    {
+    	System.out.println("CODE:"+code);
+    	if(code == MARK_OLD)
+    		return "(OLD)";
+    	else if(code == MARK_DEAD)
+    		return "(DEAD)";
+    	else if(code == MARK_VISITED)
+    		return "(NEW)";
+    	else
+    		return "(NEW)";
     }
 }
