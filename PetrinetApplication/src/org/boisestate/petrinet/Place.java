@@ -23,11 +23,17 @@ public class Place extends PlaceGuiItem implements Cloneable{
 	}
 
 	public void addToken(int num) {
-		super.setTokenNumbers(super.getTokenNumbers() + num);
+		if(super.getTokenNumbers()!=999)
+		{ 
+			super.setTokenNumbers(super.getTokenNumbers() + num);
+		}
 	}
 
 	public void removeToken(int num) {
-		super.setTokenNumbers(super.getTokenNumbers() - num);
+		if(super.getTokenNumbers()!=999)
+		{     
+			super.setTokenNumbers(super.getTokenNumbers() - num);
+		}
 	}
 
 	public void setBounded(boolean b) {

@@ -104,7 +104,7 @@ public class MainPanel extends JFrame {
 //		arrowButton.setVisible(true);
 //		add(arrowButton);
 
-		simulateButton = new JButton("Drawing Mode");
+		simulateButton = new JButton("Simulation Off");
 		simulateButton.setVisible(true);
 		add(simulateButton);
 
@@ -431,22 +431,37 @@ public class MainPanel extends JFrame {
 		newAction.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (!isSimulationModeOn()) {
-					if (alertDialog() == JOptionPane.YES_OPTION) {
+					if(petrinet.arcVector.size()>0 && petrinet.placeVector.size()>0 && petrinet.transitionVector.size()>0) {
+						if (alertDialog() == JOptionPane.YES_OPTION) {
+							petrinet.removeAllPlace();
+							petrinet.removeAllTransition();
+							petrinet.removeAllArcs();
+							drawingPanel.paintAgain();
+						}
+					}else {
 						petrinet.removeAllPlace();
 						petrinet.removeAllTransition();
 						petrinet.removeAllArcs();
 						drawingPanel.paintAgain();
 					}
+					
 				}
 
 			}
 		});
 		openAction.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				System.out.println(petrinet.arcVector.size()+" "+petrinet.transitionVector.size()+" "+petrinet.placeVector.size());
 				if (!isSimulationModeOn()) {
-					if (alertDialog() == JOptionPane.YES_OPTION) {
+					if(petrinet.arcVector.size()>0 && petrinet.placeVector.size()>0 && petrinet.transitionVector.size()>0) {
+						if (alertDialog() == JOptionPane.YES_OPTION) {
+							fileChoose();
+						}
+					}else {
 						fileChoose();
+
 					}
+					
 				}
 			}
 		});
@@ -544,28 +559,33 @@ public class MainPanel extends JFrame {
 //				}
 //			}
 //		});
+		
+		
+		
 		simulateButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 
-				if (simulateButton.getText().equals("Drawing Mode")) {
+				if (simulateButton.getText().equals("Simulation Off")) {
+					System.out.println("Drawing Mode....");
 					currentState = currentState.SIMULATING;
 					petrinet.setFirableComboList();
-					toggleSimulateButton("Simulation Mode");
+					toggleSimulateButton("Simulation On");
 
 					petrinet.saveCurrentMarking();
-
+					
 					drawingPanel.paintAgain();
+
+					//drawingPanel.resetTransitionColor();
 
 				} else {
+					System.out.println("Simulation Mode....");
+
 					petrinet.restorePreviousMarking();
 					currentState = currentState.DRAWING;
-					toggleSimulateButton("Drawing Mode");
+					toggleSimulateButton("Simulation Off");
 					petrinet.currentFirableTransitionList.clear();
-
-					for (Transition trans : petrinet.transitionVector) {
-						trans.setFillColor(Color.GRAY);
-					}
-					drawingPanel.paintAgain();
+					activeFiringStatesList.removeAllItems();
+					drawingPanel.resetTransitionColor();
 				}
 
 			}
@@ -582,32 +602,35 @@ public class MainPanel extends JFrame {
 		
 		coverabilityTreeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(currentState != currentState.COVERABILITY)
-				{
-				 currentState = currentState.COVERABILITY;
-				 coverabilityTreePanel = new CoverabilityTreePanel(petrinet,width*1/5,height/2-100);
-				 coverabilityTreePanel.setVisible(true);
-				 drawingPanel.add(coverabilityTreePanel,BorderLayout.EAST);
-				 coverabilityTreeButton.setText("Hide Tree");
-				 drawingPanel.validate();
-				 //Marking marking = petrinet.getPetrinetBuilder().generateMarkingFromCurrentPlaces();
-				 
-				 //System.out.println(marking);
-				 
-				}
-				else if (currentState == currentState.COVERABILITY)
-				{
-					currentState = currentState.HIDECOVERABILITY;
-					 drawingPanel.remove(coverabilityTreePanel);
-					 coverabilityTreeButton.setText("Coverability Tree");
-					 coverabilityTreePanel.setVisible(false);
-					 
-					 drawingPanel.revalidate();
+				if(!isSimulationModeOn()) {
+					if(currentState != currentState.COVERABILITY)
+					{
+					 currentState = currentState.COVERABILITY;
+					 coverabilityTreePanel = new CoverabilityTreePanel(petrinet,width*1/5,height/2-100);
+					 coverabilityTreePanel.setVisible(true);
+					 drawingPanel.add(coverabilityTreePanel,BorderLayout.EAST);
+					 coverabilityTreeButton.setText("Hide Tree");
 					 drawingPanel.validate();
-					 drawingPanel.repaint();
-					// thisFrame.invalidate();
-					 thisFrame.validate();
+					 //Marking marking = petrinet.getPetrinetBuilder().generateMarkingFromCurrentPlaces();
+					 
+					 //System.out.println(marking);
+					 
+					}
+					else if (currentState == currentState.COVERABILITY)
+					{
+						currentState = currentState.HIDECOVERABILITY;
+						 drawingPanel.remove(coverabilityTreePanel); 
+						 coverabilityTreeButton.setText("Coverability Tree");
+						 coverabilityTreePanel.setVisible(false);
+						 
+						 drawingPanel.revalidate();
+						 drawingPanel.validate();
+						 drawingPanel.repaint();
+						// thisFrame.invalidate();
+						 thisFrame.validate();
+					}
 				}
+				
 
 			}
 		});
@@ -661,5 +684,6 @@ public class MainPanel extends JFrame {
 		editMenu.add(redoAction);
 		return editMenu;
 	}
-
+	
+	
 }

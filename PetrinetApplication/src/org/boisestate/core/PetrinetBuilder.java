@@ -541,15 +541,27 @@ public class PetrinetBuilder {
 		return returnString;
 	}
 	
+	public String getCurrentPlaceTokenSequence() {
+		String returnString = "(";
+		for(Place place : petrinet.placeVector)
+		{
+			returnString +=place.getTokenNumbers()+",";
+			//System.out.println(place.getName() + ":"+place.getTokenNumbers());
+		}
+		returnString  = returnString.substring(0, returnString.length()-1);
+		returnString += ")";
+		return returnString;
+	}
+	
 	private String getPresentableTreeNode(Marking marking)
 	{
 		return marking.getName()+":"+marking.getTokenSequence()+marking.getPrecedenceTransitionName();
 	}
 	
 	
-	Map<String,Marking> allMarking = new HashMap<String,Marking>();
-	ArrayList<TreeNode> bfsQueue = new ArrayList<TreeNode>();
-	int queueIndex = 0;
+	public Map<String,Marking> allMarking = new HashMap<String,Marking>();
+	public ArrayList<TreeNode> bfsQueue = new ArrayList<TreeNode>();
+	public int queueIndex = 0;
 	
 	//public static int markingCount = 1;
 	
@@ -735,7 +747,7 @@ public class PetrinetBuilder {
 		//DefaultMutableTreeNode root;
 		if(node ==null)
 		{     
-			node = new DefaultMutableTreeNode((String)getPresentableTreeNode((Marking)tree.getData()));
+			node = new DefaultMutableTreeNode((String)getPresentableTreeNode((Marking)tree.getData())+tree.getStatus());
 	        System.out.println(getPresentableTreeNode((Marking)tree.getData()));
 	        testTree = node;
 		}// traverse children
@@ -745,7 +757,7 @@ public class PetrinetBuilder {
 	    } else {
 	        for (int i = 0; i < childCount; i++) {
 	            TreeNode child = (TreeNode) tree.getChildren().get(i);
-	            DefaultMutableTreeNode childNode = new DefaultMutableTreeNode((String)getPresentableTreeNode((Marking)child.getData()));
+	            DefaultMutableTreeNode childNode = new DefaultMutableTreeNode((String)getPresentableTreeNode((Marking)child.getData())+tree.getStatus());
 	            System.out.println(getPresentableTreeNode((Marking)child.getData()));
 	            traverseTree(child,childNode);
 	            node.add(childNode);

@@ -283,4 +283,13 @@ public class DrawingPanel extends JPanel {
 		}
 
 	}
+	
+	public void resetTransitionColor()
+	{
+		for (Transition trans : petrinet.transitionVector) {
+			trans.setFillColor(Color.GRAY);
+		}
+		paintAgain();
+	}
+
 }
