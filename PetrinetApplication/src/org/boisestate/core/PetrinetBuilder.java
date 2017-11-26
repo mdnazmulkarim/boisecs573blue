@@ -562,19 +562,32 @@ public class PetrinetBuilder {
 	
 	private String getPresentableTreeNode(Marking marking)
 	{
-		return marking.getName()+":"+marking.getTokenSequence()+marking.getPrecedenceTransitionName();
+		return marking.getName()+":"+marking.getTokenSequence().replace("999", "W")+marking.getPrecedenceTransitionName();
 	}
+	
+	/*
+	  public static final int MARK_OLD = 200;  //old node
+	public static final int MARK_DEAD = 300;  //dead node
+	public static final int MARK_NEW = 100;   // new node
+	public static final int MARK_VISITED = 99;   // new node
+	 */
 	
 	
 	public Map<String,Marking> allMarking = new HashMap<String,Marking>();
 	public ArrayList<TreeNode> bfsQueue = new ArrayList<TreeNode>();
 	public int queueIndex = 0;
 	
+	public ArrayList<Marking> tokensHistory = new ArrayList<Marking>();
 	//public static int markingCount = 1;
 	
 	public TreeNode generateCoverabilityTree()
 	{
 		TreeNode<Marking> root = new TreeNode<>(petrinet.getInitialMarking());
+		
+		System.out.println("string my----"+root.getData().getTokenSequence());
+		tokensHistory.clear();
+		tokensHistory.add(root.getData());
+		
 		allMarking.put(root.getData().getTokenSequence(), root.getData());
 		bfsQueue.add(root);
 		
@@ -620,9 +633,13 @@ public class PetrinetBuilder {
 				
 				
 				//newMarking = transformMarkingWithOmegaFactor(marking,newMarking,transition);
-				newMarking = transformMarkingWithOmegaFactorUpdated(marking,newMarking);
+				//newMarking = transformMarkingWithOmegaFactorUpdated(marking,newMarking);
 				
-				updateTokenplaceHistory(newMarking);
+				System.out.println("string my----"+newMarking.getTokenSequence());
+				tokenHistoryChecking(newMarking);
+				
+
+				//updateTokenplaceHistory(newMarking);
 				newMarking.setPrecedenceTransitionName(transition.getName());
 				TreeNode<Marking> newNode = new TreeNode<>(newMarking);	
 				
@@ -637,6 +654,8 @@ public class PetrinetBuilder {
 					allMarking.put(newNode.getData().getTokenSequence(), newNode.getData());
 					bfsQueue.add(newNode);					
 				}
+				
+				
 				node.addChild(newNode);
 				
 				
@@ -647,7 +666,55 @@ public class PetrinetBuilder {
 			node.setStatus(TreeNode.MARK_VISITED);
 	}
 	
-	
+	private void tokenHistoryChecking(Marking mark) {
+		String tempDetailsCurrent = mark.getTokenSequence();
+		tempDetailsCurrent = tempDetailsCurrent.replace("(", "");
+		tempDetailsCurrent = tempDetailsCurrent.replace(")", "");
+		String[] tokensCurrent = tempDetailsCurrent.split("[,]");
+		
+		int index = -1;
+		for(Marking mm: tokensHistory) {
+			String tempDetailsPre = mm.getTokenSequence();
+			tempDetailsPre = tempDetailsPre.replace("(", "");
+			tempDetailsPre = tempDetailsPre.replace(")", "");
+			String[] tokensPre = tempDetailsPre.split("[,]");
+			
+			
+			
+		
+			for(int i=0; i<tokensPre.length; i++){
+				if(tokensPre[i].equals("1")) {
+					if(!tokensPre[i].equals(tokensCurrent[i])) {
+						break;
+					}
+				}
+				else {
+					if(i==tokensPre.length-1) {
+						for(int j = 0; j<tokensPre.length; j++) {
+							if(tokensPre[j].equals("0")) {
+								if(!tokensCurrent[j].equals("0")) {
+									index = j;
+									tokensCurrent[j]="999";
+									
+									break;
+								}
+							}
+						}
+					}
+				}
+				
+			}
+		}
+		String str="(";
+		for(int i=0; i<tokensCurrent.length;i++) {
+			str += tokensCurrent[i]+",";
+		}
+		str  = str.substring(0, str.length()-1);
+		str += ")";
+		mark.setTokenSequence(str);
+		tokensHistory.add(mark);
+
+	}
 	private void updateTokenplaceHistory(Marking marking)
 	{
 		String tempDetailsPre = marking.getTokenSequence();
@@ -812,6 +879,21 @@ public class PetrinetBuilder {
 	}
 	
 	public DefaultMutableTreeNode testTree;
+	public String getStatusName(int status) {
+		String returnStr = "";
+		switch (status) {
+		case 300:
+			returnStr = "Dead End";
+			break;
+		case 200:
+			returnStr = "Old";
+			break;
+		default:
+			returnStr = "";
+			break;
+		}
+		return returnStr;
+	}
 	public void traverseTree(TreeNode tree,DefaultMutableTreeNode node) {
 
 	    // print, increment counter, whatever
@@ -819,7 +901,11 @@ public class PetrinetBuilder {
 		//DefaultMutableTreeNode root;
 		if(node ==null)
 		{     
-			node = new DefaultMutableTreeNode((String)getPresentableTreeNode((Marking)tree.getData())+tree.getStatus());
+			String str = (String)getPresentableTreeNode((Marking)tree.getData())+getStatusName(tree.getStatus());
+			System.out.println("traverseTree----!@@@@"+tree.getStatus());
+			System.out.println("traverseTree----!@@@@---"+getStatusName(tree.getStatus()));
+
+			node = new DefaultMutableTreeNode(str);
 	        System.out.println(getPresentableTreeNode((Marking)tree.getData()));
 	        testTree = node;
 		}// traverse children
@@ -829,7 +915,8 @@ public class PetrinetBuilder {
 	    } else {
 	        for (int i = 0; i < childCount; i++) {
 	            TreeNode child = (TreeNode) tree.getChildren().get(i);
-	            DefaultMutableTreeNode childNode = new DefaultMutableTreeNode((String)getPresentableTreeNode((Marking)child.getData())+tree.getStatus());
+	            DefaultMutableTreeNode childNode = new DefaultMutableTreeNode((String)getPresentableTreeNode((Marking)child.getData())+getStatusName(tree.getStatus()));
+				System.out.println("traverseTree----!@@@@---"+tree.getStatus());
 	            System.out.println(getPresentableTreeNode((Marking)child.getData()));
 	            traverseTree(child,childNode);
 	            node.add(childNode);
