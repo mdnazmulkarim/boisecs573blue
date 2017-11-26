@@ -482,6 +482,8 @@ public class PetrinetBuilder {
 		}
 	}
 	
+	
+	
 	public static int markingIndex = 0;
 	/**
 	 * 
@@ -541,10 +543,15 @@ public class PetrinetBuilder {
 		return returnString;
 	}
 	
+	public static ArrayList tokenPlaceHistory = new ArrayList();
+	
 	public String getCurrentPlaceTokenSequence() {
+		tokenPlaceHistory.clear();
+		
 		String returnString = "(";
 		for(Place place : petrinet.placeVector)
 		{
+			tokenPlaceHistory.add(new Integer(place.getTokenNumbers()));
 			returnString +=place.getTokenNumbers()+",";
 			//System.out.println(place.getName() + ":"+place.getTokenNumbers());
 		}
@@ -584,6 +591,8 @@ public class PetrinetBuilder {
 		return root;
 	}
 	
+	
+	
 	private void traverseNode(TreeNode node)
 	{
 		Marking marking = (Marking) node.getData();
@@ -607,9 +616,13 @@ public class PetrinetBuilder {
 			{
 				resetPlaceWithMarking(marking);
 				transition.fireTransition();
-				Marking newMarking = generateMarkingFromCurrentPlaces();				
-				newMarking = transformMarkingWithOmegaFactor(marking,newMarking,transition);
+				Marking newMarking = generateMarkingFromCurrentPlaces();	
 				
+				
+				//newMarking = transformMarkingWithOmegaFactor(marking,newMarking,transition);
+				newMarking = transformMarkingWithOmegaFactorUpdated(marking,newMarking);
+				
+				updateTokenplaceHistory(newMarking);
 				newMarking.setPrecedenceTransitionName(transition.getName());
 				TreeNode<Marking> newNode = new TreeNode<>(newMarking);	
 				
@@ -633,6 +646,65 @@ public class PetrinetBuilder {
 		if(node.getStatus() == TreeNode.MARK_NEW)
 			node.setStatus(TreeNode.MARK_VISITED);
 	}
+	
+	
+	private void updateTokenplaceHistory(Marking marking)
+	{
+		String tempDetailsPre = marking.getTokenSequence();
+		tempDetailsPre = tempDetailsPre.replace("(", "");
+		tempDetailsPre = tempDetailsPre.replace(")", "");
+		String[] tokensPre = tempDetailsPre.split("[,]");
+		
+		for(int i=0;i<tokensPre.length;i++)
+		{
+			if(Integer.parseInt(tokensPre[i])>=1 && (int)tokenPlaceHistory.get(i) <= new Integer(0))
+			{
+				
+				tokenPlaceHistory.remove(i);
+				tokenPlaceHistory.add(i, Integer.parseInt(tokensPre[i]));			
+			}
+		}
+	}
+	
+	
+	private Marking transformMarkingWithOmegaFactorUpdated(Marking priorMarking, Marking postMarking)
+	{
+		int[] tokensSerialByPre;
+		int[] tokensSerialByPost;
+		
+		String tempDetailsPre = priorMarking.getTokenSequence();
+		tempDetailsPre = tempDetailsPre.replace("(", "");
+		tempDetailsPre = tempDetailsPre.replace(")", "");
+		String[] tokensPre = tempDetailsPre.split("[,]");
+		tokensSerialByPre = new int[tokensPre.length];
+		
+		for(int i=0;i<tokensSerialByPre.length;i++)
+		{
+			tokensSerialByPre[i] = Integer.parseInt(tokensPre[i]);
+		}
+		
+		
+		String tempDetailsPost = postMarking.getTokenSequence();
+		tempDetailsPost = tempDetailsPost.replace("(", "");
+		tempDetailsPost = tempDetailsPost.replace(")", "");
+		String[] tokensPost = tempDetailsPost.split("[,]");
+		tokensSerialByPost = new int[tokensPost.length];
+		
+		for(int i=0;i<tokensSerialByPost.length;i++)
+		{
+			tokensSerialByPost[i] = Integer.parseInt(tokensPost[i]);
+		}
+		
+		boolean hasOmega = false;
+		for(int i=0;i<tokensSerialByPre.length;i++)
+		{
+			
+		}
+		
+		return postMarking;
+	}
+	
+	
 	
 	/**
 	 * @param priorMarking
