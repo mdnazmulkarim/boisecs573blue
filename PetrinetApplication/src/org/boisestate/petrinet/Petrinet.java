@@ -305,6 +305,8 @@ public class Petrinet {
 	
 	public String checkReachability(Marking reachabilitiTestMarking)
 	{
+		System.out.println("Printing All Marking");
+		petrinetBuilder.printAllMarking();
 		String returnMessage = ""; 
 		if(petrinetBuilder.isOldMarking(reachabilitiTestMarking))
 		{

@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 
@@ -696,6 +697,16 @@ public class PetrinetBuilder {
 		//else
 		//	allMarking.put(marking.getTokenSequence(),marking);
 		return false;
+	}
+	
+	public void printAllMarking()
+	{
+		Iterator it = allMarking.entrySet().iterator();
+	    while (it.hasNext()) {
+	        Map.Entry pair = (Map.Entry)it.next();
+	        System.out.println(pair.getKey() + " = " + pair.getValue());
+	       // it.remove(); // avoids a ConcurrentModificationException
+	    }
 	}
 	
 	public DefaultMutableTreeNode testTree;
