@@ -51,144 +51,9 @@ public class DrawingPanel extends JPanel {
 	public DrawingPanel(final Petrinet petrinet) {
 		this.petrinet = petrinet;
 		setBorder(BorderFactory.createLineBorder(Color.black));
-		addMouseListener(new MouseAdapter() {
-			public void mousePressed(MouseEvent e) {
-				if (e.getButton() == MouseEvent.BUTTON1) {
-					if (MainPanel.currentState == MainPanel.currentState.PLACE) {
-						erasePartialArc();
-						Place place = new Place();
-						drawPlace(place, e.getX(), e.getY());
-					} else if (MainPanel.currentState == MainPanel.currentState.TRANSITION) {
-						erasePartialArc();
-						Transition transition = new Transition();
-						drawTransition(transition, e.getX(), e.getY());
-					} else if (MainPanel.currentState == MainPanel.currentState.ARC) {
-
-						if (arcDrawingStarted) {
-							pointList.add(new Point(e.getX(), e.getY()));
-
-							repaint();
-							Object obj = petrinet.getPetrinetBuilder().getElementUnderThisPoint(e.getX(), e.getY());
-
-							if (arcDirection == "P_2_T" && obj != null) {
-								if (obj instanceof Transition) {
-									arcDrawingStarted = false;
-									// Drawing End. create new arc object and initialize temporary variables
-									tempTransition = (Transition) obj;
-									petrinet.getPetrinetBuilder().createArc((ArrayList<Point>) pointList.clone(),
-											tempPlace, tempTransition, arcDirection);
-									pointList.clear();
-									tempPlace = null;
-									tempTransition = null;
-									arcDirection = "";
-									repaint();
-								}
-							} else if (arcDirection == "T_2_P" && obj != null) {
-								if (obj instanceof Place) {
-									arcDrawingStarted = false;
-									// Drawing End. create new arc object and initialize temporary variables
-									tempPlace = (Place) obj;
-									petrinet.getPetrinetBuilder().createArc((ArrayList<Point>) pointList.clone(),
-											tempPlace, tempTransition, arcDirection);
-									pointList.clear();
-									tempPlace = null;
-									tempTransition = null;
-									arcDirection = "";
-									repaint();
-								}
-							}
-						} else {
-							Object obj = petrinet.getPetrinetBuilder().getElementUnderThisPoint(e.getX(), e.getY());
-							if (obj != null) {
-								if (obj instanceof Place) {
-									tempPlace = (Place) obj;
-									arcDrawingStarted = true;
-									arcDirection = "P_2_T";
-									pointList.add(new Point(e.getX(), e.getY()));
-									repaint();
-								} else {
-									tempTransition = (Transition) obj;
-									arcDrawingStarted = true;
-									arcDirection = "T_2_P";
-									pointList.add(new Point(e.getX(), e.getY()));
-									repaint();
-								}
-
-							}
-						}
-
-					}
-
-					else if (MainPanel.currentState == MainPanel.currentState.COPY) {
-						erasePartialArc();
-						Object obj = petrinet.selectedPlace(e.getX(), e.getY());
-						selectedItem = obj;
-					} else if (MainPanel.currentState == MainPanel.currentState.PASTE) {
-						erasePartialArc();
-						if (selectedItem != null) {
-							if (selectedItem instanceof Place) {
-								Place place = (Place) selectedItem;
-								Place newPlace = (Place) place.clone();
-								drawPlace(newPlace, e.getX(), e.getY());
-							} else if (selectedItem instanceof Transition) {
-								Transition trans = (Transition) selectedItem;
-								Transition newTrans = (Transition) trans.clone();
-								drawTransition(newTrans, e.getX(), e.getY());
-							}
-
-						}
-					} else if (MainPanel.currentState == MainPanel.currentState.DELETE) {
-						erasePartialArc();
-						Object obj = petrinet.selectedPlace(e.getX(), e.getY());
-						selectedItem = obj;
-						if (selectedItem != null) {
-							if (selectedItem instanceof Place) {
-								System.out.println("delete called");
-								petrinet.deleteLinkedArcWithPlace((Place) selectedItem);
-								petrinet.deletePlace((Place) selectedItem);
-								repaint();
-							} else if (selectedItem instanceof Transition) {
-								System.out.println("delete called");
-								petrinet.deleteLinkedArcWithTransition((Transition) selectedItem);
-								petrinet.deleteTransition((Transition) selectedItem);
-								repaint();
-							} else {
-								System.out.println("delete called");
-
-								petrinet.deleteArc((Arc) selectedItem);
-								repaint();
-
-							}
-
-						}
-					}
-				}
-				if (e.getButton() == MouseEvent.BUTTON3) {
-					if (MainPanel.currentState != MainPanel.currentState.SIMULATING) {
-						erasePartialArc();
-						Object obj = petrinet.selectedPlace(e.getX(), e.getY());
-						selectedItem = obj;
-						if (selectedItem != null) {
-							if (selectedItem instanceof Place) {
-								petrinet.getPetrinetBuilder().placeInputDialog(selectedItem);
-							} else if (selectedItem instanceof Transition) {
-								petrinet.getPetrinetBuilder().transitionInputDialog(selectedItem);
-							} else if (selectedItem instanceof Arc) {
-								System.out.println("Arc found:");
-							}
-
-						}
-
-					}
-
-				}
-
-			}
-
-		});
-
+		addMouseListener(new DrawingMouseHandlingAdapter());
 	}
-
+	
 	public void erasePartialArc() {
 		if (arcDrawingStarted) {
 			pointList.clear();
@@ -291,5 +156,143 @@ public class DrawingPanel extends JPanel {
 		}
 		paintAgain();
 	}
+	
+	private class DrawingMouseHandlingAdapter extends MouseAdapter{
+		
+		public void mousePressed(MouseEvent e) {
+			if (e.getButton() == MouseEvent.BUTTON1) {
+				if (MainPanel.currentState == MainPanel.currentState.PLACE) {
+					erasePartialArc();
+					Place place = new Place();
+					drawPlace(place, e.getX(), e.getY());
+				} else if (MainPanel.currentState == MainPanel.currentState.TRANSITION) {
+					erasePartialArc();
+					Transition transition = new Transition();
+					drawTransition(transition, e.getX(), e.getY());
+				} else if (MainPanel.currentState == MainPanel.currentState.ARC) {
+
+					if (arcDrawingStarted) {
+						pointList.add(new Point(e.getX(), e.getY()));
+
+						repaint();
+						Object obj = petrinet.getPetrinetBuilder().getElementUnderThisPoint(e.getX(), e.getY());
+
+						if (arcDirection.equals(Arc.PLACE_TO_TRANSITION) && obj != null) {
+							if (obj instanceof Transition) {
+								arcDrawingStarted = false;
+								// Drawing End. create new arc object and initialize temporary variables
+								tempTransition = (Transition) obj;
+								petrinet.getPetrinetBuilder().createArc((ArrayList<Point>) pointList.clone(),
+										tempPlace, tempTransition, arcDirection);
+								pointList.clear();
+								tempPlace = null;
+								tempTransition = null;
+								arcDirection = "";
+								repaint();
+							}
+						} else if (arcDirection.equals(Arc.TRANSITION_TO_PLACE) && obj != null) {
+							if (obj instanceof Place) {
+								arcDrawingStarted = false;
+								// Drawing End. create new arc object and initialize temporary variables
+								tempPlace = (Place) obj;
+								petrinet.getPetrinetBuilder().createArc((ArrayList<Point>) pointList.clone(),
+										tempPlace, tempTransition, arcDirection);
+								pointList.clear();
+								tempPlace = null;
+								tempTransition = null;
+								arcDirection = "";
+								repaint();
+							}
+						}
+					} else {
+						Object obj = petrinet.getPetrinetBuilder().getElementUnderThisPoint(e.getX(), e.getY());
+						if (obj != null) {
+							if (obj instanceof Place) {
+								tempPlace = (Place) obj;
+								arcDrawingStarted = true;
+								arcDirection = Arc.PLACE_TO_TRANSITION;
+								pointList.add(new Point(e.getX(), e.getY()));
+								repaint();
+							} else {
+								tempTransition = (Transition) obj;
+								arcDrawingStarted = true;
+								arcDirection = Arc.TRANSITION_TO_PLACE;
+								pointList.add(new Point(e.getX(), e.getY()));
+								repaint();
+							}
+
+						}
+					}
+
+				}
+
+				else if (MainPanel.currentState == MainPanel.currentState.COPY) {
+					erasePartialArc();
+					Object obj = petrinet.selectedPlace(e.getX(), e.getY());
+					selectedItem = obj;
+				} else if (MainPanel.currentState == MainPanel.currentState.PASTE) {
+					erasePartialArc();
+					if (selectedItem != null) {
+						if (selectedItem instanceof Place) {
+							Place place = (Place) selectedItem;
+							Place newPlace = (Place) place.clone();
+							drawPlace(newPlace, e.getX(), e.getY());
+						} else if (selectedItem instanceof Transition) {
+							Transition trans = (Transition) selectedItem;
+							Transition newTrans = (Transition) trans.clone();
+							drawTransition(newTrans, e.getX(), e.getY());
+						}
+
+					}
+				} else if (MainPanel.currentState == MainPanel.currentState.DELETE) {
+					erasePartialArc();
+					Object obj = petrinet.selectedPlace(e.getX(), e.getY());
+					selectedItem = obj;
+					if (selectedItem != null) {
+						if (selectedItem instanceof Place) {
+							System.out.println("delete called");
+							petrinet.deleteLinkedArcWithPlace((Place) selectedItem);
+							petrinet.deletePlace((Place) selectedItem);
+							repaint();
+						} else if (selectedItem instanceof Transition) {
+							System.out.println("delete called");
+							petrinet.deleteLinkedArcWithTransition((Transition) selectedItem);
+							petrinet.deleteTransition((Transition) selectedItem);
+							repaint();
+						} else {
+							System.out.println("delete called");
+
+							petrinet.deleteArc((Arc) selectedItem);
+							repaint();
+
+						}
+
+					}
+				}
+			}
+			if (e.getButton() == MouseEvent.BUTTON3) {
+				if (MainPanel.currentState != MainPanel.currentState.SIMULATING) {
+					erasePartialArc();
+					Object obj = petrinet.selectedPlace(e.getX(), e.getY());
+					selectedItem = obj;
+					if (selectedItem != null) {
+						if (selectedItem instanceof Place) {
+							petrinet.getPetrinetBuilder().placeInputDialog(selectedItem);
+						} else if (selectedItem instanceof Transition) {
+							petrinet.getPetrinetBuilder().transitionInputDialog(selectedItem);
+						} else if (selectedItem instanceof Arc) {
+							System.out.println("Arc found:");
+						}
+
+					}
+
+				}
+
+			}
+
+		}
+
+
+}
 
 }

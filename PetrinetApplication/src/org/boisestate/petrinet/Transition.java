@@ -62,7 +62,7 @@ public class Transition extends TransitionGuiItem implements Cloneable{
 	private int getNoOfIncomiongPlaces() {
 		int incomingPlaces = 0;
 		for (Arc arc : arcVector) {
-			if (arc.getDirectionType().equals("P_2_T"))
+			if (arc.getDirectionType().equals(Arc.PLACE_TO_TRANSITION))
 				incomingPlaces++;
 		}
 		return incomingPlaces;
@@ -73,7 +73,7 @@ public class Transition extends TransitionGuiItem implements Cloneable{
 		for (Arc arc : arcVector) {
 			//System.out.println(
 			//		"getNumberOfPlayableIncomingPlaces---" + arc.getPlace().getTokenNumbers() + " " + arc.getWeight());
-			if (arc.getDirectionType().equals("P_2_T") && arc.getPlace().getTokenNumbers() >= arc.getWeight())
+			if (arc.getDirectionType().equals(Arc.PLACE_TO_TRANSITION) && arc.getPlace().getTokenNumbers() >= arc.getWeight())
 				noOfPlayableIncomingPlaces++;
 		}
 		return noOfPlayableIncomingPlaces;
@@ -82,9 +82,9 @@ public class Transition extends TransitionGuiItem implements Cloneable{
 	public void fireTransition() {
 		if (isFireable()) {
 			for (Arc arc : arcVector) {
-				if (arc.getDirectionType().equals("P_2_T")) {
+				if (arc.getDirectionType().equals(Arc.PLACE_TO_TRANSITION)) {
 					arc.getPlace().removeToken(arc.getWeight());
-				} else if (arc.getDirectionType().equals("T_2_P")) {
+				} else if (arc.getDirectionType().equals(Arc.TRANSITION_TO_PLACE)) {
 					arc.getPlace().addToken(arc.getWeight());
 				} else {
 					System.out.println("This should not happen.");

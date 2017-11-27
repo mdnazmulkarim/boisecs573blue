@@ -38,6 +38,10 @@ public class PetrinetBuilder {
 	public PetrinetUtility petrinetUtility;
 	public Petrinet petrinet;
 	public DrawingPanel drawingPanel;
+	
+	public static String DELETE = "D";
+	public static String MODIFY = "M";
+	public static String ADD = "A";
 
 	public PetrinetBuilder(Petrinet petrinet) {
 		this.petrinet = petrinet;
@@ -160,7 +164,7 @@ public class PetrinetBuilder {
 				} else {
 
 					this.putElementInWorkingArrayList(trans.clone());
-					this.putElementInActionArrayList("M");
+					this.putElementInActionArrayList(MODIFY);
 
 					trans.setName(name.getText());
 
@@ -201,7 +205,7 @@ public class PetrinetBuilder {
 				} else {
 
 					this.putElementInWorkingArrayList(place.clone());
-					this.putElementInActionArrayList("M");
+					this.putElementInActionArrayList(MODIFY);
 
 					place.setName(name.getText());
 					if (numberOfTokens.getText() != null) {
@@ -244,7 +248,7 @@ public class PetrinetBuilder {
 				} else {
 
 					this.putElementInWorkingArrayList(place.clone());
-					this.putElementInActionArrayList("M");
+					this.putElementInActionArrayList(MODIFY);
 
 					place.setName(name.getText());
 					if (numberOfTokens.getText() != null) {
@@ -357,7 +361,7 @@ public class PetrinetBuilder {
 			createPolygonMapForArc(arc);
 
 			petrinet.getPetrinetBuilder().workingArrayList.add(arc.clone());
-			petrinet.getPetrinetBuilder().actionArrayList.add("A");
+			petrinet.getPetrinetBuilder().actionArrayList.add(ADD);
 			petrinet.getPetrinetBuilder().printLists();
 			// drawingPanel.paintAgain();
 		}

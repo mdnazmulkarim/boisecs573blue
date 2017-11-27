@@ -9,9 +9,9 @@ import org.boisestate.graphics.DrawingPanel;
 import org.boisestate.util.PetrinetUtility;
 
 public class Arc extends ArcGuiItem implements Cloneable{
-//	public enum ArcDirectionType  {
-//	      P_2_T, T_2_P
-//   }
+	public static String PLACE_TO_TRANSITION = "P_2_T";
+	public static String TRANSITION_TO_PLACE = "T_2_P";
+	
 //	public static ArcDirectionType arcDirectionType;
 	private int weight;
 	

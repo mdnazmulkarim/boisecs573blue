@@ -88,18 +88,18 @@ public class Petrinet {
 	public void addTransition(Transition transition) {
 		this.transitionVector.add(transition);
 		petrinetBuilder.putElementInWorkingArrayList(transition.clone()); // For Redo Undo
-		petrinetBuilder.putElementInActionArrayList("A");
+		petrinetBuilder.putElementInActionArrayList(PetrinetBuilder.ADD);
 	}
 
 	public void addPlace(Place place) {
 		this.placeVector.add(place);
 		petrinetBuilder.putElementInWorkingArrayList(place.clone()); // For Redo Undo
-		petrinetBuilder.putElementInActionArrayList("A");
+		petrinetBuilder.putElementInActionArrayList(PetrinetBuilder.ADD);
 	}
 
 	public void deletePlace(Place place) {
 		petrinetBuilder.putElementInWorkingArrayList(place.clone()); // For Redo Undo
-		petrinetBuilder.putElementInActionArrayList("D");
+		petrinetBuilder.putElementInActionArrayList(PetrinetBuilder.DELETE);
 		this.placeVector.remove(place);
 	}
 
@@ -111,7 +111,7 @@ public class Petrinet {
 
 			if(arc.getPlace().equals(place)) {
 				petrinetBuilder.putElementInWorkingArrayList(arc.clone()); // For Redo Undo
-				petrinetBuilder.putElementInActionArrayList("D");
+				petrinetBuilder.putElementInActionArrayList(PetrinetBuilder.DELETE);
 				for(Transition trans: this.transitionVector) {
 					if (trans.getArcList().contains(arc)) {
 						trans.getArcList().remove(arc);
@@ -138,7 +138,7 @@ public class Petrinet {
 
 			if(arc.getTransition().equals(trans)) {
 				petrinetBuilder.putElementInWorkingArrayList(arc.clone()); // For Redo Undo
-				petrinetBuilder.putElementInActionArrayList("D");
+				petrinetBuilder.putElementInActionArrayList(PetrinetBuilder.DELETE);
 				av.add(arc);
 			}
 		}
@@ -160,13 +160,13 @@ public class Petrinet {
 
 	public void deleteTransition(Transition trans) {
 		petrinetBuilder.putElementInWorkingArrayList(trans.clone()); // For Redo Undo
-		petrinetBuilder.putElementInActionArrayList("D");
+		petrinetBuilder.putElementInActionArrayList(PetrinetBuilder.DELETE);
 		this.transitionVector.remove(trans);
 	}
 
 	public void deleteArc(Arc arc) {
 		petrinetBuilder.putElementInWorkingArrayList(arc.clone()); // For Redo Undo
-		petrinetBuilder.putElementInActionArrayList("D");
+		petrinetBuilder.putElementInActionArrayList(PetrinetBuilder.DELETE);
 
 		Transition trans = arc.getTransition();
 		trans.removeArc(arc);
