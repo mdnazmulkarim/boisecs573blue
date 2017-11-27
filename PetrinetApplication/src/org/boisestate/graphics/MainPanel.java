@@ -606,7 +606,7 @@ public class MainPanel extends JFrame {
 					if(currentState != currentState.COVERABILITY)
 					{
 					 currentState = currentState.COVERABILITY;
-					 coverabilityTreePanel = new CoverabilityTreePanel(petrinet,width*1/5,height/2-100);
+					 coverabilityTreePanel = new CoverabilityTreePanel(petrinet,width*1/4,height/2-100);
 					 coverabilityTreePanel.setVisible(true);
 					 drawingPanel.add(coverabilityTreePanel,BorderLayout.EAST);
 					 coverabilityTreeButton.setText("Hide Tree");
@@ -622,7 +622,7 @@ public class MainPanel extends JFrame {
 						 drawingPanel.remove(coverabilityTreePanel); 
 						 coverabilityTreeButton.setText("Coverability Tree");
 						 coverabilityTreePanel.setVisible(false);
-						 
+						 coverabilityTreePanel.treeIsLive = false;
 						 drawingPanel.revalidate();
 						 drawingPanel.validate();
 						 drawingPanel.repaint();

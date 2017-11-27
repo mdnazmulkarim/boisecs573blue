@@ -9,17 +9,14 @@ import org.boisestate.graphics.PlaceGuiItem;
  */
 public class Place extends PlaceGuiItem implements Cloneable{
 	
-	private boolean isBounded;
 	/**
 	 * Constructor: creates a place with a name and .
 	 * @param name is the name of this place
 	 * noOfTokens is intialized to zero(0) a default value
-	 * isBounded is false by default
 	 */
 	public Place() {
 
 		super();
-		this.isBounded = false;
 	}
 
 	public void addToken(int num) {
@@ -36,14 +33,7 @@ public class Place extends PlaceGuiItem implements Cloneable{
 		}
 	}
 
-	public void setBounded(boolean b) {
-		this.isBounded = b;
-	}
-
-	public boolean getBounded() {
-		return this.isBounded;
-	}
-
+	
 	public Object clone() {
 		Object o = null;
 		try {

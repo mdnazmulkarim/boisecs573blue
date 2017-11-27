@@ -272,5 +272,49 @@ public class Petrinet {
 			place.setTokenNumbers(petrinetMarking.get(place));
 		}
 	}
+	
+	public String getBoundednessInformation()
+	{
+		String returnMessage = "";
+		//return "This is the liveness status.";
+		if(petrinetBuilder.hasOmega == true)
+		{
+			returnMessage = "The petrinet is not Bounded.";
+		}
+		else
+		{
+			returnMessage = "The petrinet is Bounded.";
+		}
+		return returnMessage;
+	}
+	
+	public String getDeadTransitionInformation()
+	{
+		String returnMessage = "";
+		//return "This is the liveness status.";
+		if(petrinetBuilder.hasDeadTransition == true)
+		{
+			returnMessage = "The petrinet has dead transition.";
+		}
+		else
+		{
+			returnMessage = "The petrinet has no dead transition.";
+		}
+		return returnMessage;
+	}
+	
+	public String checkReachability(Marking reachabilitiTestMarking)
+	{
+		String returnMessage = ""; 
+		if(petrinetBuilder.isOldMarking(reachabilitiTestMarking))
+		{
+			returnMessage = "The marking is reachable";
+		}
+		else
+		{
+			returnMessage = "The marking is unreachable";
+		}
+		return returnMessage;
+	}
 
 }
