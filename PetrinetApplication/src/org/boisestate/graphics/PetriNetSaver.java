@@ -46,25 +46,25 @@ public class PetriNetSaver {
 			title.appendChild(doc.createTextNode("PetriNet"));
 			rootElement.appendChild(title);
 
-			Element ID = doc.createElement(Constants.PETRI_NET_ID);
-			ID.appendChild(doc.createTextNode("100"));
-			rootElement.appendChild(ID);
+//			Element ID = doc.createElement(Constants.PETRI_NET_ID);
+//			ID.appendChild(doc.createTextNode("100"));
+//			rootElement.appendChild(ID);
 
 			Element name = doc.createElement(Constants.PETRI_NET_NAME);
 			name.appendChild(doc.createTextNode(petriName));
 			rootElement.appendChild(name);
 
-			Element numberOfPlaces = doc.createElement(Constants.PETRI_NET_NUMBER_OF_PALCES);
-			numberOfPlaces.appendChild(doc.createTextNode("10"));
-			rootElement.appendChild(numberOfPlaces);
-
-			Element numberOfTransitions = doc.createElement(Constants.PETRI_NET_NUMBER_OF_TRANSITIONS);
-			numberOfTransitions.appendChild(doc.createTextNode("10"));
-			rootElement.appendChild(numberOfTransitions);
-
-			Element numberOfArcs = doc.createElement(Constants.PETRI_NET_NUMBER_OF_ARCS);
-			numberOfArcs.appendChild(doc.createTextNode("10"));
-			rootElement.appendChild(numberOfArcs);
+//			Element numberOfPlaces = doc.createElement(Constants.PETRI_NET_NUMBER_OF_PALCES);
+//			numberOfPlaces.appendChild(doc.createTextNode("10"));
+//			rootElement.appendChild(numberOfPlaces);
+//
+//			Element numberOfTransitions = doc.createElement(Constants.PETRI_NET_NUMBER_OF_TRANSITIONS);
+//			numberOfTransitions.appendChild(doc.createTextNode("10"));
+//			rootElement.appendChild(numberOfTransitions);
+//
+//			Element numberOfArcs = doc.createElement(Constants.PETRI_NET_NUMBER_OF_ARCS);
+//			numberOfArcs.appendChild(doc.createTextNode("10"));
+//			rootElement.appendChild(numberOfArcs);
 
 			// Places elements
 			Element places = doc.createElement(Constants.PLACES);
