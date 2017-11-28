@@ -89,7 +89,7 @@ public class TransitionGuiItem implements GuiItemInterface {
 		g.fillRect(xPos, yPos, width, height - nameHeight);
 		g.setColor(this.borderColor);
 		g.drawRect(xPos, yPos, width, height - nameHeight);
-		g.drawString(name, xPos + 2, yPos + height);
+		g.drawString(name, xPos, yPos + height);
 
 	}
 
