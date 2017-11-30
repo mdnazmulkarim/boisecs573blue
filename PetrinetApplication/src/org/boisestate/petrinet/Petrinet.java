@@ -85,6 +85,10 @@ public class Petrinet {
 		this.initialMarking = initialMarking;
 	}
 
+	
+	/**
+	 * @param transition
+	 */
 	public void addTransition(Transition transition) {
 		this.transitionVector.add(transition);
 		petrinetBuilder.putElementInWorkingArrayList(transition.clone()); // For Redo Undo
@@ -185,24 +189,9 @@ public class Petrinet {
 		this.arcVector.clear();
 	}
 
-	// public int tokensOfPlace(int x, int y){
-	// for(int i=0; i<this.placeVector.size(); i++) {
-	// Place place = (Place)this.placeVector.get(i);
-	// if(place.getBounds().contains(new Point(x,y))) {
-	// return i;
-	// }
-	// }
-	//
-	// return -1;
-	// }
+	
 	public Object selectedPlace(int x, int y) {
 
-		// for(int i=0; i<this.placeVector.size(); i++) {
-		// Place place = (Place)this.placeVector.get(i);
-		// if(place.getBounds().contains(new Point(x,y))) {
-		// return place;
-		// }
-		// }
 
 		for (Place place : this.placeVector) {
 			if (place.getBounds().contains(new Point(x, y))) {
@@ -230,7 +219,6 @@ public class Petrinet {
 	}
 
 	public void populatefireableTransitions() {
-		// ArrayList<Transition> firableArrayList = new ArrayList<Transition>();
 		currentFirableTransitionList.clear();
 		for (Transition trans : this.transitionVector) {
 			trans.validateFiringStatus();
@@ -276,7 +264,6 @@ public class Petrinet {
 	public String getBoundednessInformation()
 	{
 		String returnMessage = "";
-		//return "This is the liveness status.";
 		if(petrinetBuilder.hasOmega == true)
 		{
 			returnMessage = "The petrinet is not Bounded.";
@@ -288,32 +275,24 @@ public class Petrinet {
 		return returnMessage;
 	}
 	
-	public String getDeadTransitionInformation()
-	{
+	public String getDeadTransitionInformation() {
 		String returnMessage = "";
-		//return "This is the liveness status.";
-		if(petrinetBuilder.hasDeadTransition == true)
-		{
+		// return "This is the liveness status.";
+		if (PetrinetBuilder.hasDeadTransition == true) {
 			returnMessage = "The petrinet has dead transition.";
-		}
-		else
-		{
+		} else {
 			returnMessage = "The petrinet has no dead transition.";
 		}
 		return returnMessage;
 	}
-	
-	public String checkReachability(Marking reachabilitiTestMarking)
-	{
+
+	public String checkReachability(Marking reachabilitiTestMarking) {
 		System.out.println("Printing All Marking");
 		petrinetBuilder.printAllMarking();
-		String returnMessage = ""; 
-		if(petrinetBuilder.isOldMarking(reachabilitiTestMarking))
-		{
+		String returnMessage = "";
+		if (petrinetBuilder.isOldMarking(reachabilitiTestMarking)) {
 			returnMessage = "The marking is reachable";
-		}
-		else
-		{
+		} else {
 			returnMessage = "The marking is unreachable";
 		}
 		return returnMessage;

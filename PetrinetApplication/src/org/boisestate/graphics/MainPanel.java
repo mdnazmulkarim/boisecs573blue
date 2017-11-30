@@ -55,7 +55,7 @@ public class MainPanel extends JFrame {
 
 	public MainPanel() {
 		this.setTitle(petriNetName);
-		petrinet = new Petrinet("Vending Machine");
+		petrinet = new Petrinet("");
 		savePetrinet = new PetriNetSaver(petrinet);
 		// get the screen size as a java dimension
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();

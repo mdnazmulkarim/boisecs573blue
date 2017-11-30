@@ -1,5 +1,9 @@
 package org.boisestate.petrinet;
 
+/**
+ * @author Md Nazmul Karim
+ *
+ */
 public class Marking{
 	
 	private String name;               //M0
@@ -61,11 +65,13 @@ public class Marking{
 	}
 
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
-	public String toString()
-	{
-		return name+":"+placeSequence+":"+tokensNoSequence+":"+precedenceTransitionName;
-		
+	public String toString() {
+		return name + ":" + placeSequence + ":" + tokensNoSequence + ":" + precedenceTransitionName;
+
 	}
 	
 }
