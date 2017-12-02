@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import org.boisestate.graphics.MainPanel;
 import org.boisestate.petrinet.Arc;
+import org.boisestate.petrinet.Marking;
 import org.boisestate.petrinet.Petrinet;
 import org.boisestate.petrinet.Place;
 import org.boisestate.petrinet.Transition;
@@ -35,6 +36,10 @@ public class Test extends TestCase{
 		petrinet.deleteTransition(aTransition);
 		assertTrue("", petrinet.transitionVector.size()==0);
 		petrinet.removeAllTransition();
+		petrinet.saveCurrentMarking();
+		petrinet.populatefireableTransitions(); 
+		petrinet.setFirableComboList();	
+		petrinet.playTransition();
 			
 	}
 	
@@ -49,17 +54,17 @@ public class Test extends TestCase{
 		assertTrue("", petrinet.placeVector.size()==1);
 		petrinet.removeLastPlace();
 		petrinet.removeAllPlace();
+		petrinet.restorePreviousMarking();
+		aPlace.addToken(2);
+		aPlace.removeToken(1);
 	}
-//	
+
+	//********************Marking Class*************************************
 //	@org.junit.Test
 //	public void test4() {
-//		Place aPlace = new Place();
-//		petrinet.addPlace(aPlace);
-//		assertTrue("", petrinet.placeVector.size()==1);
-//		petrinet.deletePlace(aPlace);
-//		assertTrue("", petrinet.placeVector.size()==0);
+//		String name = "P1";
+//		//Marking.Marking("P1");
 //		
-//			
 //	}
 	
 	//********************MainPanel Class*************************************
