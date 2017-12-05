@@ -51,7 +51,21 @@ public class Test extends TestCase{
 		petrinet.populatefireableTransitions(); 
 		petrinet.setFirableComboList();	
 		petrinet.playTransition();
+		PetrinetBuilder pb = new PetrinetBuilder(petrinet);
+		petrinet.setPetrinetBuilder(pb);
 			
+		Marking initialMarking = new Marking("fName");
+		petrinet.getInitialMarking();
+		petrinet.setInitialMarking(initialMarking);
+		petrinet.selectedPlace(10, 10);
+		petrinet.saveCurrentMarking();
+		petrinet.restorePreviousMarking();
+		petrinet.getBoundednessInformation();
+		petrinet.getDeadTransitionInformation();
+		petrinet.checkReachability(initialMarking);
+		
+//		petrinet.populatefireableTransitions();
+//		petrinet.setFirableComboList();
 	}
 	
 	@org.junit.Test
@@ -93,6 +107,7 @@ public class Test extends TestCase{
 		aPlace.setTokenNumbers(2);
 		aPlace.setName("P1");		
 	}
+	
 	@org.junit.Test
 	public void test6() {
 		petrinet.getPetrinetBuilder().printLists();
@@ -101,6 +116,7 @@ public class Test extends TestCase{
 		aTrans.setName("T1");
 		assertTrue("", petrinet.getPetrinetBuilder().existingTransitionNameCheck("T1",aTrans)==true);
 	}
+	
 	@org.junit.Test
 	public void test7() {
 		petrinet.getPetrinetBuilder().printLists();
@@ -167,10 +183,7 @@ public class Test extends TestCase{
 		petrinet.getPetrinetBuilder().getElementUnderThisPoint(aPlace.getX(),aPlace.getY());
 
 	}
-	@org.junit.Test
-	public void test12() {
-		petrinet.getPetrinetBuilder().getElementUnderThisPoint(10,10);
-	}
+	
 	@org.junit.Test
 	public void test11() {
 		Transition aTrans = new Transition();
@@ -182,6 +195,12 @@ public class Test extends TestCase{
 		petrinet.getPetrinetBuilder().getElementUnderThisPoint(aTrans.getX(),aTrans.getY());
 
 	}
+	
+	@org.junit.Test
+	public void test12() {
+		petrinet.getPetrinetBuilder().getElementUnderThisPoint(10,10);
+	}
+	
 	@org.junit.Test
 	public void test13() {
 		Place aPlace = new Place();
@@ -203,6 +222,17 @@ public class Test extends TestCase{
 		petrinet.getPetrinetBuilder().putElementInWorkingArrayList(aPlace);
 		petrinet.getPetrinetBuilder().putElementInWorkingArrayList(aTrans);
 		petrinet.getPetrinetBuilder().createArc(pointList,aPlace,aTrans,"P_2_T");
+		petrinet.getPetrinetBuilder().createArc(pointList,aPlace,aTrans,"T_2_P");
+		
+		petrinet.populatefireableTransitions();
+		aTrans.isFireable();
+		aTrans.setFireable(true);
+		aTrans.validateFiringStatus();
+		aTrans.setFireable(false);
+		aTrans.validateFiringStatus();
+		
+		aTrans.fireTransition();
+		
 	}
 	@org.junit.Test
 	public void test14() {
@@ -220,8 +250,12 @@ public class Test extends TestCase{
 		
 		Arc arc = new Arc(aPlace, aTrans, "P_2_T");
 		petrinet.addArc(arc);
-//		Arc arc1 = new Arc(aPlace, aTrans, "P_2_T");
-//		petrinet.addArc(arc1);
+		
+		arc.getWeight();
+		arc.setWeight(2);
+		
+		Arc arc1 = new Arc(aPlace, aTrans, "P_2_T");
+		petrinet.addArc(arc1);
 		ArrayList<Point> pointList = new ArrayList<Point>();
 		pointList.add(new Point(aPlace.getX(),aPlace.getY()));
 		pointList.add(new Point(aTrans.getX(),aTrans.getY()));
@@ -231,6 +265,23 @@ public class Test extends TestCase{
 		petrinet.getPetrinetBuilder().putElementInWorkingArrayList(aTrans);
 		petrinet.getPetrinetBuilder().createArc(pointList,aPlace,aTrans,"P_2_T");
 //		petrinet.getPetrinetBuilder().createArc(pointList,aPlace,aTrans,"P_2_T");
+		petrinet.deleteArc(arc1);
+	
+		Transition aTrans2 = new Transition();
+		petrinet.addTransition(aTrans2);
+		Arc arc2 = new Arc(aPlace, aTrans2, "P_2_T");
+		petrinet.addArc(arc2);
+		petrinet.deleteLinkedArcWithTransition(aTrans);
+		petrinet.deleteLinkedArcWithPlace(aPlace);
+		
+		Place aPlace3 = new Place();
+		petrinet.addPlace(aPlace3);
+		Transition aTrans3 = new Transition();
+		petrinet.addTransition(aTrans3);
+		Arc arc3 = new Arc(aPlace3, aTrans3, "P_2_T");
+		petrinet.addArc(arc3);
+		petrinet.removeAllArcs();
+		
 
 	}
 	@org.junit.Test
@@ -279,7 +330,6 @@ public class Test extends TestCase{
 		aTrans.setFillColor(Color.BLACK);
 		aTrans.setBorderColor(Color.BLACK);
 		
-		
 //		mainPanel.redoActionForPlace(aPlace,PetrinetBuilder.ADD);
 //		mainPanel.redoActionForPlace(aPlace,PetrinetBuilder.DELETE);
 	}
@@ -294,12 +344,7 @@ public class Test extends TestCase{
 		petrinet.createMainPanel();
 		assertTrue("", petrinet!=null);
 	}
-//	@org.junit.Test
-//	public void test17() {
-//		MainPanel mainPanel = new MainPanel();
-//		mainPanel.alertDialog();
-//	}
-//	
+	
 	@org.junit.Test
 	public void test18() {
 		Place aPlace = new Place();
@@ -328,9 +373,9 @@ public class Test extends TestCase{
 		petrinet.getPetrinetBuilder().createArc(pointList,aPlace,aTrans,"P_2_T");
 //		petrinet.getPetrinetBuilder().createArc(pointList,aPlace,aTrans,"P_2_T");
 
-		MainPanel mainPanel =new MainPanel();
-		assertTrue("", mainPanel!=null);
-	     mainPanel.fileChoose();
+//		MainPanel mainPanel =new MainPanel();
+//		assertTrue("", mainPanel!=null);
+//	     mainPanel.fileChoose();
 		
 		DrawingPanel draw = new DrawingPanel(petrinet);
 		draw.arcDrawingStarted = true;
@@ -386,7 +431,48 @@ public class Test extends TestCase{
 		petrinet.getPetrinetBuilder().transitionInputDialog(aTrans);
 		
 	}
-	//********************MainPanel Class*************************************
+	
+	@org.junit.Test
+	public void test21() {
+		petrinet.getPetrinetBuilder().getElementFromRedoArrayList();
 
+		petrinet.getPetrinetBuilder().printLists();
+		Place aPlace = new Place();
+		aPlace.setTokenNumbers(2);
+		aPlace.setName("P1");
+		Transition aTrans = new Transition();
+		petrinet.addTransition(aTrans);
+		aTrans.setName("T1");
+		petrinet.getPetrinetBuilder().getElementFromActionArrayList();
+		petrinet.getPetrinetBuilder().getElementFromWorkingArrayList();
+		petrinet.getPetrinetBuilder().putElementInRedoArrayList(aPlace);
+		petrinet.getPetrinetBuilder().putElementInRedoArrayList(aTrans);
+		petrinet.getPetrinetBuilder().getElementFromRedoArrayList();
+		petrinet.getPetrinetBuilder().getElementFromWorkingArrayList();
+		petrinet.getPetrinetBuilder().removeElementFromRedoArrayList();
+		petrinet.getPetrinetBuilder().getElementFromRedoActionArrayList();
+		petrinet.getPetrinetBuilder().putElementInRedoActionArrayList(aPlace);
+		petrinet.getPetrinetBuilder().getElementFromRedoActionArrayList();
+		petrinet.getPetrinetBuilder().removeElementFromRedoActionArrayList();
+		petrinet.getPetrinetBuilder().putElementInActionArrayList(aPlace);
+		petrinet.getPetrinetBuilder().removeElementFromActionArrayList();
+		petrinet.getPetrinetBuilder().getElementFromWorkingArrayList();
+		petrinet.getPetrinetBuilder().putElementInWorkingArrayList(aPlace);
+		petrinet.getPetrinetBuilder().getElementFromWorkingArrayList();
+		petrinet.getPetrinetBuilder().removeElementFromWorkingArrayList();
+		petrinet.getPetrinetBuilder().getElementFromActionArrayList();
+		
+//		MainPanel mainPanel = new MainPanel();
+//		mainPanel.alertDialog();
+//		mainPanel.undoAction();
+//		mainPanel.redoAction();
+	}
+	//********************MainPanel Class*************************************
+	@org.junit.Test
+	public void test22() {
+		MainPanel mainPanel = new MainPanel();
+		assertTrue("", mainPanel!=null);
+		mainPanel.fileChoose();
+	}
 	
 }

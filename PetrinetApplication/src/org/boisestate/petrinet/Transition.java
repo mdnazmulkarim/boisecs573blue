@@ -20,7 +20,7 @@ public class Transition extends TransitionGuiItem implements Cloneable{
 		return fireable;
 	}
 
-	private void setFireable(boolean fireable) {
+	public void setFireable(boolean fireable) {
 		this.fireable = fireable;
 	}
 
