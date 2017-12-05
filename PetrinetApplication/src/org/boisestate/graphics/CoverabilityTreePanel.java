@@ -196,11 +196,11 @@ public class CoverabilityTreePanel extends JPanel{
 		
 	}
 	
-	private void showAlert(String message)
+	public void showAlert(String message)
 	{
 		JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
 	}
-	private void showInformation(String message)
+	public void showInformation(String message)
 	{
 		JOptionPane.showMessageDialog(this, message, "Info", JOptionPane.INFORMATION_MESSAGE);
 	}

@@ -32,12 +32,12 @@ public class Petrinet {
 
 	private PetrinetBuilder petrinetBuilder;
 
-	public Petrinet(PetrinetBuilder pb, String title) {
-		this.title = title;
-		this.petrinetBuilder = pb;
-		initIDNameBuilder();
-		initVectors();
-	}
+//	public Petrinet(PetrinetBuilder pb, String title) {
+//		this.title = title;
+//		this.petrinetBuilder = pb;
+//		initIDNameBuilder();
+//		initVectors();
+//	}
 
 	public Petrinet(String title) {
 		this.title = title;
@@ -95,6 +95,9 @@ public class Petrinet {
 		petrinetBuilder.putElementInActionArrayList(PetrinetBuilder.ADD);
 	}
 
+	public void addArc(Arc arc) {
+		this.arcVector.add(arc);
+	}
 	public void addPlace(Place place) {
 		this.placeVector.add(place);
 		petrinetBuilder.putElementInWorkingArrayList(place.clone()); // For Redo Undo

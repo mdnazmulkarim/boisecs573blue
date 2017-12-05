@@ -33,12 +33,12 @@ public class Arc extends ArcGuiItem implements Cloneable{
 		this.weight = 1;
 	}
 	
-	public Arc(Place place, Transition transition, int w, String type ){
-		this.connectedPlace = place;
-		this.connectedTransition = transition;
-		this.directionType = type;
-		this.weight = w;
-	}
+//	public Arc(Place place, Transition transition, int w, String type ){
+//		this.connectedPlace = place;
+//		this.connectedTransition = transition;
+//		this.directionType = type;
+//		this.weight = w;
+//	}
 	
 	public void setPlace(Place place){
 		this.connectedPlace = place;

@@ -121,7 +121,7 @@ public class PetrinetBuilder {
 		return petrinetUtility.generateAPetrinetID();
 	}
 
-	private Boolean existingPlaceNameCheck(String placeName, Place pl) {
+	public Boolean existingPlaceNameCheck(String placeName, Place pl) {
 		for (Place place : petrinet.placeVector) {
 			if (place != pl && placeName.equals(place.getName())) {
 				return false;
@@ -131,7 +131,7 @@ public class PetrinetBuilder {
 		return true;
 	}
 
-	private Boolean existingTransitionNameCheck(String transName, Transition pl) {
+	public Boolean existingTransitionNameCheck(String transName, Transition pl) {
 		for (Transition trans : petrinet.transitionVector) {
 			if (trans != pl && transName.equals(trans.getName())) {
 				return false;
@@ -227,48 +227,48 @@ public class PetrinetBuilder {
 		}
 	}
 
-	public void arcInputDialog(Object selectedItem) {
-		Place place = (Place) selectedItem;
-
-		JTextField name = new JTextField();
-		JTextField numberOfTokens = new JTextField();
-		name.setText(place.getName());
-		numberOfTokens.setText(Integer.toString(place.getTokenNumbers()));
-		Object[] message = { "Name:", name, "NumberOfTokens:", numberOfTokens };
-
-		int option = JOptionPane.showConfirmDialog(null, message, "Input", JOptionPane.OK_CANCEL_OPTION);
-		if (option == JOptionPane.OK_OPTION) {
-			if (name.getText() != null && (!name.getText().equals(place.getName())
-					|| Integer.parseInt(numberOfTokens.getText()) != place.getTokenNumbers())) {
-				boolean b = existingPlaceNameCheck(name.getText(), place);
-
-				if (!b) {
-					final JPanel panel = new JPanel();
-					JOptionPane.showMessageDialog(panel, "Duplicate name error.", "Error", JOptionPane.ERROR_MESSAGE);
-				} else {
-
-					this.putElementInWorkingArrayList(place.clone());
-					this.putElementInActionArrayList(MODIFY);
-
-					place.setName(name.getText());
-					if (numberOfTokens.getText() != null) {
-						place.setTokenNumbers(Integer.parseInt(numberOfTokens.getText()));
-					}
-
-					drawingPanel.partialPaint(new Rectangle(place.getX(), place.getY(), place.getRadius() + 1,
-							place.getHeight() + 10 + 2));
-
-					System.out.println("name changed....");
-					petrinet.getPetrinetBuilder().printLists();
-
-				}
-
-			}
-
-		} else {
-			System.out.println("Not Changed.");
-		}
-	}
+//	public void arcInputDialog(Object selectedItem) {
+//		Place place = (Place) selectedItem;
+//
+//		JTextField name = new JTextField();
+//		JTextField numberOfTokens = new JTextField();
+//		name.setText(place.getName());
+//		numberOfTokens.setText(Integer.toString(place.getTokenNumbers()));
+//		Object[] message = { "Name:", name, "NumberOfTokens:", numberOfTokens };
+//
+//		int option = JOptionPane.showConfirmDialog(null, message, "Input", JOptionPane.OK_CANCEL_OPTION);
+//		if (option == JOptionPane.OK_OPTION) {
+//			if (name.getText() != null && (!name.getText().equals(place.getName())
+//					|| Integer.parseInt(numberOfTokens.getText()) != place.getTokenNumbers())) {
+//				boolean b = existingPlaceNameCheck(name.getText(), place);
+//
+//				if (!b) {
+//					final JPanel panel = new JPanel();
+//					JOptionPane.showMessageDialog(panel, "Duplicate name error.", "Error", JOptionPane.ERROR_MESSAGE);
+//				} else {
+//
+//					this.putElementInWorkingArrayList(place.clone());
+//					this.putElementInActionArrayList(MODIFY);
+//
+//					place.setName(name.getText());
+//					if (numberOfTokens.getText() != null) {
+//						place.setTokenNumbers(Integer.parseInt(numberOfTokens.getText()));
+//					}
+//
+//					drawingPanel.partialPaint(new Rectangle(place.getX(), place.getY(), place.getRadius() + 1,
+//							place.getHeight() + 10 + 2));
+//
+//					System.out.println("name changed....");
+//					petrinet.getPetrinetBuilder().printLists();
+//
+//				}
+//
+//			}
+//
+//		} else {
+//			System.out.println("Not Changed.");
+//		}
+//	}
 
 	public Object getElementUnderThisPoint(int x, int y) {
 		Object obj = null;
@@ -368,18 +368,18 @@ public class PetrinetBuilder {
 
 	}
 
-	public Point intersectionPoint(Point p, Point center, int r) {
-		int off_x = p.x - center.x;
-		int off_y = p.y - center.y;
-		int ls = off_x * off_x + off_y * off_y;
-		if (ls > r * r) {
-			double scale = r / Math.sqrt((double) ls);
-			double res_x = off_x * scale + center.x;
-			double res_y = center.y - off_y * scale;
-			return new Point(off_x, off_y);
-		}
-		return null;
-	}
+//	public Point intersectionPoint(Point p, Point center, int r) {
+//		int off_x = p.x - center.x;
+//		int off_y = p.y - center.y;
+//		int ls = off_x * off_x + off_y * off_y;
+//		if (ls > r * r) {
+//			double scale = r / Math.sqrt((double) ls);
+//			double res_x = off_x * scale + center.x;
+//			double res_y = center.y - off_y * scale;
+//			return new Point(off_x, off_y);
+//		}
+//		return null;
+//	}
 
 	public Map<Polygon, Arc> arcDetectionMap = new HashMap<Polygon, Arc>();
 
