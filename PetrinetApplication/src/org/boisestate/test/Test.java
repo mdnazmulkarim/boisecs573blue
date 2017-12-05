@@ -7,9 +7,13 @@ import java.awt.Point;
 import java.util.ArrayList;
 
 import org.boisestate.core.PetrinetBuilder;
+import org.boisestate.core.PetrinetMain;
 import org.boisestate.graphics.Constants;
 import org.boisestate.graphics.CoverabilityTreePanel;
+import org.boisestate.graphics.DrawingPanel;
 import org.boisestate.graphics.MainPanel;
+import org.boisestate.graphics.PetriNetSaver;
+import org.boisestate.graphics.XMLParser;
 import org.boisestate.petrinet.Arc;
 import org.boisestate.petrinet.Marking;
 import org.boisestate.petrinet.Petrinet;
@@ -24,14 +28,7 @@ public class Test extends TestCase{
 	
 	private Petrinet petrinet = new Petrinet("");
 
-	@org.junit.Test
-	public void test40() {
-		MainPanel mainPanel =new MainPanel();
-		assertTrue("", mainPanel!=null);
-	     mainPanel.fileChoose();
-		
-			
-	}
+	
 	//********************Petrinet Class*************************************
 	@org.junit.Test
 	public void test1() {
@@ -87,15 +84,7 @@ public class Test extends TestCase{
 		
 	}
 	
-	@org.junit.Test
-	public void test41() {
-		petrinet.getPetrinetBuilder().printLists();
-		Transition aTrans = new Transition();
-		petrinet.addTransition(aTrans);
-		aTrans.setName("T1");
-		petrinet.getPetrinetBuilder().transitionInputDialog(aTrans);
-		
-	}
+	
 	@org.junit.Test
 	public void test5() {
 		petrinet.getPetrinetBuilder().printLists();
@@ -165,7 +154,7 @@ public class Test extends TestCase{
 		mainPanel.undoAction();
 		mainPanel.redoAction();
 	}
-	
+
 	
 	@org.junit.Test
 	public void test10() {
@@ -299,14 +288,104 @@ public class Test extends TestCase{
 	public void test16() {
 		Constants.ROOT_OF_XML = "PetriNet";
 	}
+	@org.junit.Test
+	public void test17() {
+		PetrinetMain petrinet = new PetrinetMain();
+		petrinet.createMainPanel();
+		assertTrue("", petrinet!=null);
+	}
 //	@org.junit.Test
 //	public void test17() {
 //		MainPanel mainPanel = new MainPanel();
 //		mainPanel.alertDialog();
 //	}
 //	
-	
-	
+	@org.junit.Test
+	public void test18() {
+		Place aPlace = new Place();
+		aPlace.setTokenNumbers(2);
+		aPlace.setName("P1");
+		aPlace.setX(50);
+		aPlace.setY(50);
+		petrinet.addPlace(aPlace);
+		Transition aTrans = new Transition();
+		aTrans.setName("T1");
+		aTrans.setX(100);
+		aTrans.setY(190);
+		petrinet.addTransition(aTrans);
+		
+		Arc arc = new Arc(aPlace, aTrans, "P_2_T");
+		petrinet.addArc(arc);
+//		Arc arc1 = new Arc(aPlace, aTrans, "P_2_T");
+//		petrinet.addArc(arc1);
+		ArrayList<Point> pointList = new ArrayList<Point>();
+		pointList.add(new Point(aPlace.getX(),aPlace.getY()));
+		pointList.add(new Point(aTrans.getX(),aTrans.getY()));
+		arc.setPointVector(pointList);
+		arc.getPointVector();
+		petrinet.getPetrinetBuilder().putElementInWorkingArrayList(aPlace);
+		petrinet.getPetrinetBuilder().putElementInWorkingArrayList(aTrans);
+		petrinet.getPetrinetBuilder().createArc(pointList,aPlace,aTrans,"P_2_T");
+//		petrinet.getPetrinetBuilder().createArc(pointList,aPlace,aTrans,"P_2_T");
+
+		MainPanel mainPanel =new MainPanel();
+		assertTrue("", mainPanel!=null);
+	     mainPanel.fileChoose();
+		
+		DrawingPanel draw = new DrawingPanel(petrinet);
+		draw.arcDrawingStarted = true;
+		draw.erasePartialArc();
+		draw.placeNameSet(aPlace);
+		draw.transitionNameSet(aTrans);
+		draw.drawPlace(aPlace, 100, 100);
+		draw.drawTransition(aTrans, 200, 200);
+		draw.getPreferredSize();
+		draw.resetTransitionColor();
+		
+		PetriNetSaver saver = new PetriNetSaver(petrinet);
+		saver.xmlFileName("testing");
+		XMLParser xmlParse = new XMLParser(null, petrinet);
+		
+	}
+	@org.junit.Test
+	public void test19() {
+		petrinet.getPetrinetBuilder().getElementFromRedoArrayList();
+
+		petrinet.getPetrinetBuilder().printLists();
+		Place aPlace = new Place();
+		aPlace.setTokenNumbers(2);
+		aPlace.setName("P1");
+		Transition aTrans = new Transition();
+		petrinet.addTransition(aTrans);
+		aTrans.setName("T1");
+		petrinet.getPetrinetBuilder().getElementFromActionArrayList();
+		petrinet.getPetrinetBuilder().getElementFromWorkingArrayList();
+		petrinet.getPetrinetBuilder().putElementInRedoArrayList(aPlace);
+		petrinet.getPetrinetBuilder().putElementInRedoArrayList(aTrans);
+		petrinet.getPetrinetBuilder().getElementFromRedoArrayList();
+		petrinet.getPetrinetBuilder().getElementFromWorkingArrayList();
+		petrinet.getPetrinetBuilder().removeElementFromRedoArrayList();
+		petrinet.getPetrinetBuilder().getElementFromRedoActionArrayList();
+		petrinet.getPetrinetBuilder().putElementInRedoActionArrayList(aPlace);
+		petrinet.getPetrinetBuilder().getElementFromRedoActionArrayList();
+		petrinet.getPetrinetBuilder().removeElementFromRedoActionArrayList();
+		petrinet.getPetrinetBuilder().putElementInActionArrayList(aPlace);
+		petrinet.getPetrinetBuilder().removeElementFromActionArrayList();
+		petrinet.getPetrinetBuilder().getElementFromWorkingArrayList();
+		petrinet.getPetrinetBuilder().putElementInWorkingArrayList(aPlace);
+		petrinet.getPetrinetBuilder().getElementFromWorkingArrayList();
+		petrinet.getPetrinetBuilder().removeElementFromWorkingArrayList();
+		petrinet.getPetrinetBuilder().getElementFromActionArrayList();
+	}
+	@org.junit.Test
+	public void test20() {
+		petrinet.getPetrinetBuilder().printLists();
+		Transition aTrans = new Transition();
+		petrinet.addTransition(aTrans);
+		aTrans.setName("T1");
+		petrinet.getPetrinetBuilder().transitionInputDialog(aTrans);
+		
+	}
 	//********************MainPanel Class*************************************
 
 	

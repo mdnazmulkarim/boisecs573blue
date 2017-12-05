@@ -23,7 +23,7 @@ public class PetrinetMain {
 		
 	}
 	
-	private void createMainPanel() {
+	public void createMainPanel() {
 		mainPanel = new MainPanel();
 		mainPanel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainPanel.setVisible(true);		

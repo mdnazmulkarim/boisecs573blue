@@ -66,7 +66,7 @@ public class DrawingPanel extends JPanel {
 		repaint(rec.x, rec.y, rec.width, rec.height);
 	}
 
-	private void placeNameSet(Place plc) {
+	public void placeNameSet(Place plc) {
 		placeCount++;
 		String name = "P" + placeCount;
 		for (Place place : petrinet.placeVector) {
@@ -79,7 +79,7 @@ public class DrawingPanel extends JPanel {
 
 	}
 
-	private void transitionNameSet(Transition trans) {
+	public void transitionNameSet(Transition trans) {
 		transitionCount++;
 		String name = "T" + transitionCount;
 		for (Transition transition : petrinet.transitionVector) {
@@ -91,7 +91,7 @@ public class DrawingPanel extends JPanel {
 		trans.setName("T" + transitionCount);
 	}
 
-	private void drawPlace(Place place, int x, int y) {
+	public void drawPlace(Place place, int x, int y) {
 		placeNameSet(place);
 		place.setX(x);
 		place.setY(y);
@@ -102,7 +102,7 @@ public class DrawingPanel extends JPanel {
 		petrinet.addPlace(place);
 	}
 
-	private void drawTransition(Transition transition, int x, int y) {
+	public void drawTransition(Transition transition, int x, int y) {
 		transitionNameSet(transition);
 		transition.setX(x);
 		transition.setY(y);
