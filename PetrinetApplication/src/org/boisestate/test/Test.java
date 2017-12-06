@@ -18,7 +18,9 @@ import org.boisestate.petrinet.Arc;
 import org.boisestate.petrinet.Marking;
 import org.boisestate.petrinet.Petrinet;
 import org.boisestate.petrinet.Place;
+import org.boisestate.petrinet.TestTree;
 import org.boisestate.petrinet.Transition;
+import org.boisestate.petrinet.TreeNode;
 
 import junit.framework.*;
 
@@ -467,9 +469,11 @@ public class Test extends TestCase{
 //		mainPanel.undoAction();
 //		mainPanel.redoAction();
 	}
+	
+	
 	//********************MainPanel Class*************************************
 	@org.junit.Test
-	public void test22() {
+	public void test30() {
 		MainPanel mainPanel = new MainPanel();
 		assertTrue("", mainPanel!=null);
 		mainPanel.fileChoose();
