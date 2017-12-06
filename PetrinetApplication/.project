@@ -12,6 +12,14 @@
 		</buildCommand>
 	</buildSpec>
 	<natures>
+		<nature>org.eclipse.sirius.nature.modelingproject</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>assertj-swing-junit</name>
+			<type>2</type>
+			<location>C:/Users/mklnt/myeclipse-workspace/assertj-swing/assertj-swing-master/assertj-swing-junit</location>
+		</link>
+	</linkedResources>
 </projectDescription>

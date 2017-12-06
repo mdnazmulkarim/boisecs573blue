@@ -1,7 +1,9 @@
 package org.boisestate.graphics;
 
 import java.awt.BorderLayout;
+
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Image;
@@ -54,12 +56,15 @@ public class MainPanel extends JFrame {
 	JFrame thisFrame = null;
 
 	public MainPanel() {
-		this.setTitle(petriNetName);
-		petrinet = new Petrinet("");
+//		this.setTitle(petriNetName);
+		petrinet = new Petrinet(petriNetName);
+		
 		savePetrinet = new PetriNetSaver(petrinet);
 		// get the screen size as a java dimension
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		thisFrame = this;
+		// added for GUI testing
+		this.setName("mainPanel");
 		height = screenSize.height * 3 / 4;
 		width = screenSize.width * 5 / 6;
 	//	width = screenSize.width;
@@ -69,9 +74,13 @@ public class MainPanel extends JFrame {
 
 		menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
+		// added for GUI testing
+		menuBar.setName("menuBar");
 
 		
 		placeButton = new JButton();
+		//added for GUI testing
+		placeButton.setName("placeButton");
 		try {
 		    Image img = ImageIO.read(getClass().getResource("circle.jpg"));
 		    placeButton.setIcon(new ImageIcon(img));
@@ -82,6 +91,7 @@ public class MainPanel extends JFrame {
 		add(placeButton);
 
 		transitionButton = new JButton();
+		transitionButton.setName("transitionButton");
 		try {
 		    Image img = ImageIO.read(getClass().getResource("rectangle.png"));
 		    transitionButton.setIcon(new ImageIcon(img));
@@ -92,6 +102,7 @@ public class MainPanel extends JFrame {
 		add(transitionButton);
 
 		arcButton = new JButton();
+		arcButton.setName("arcButton");
 		try {
 		    Image img = ImageIO.read(getClass().getResource("Arrow.png"));
 		    arcButton.setIcon(new ImageIcon(img));
@@ -106,16 +117,20 @@ public class MainPanel extends JFrame {
 //		add(arrowButton);
 
 		simulateButton = new JButton("Simulation Off");
+		// added for GUI testing
+		simulateButton.setName("simulateButton");
 		simulateButton.setVisible(true);
 		add(simulateButton);
 
 		playButton = new JButton("Play");
+		playButton.setName("playButton");
 		playButton.setVisible(true);
 		add(playButton);
 		
 		add(activeFiringStatesList);
 
 		coverabilityTreeButton = new JButton("Coverability Tree");
+		coverabilityTreeButton.setName("coverabilityTreeButton");
 		coverabilityTreeButton.setVisible(true);
 		add(coverabilityTreeButton);
 		
@@ -653,12 +668,18 @@ public class MainPanel extends JFrame {
 
 	protected JMenu createFileMenu() {
 		JMenu fileMenu = new JMenu("File");
+		// add for GUI testing
+		fileMenu.setName("fileMenu");
 		menuBar.add(fileMenu);
-
+		// setName added for GUI testing
 		newAction = new JMenuItem("New");
+		newAction.setName("newAction");
 		openAction = new JMenuItem("Open");
+		openAction.setName("openAction");
 		saveAction = new JMenuItem("Save As");
+		saveAction.setName("saveAction");
 		exitAction = new JMenuItem("Exit");
+		exitAction.setName("exitAction");
 
 		fileMenu.add(newAction);
 		fileMenu.add(openAction);
@@ -670,13 +691,19 @@ public class MainPanel extends JFrame {
 
 	protected JMenu createEditMenu() {
 		JMenu editMenu = new JMenu("Edit");
+		editMenu.setName("editMenu");
 		menuBar.add(editMenu);
-
+		// setName added for GUI testing
 		deleteAction = new JMenuItem("Delete");
+		deleteAction.setName("deleteAction");
 		copyAction = new JMenuItem("Copy");
+		copyAction.setName("copyAction");
 		pasteAction = new JMenuItem("Paste");
+		pasteAction.setName("pasteAction");
 		undoAction = new JMenuItem("Undo");
+		undoAction.setName("undoAction");
 		redoAction = new JMenuItem("Redo");
+		redoAction.setName("redoAction");
 
 		editMenu.add(deleteAction);
 		editMenu.add(copyAction);

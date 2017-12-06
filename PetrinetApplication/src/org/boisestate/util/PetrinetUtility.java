@@ -5,7 +5,7 @@ import java.util.Vector;
 
 public class PetrinetUtility {
 	
-	public static enum ITEM {PLACE,TRANSITION,ARC};
+	public static enum ITEM {PLACE,TRANSITION,ARC, PETRINET};
 	
 	private String namePrefixPlace = "P"; 
 	private String namePrefixTransition = "T"; 
@@ -42,7 +42,11 @@ public class PetrinetUtility {
 			case ARC :
 				returnName =  this.namePrefixArc + currentIndexForArc;
 				currentIndexForArc ++;
-			    break;     
+			    break;  
+			case PETRINET :
+				returnName = returnName.concat("PN");
+				returnName = returnName.concat(System.getProperty("user.name"));
+				break;
 		}
 		
 		return returnName;
